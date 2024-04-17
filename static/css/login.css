@@ -1,0 +1,11 @@
+.login-button {
+    background: var(--white-color);
+    border: var(--purple-color) 1px solid;
+    color: var(--purple-color);
+}
+
+.login-button:hover {
+    background: var(--dark-purple-color);
+    border: var(--dark-purple-color) 1px solid;
+    color: var(--white-color);
+}
