@@ -8,6 +8,9 @@ def inject_current_year():
     return {'current_year': datetime.datetime.now().year}
 
 @app.route('/')
-
 def index():
     return render_template('pages/index.html')
+
+@app.route('/login')
+def login():
+    return render_template('pages/login.html')
