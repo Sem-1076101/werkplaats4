@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../static/images/glitch-logo.webp';
+import theme_switch from '../static/images/circle-half-stroke-solid.svg';
 import '../static/css/header.css';
 function HeaderLayout() {
     return (
@@ -20,7 +21,7 @@ function HeaderLayout() {
                     <Link className="btn btn-primary register-button me-2" to="/register"
                           role="button">Registreren</Link>
                     <button className="btn btn-primary shadow" id="btnSwitch">
-                        <img src="/static/images/circle-half-stroke-solid.svg" width="20px" height="20px"
+                        <img src={theme_switch} width="20px" height="20px"
                              alt="Icon"/>
                     </button>
                 </div>
