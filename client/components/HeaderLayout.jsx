@@ -1,0 +1,32 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import logo from '../static/images/glitch-logo.webp';
+import '../static/css/header.css';
+function HeaderLayout() {
+    return (
+        <div className="container">
+            <header
+                className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+                <Link to="/flask/static"
+                      className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                    <img src={logo} height="50" width="auto" alt="GLITCH-logo"/>
+                </Link>
+
+                <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                </ul>
+
+                <div className="col-md-4 text-end">
+                    <Link className="btn btn-outline-primary login-button" to="/login" role="button">Inloggen</Link>
+                    <Link className="btn btn-primary register-button me-2" to="/register"
+                          role="button">Registreren</Link>
+                    <button className="btn btn-primary shadow" id="btnSwitch">
+                        <img src="/static/images/circle-half-stroke-solid.svg" width="20px" height="20px"
+                             alt="Icon"/>
+                    </button>
+                </div>
+            </header>
+        </div>
+    );
+}
+
+export default HeaderLayout;
