@@ -1,7 +1,7 @@
-venv
+/server/venv/
 .idea
 *.pyc
 __pycache__/
 .vscode
-/node_modules/
-.expo/
+/client/node_modules/
+/client/.expo/
