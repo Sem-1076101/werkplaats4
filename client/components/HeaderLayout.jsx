@@ -17,10 +17,10 @@ function HeaderLayout() {
                 </ul>
 
                 <div className="col-md-4 text-end">
-                    <Link className="btn btn-outline-primary login-button" to="/login" role="button">Inloggen</Link>
+                    <Link className="btn btn-outline-primary login-button me-1" to="/login" role="button">Inloggen</Link>
                     <Link className="btn btn-primary register-button me-2" to="/register"
                           role="button">Registreren</Link>
-                    <button className="btn btn-primary shadow" id="btnSwitch">
+                    <button className="btn btn-primary" id="btnSwitch">
                         <img src={theme_switch} width="20px" height="20px"
                              alt="Icon"/>
                     </button>
