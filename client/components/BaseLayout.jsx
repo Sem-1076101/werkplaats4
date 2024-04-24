@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Helmet} from 'react-helmet';
 import HeaderLayout from './HeaderLayout';
 import FooterLayout from './FooterLayout';
 import '../static/css/base.css';
 
 function BaseLayout({children}) {
+    useEffect(() => {
+        const btnSwitch = document.getElementById('btnSwitch');
+        if (btnSwitch) {
+            btnSwitch.addEventListener('click',()=>{
+                if (document.documentElement.getAttribute('data-bs-theme') == 'dark') {
+                    document.documentElement.setAttribute('data-bs-theme','light')
+                }
+                else {
+                    document.documentElement.setAttribute('data-bs-theme','dark')
+                }
+            })
+        }
+    }, []);
+
     return (
         <div>
             <Helmet>
@@ -28,7 +42,6 @@ function BaseLayout({children}) {
                 integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
                 crossOrigin="anonymous"
             ></script>
-            <script src="/static/javascript/base.js"></script>
         </div>
     );
 }
