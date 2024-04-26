@@ -6,3 +6,7 @@
     --white-color: #FFFFFF;
     --dark-purple-color: #28137f;
 }
+
+#root {
+    display: block !important;
+}
