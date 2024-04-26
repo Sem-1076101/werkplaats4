@@ -8,7 +8,7 @@ function HeaderLayout() {
         <div className="container">
             <header
                 className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-                <Link to="/flask/static"
+                <Link to="/"
                       className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
                     <img src={logo} height="50" width="auto" alt="GLITCH-logo"/>
                 </Link>
