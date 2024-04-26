@@ -6,3 +6,8 @@ __pycache__/
 
 /client/node_modules/
 /client/.expo/
+package.json
+package-lock.json
+babel.config.js
+app.json
+App.js
