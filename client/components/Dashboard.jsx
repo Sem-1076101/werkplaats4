@@ -65,7 +65,7 @@ function Dashboard() {
                                                     <div className="card-body d-flex flex-column">
                                                         <h5 className="card-title">{item.course_name}</h5>
                                                         <p className="card-text">{item.course_description}</p>
-                                                        <a href={`domein/${item.id}`} className="btn btn-primary mt-auto">Aanmelden
+                                                        <a href={`domein/${item.course_id}`} className="btn btn-primary mt-auto">Aanmelden
                                                             bij dit domein</a>
                                                     </div>
                                                 </div>))
