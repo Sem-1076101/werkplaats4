@@ -1,7 +1,31 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import BaseLayout from './BaseLayout';
+import api from '../api';
 
 function Dashboard() {
+    const [data, setData] = useState(null);
+
+    const [showModal, setShowModal] = useState(false);
+
+    const handleOpenModal = () => {
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+    };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            api.get('/api/dashboard')
+                .then(response => setData(response.data))
+                .catch(error => console.error('Error fetching data:', error));
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+
     return (
         <BaseLayout>
             <div className="container">
@@ -16,35 +40,44 @@ function Dashboard() {
                     </div>
                     <div className="col-md-6">
                         <h2>Domeinen</h2>
-                        <p>Je hebt nog geen domein toegevoegd. Klik <a href="#" data-bs-toggle="modal"
-                                                                       data-bs-target="#myModal">hier</a> om een domein
-                            te volgen.</p>
-                        <button type="button" className="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#exampleModal">
-                            Launch demo modal
-                        </button>
+                        <p>Je hebt nog geen domein toegevoegd. Klik <a href="#" onClick={handleOpenModal}>hier</a> om
+                            een domein te volgen.</p>
                     </div>
                 </div>
-            </div>
 
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            ...
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
+                {showModal && (
+                    <div className="modal show" tabIndex="-1" role="dialog" style={{display: 'block'}}>
+                        <div className="modal-dialog modal-dialog-centered modal-xl" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Domeinen</h5>
+                                    <button type="button" className="btn-close close" onClick={handleCloseModal}>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <div className="modal-body d-flex justify-content-center">
+                                        {data ? (
+                                            data.map((item, index) => (
+                                                <div className="card m-2" style={{width: '18rem'}} key={index}>
+                                                    <img src={`data:image/jpeg;base64,${item.course_image}`}
+                                                         className="card-img-top" alt="..."/>
+                                                    <div className="card-body">
+                                                        <h5 className="card-title">{item.course_name}</h5>
+                                                        <p className="card-text">{item.course_description}</p>
+                                                        <a href="#" className="btn btn-primary">Aanmelden bij dit
+                                                            domein</a>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p>Geen data beschikbaar.</p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
             </div>
         </BaseLayout>
     );
