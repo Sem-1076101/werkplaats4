@@ -58,17 +58,17 @@ function Dashboard() {
                                     <div className="modal-body d-flex justify-content-center">
                                         {data ? (
                                             data.map((item, index) => (
-                                                <div className="card m-2" style={{width: '18rem'}} key={index}>
+                                                <div className="card m-2 d-flex flex-column" style={{width: '18rem'}}
+                                                     key={index}>
                                                     <img src={`data:image/jpeg;base64,${item.course_image}`}
                                                          className="card-img-top" alt="..."/>
-                                                    <div className="card-body">
+                                                    <div className="card-body d-flex flex-column">
                                                         <h5 className="card-title">{item.course_name}</h5>
                                                         <p className="card-text">{item.course_description}</p>
-                                                        <a href="#" className="btn btn-primary">Aanmelden bij dit
-                                                            domein</a>
+                                                        <a href={`domein/${item.id}`} className="btn btn-primary mt-auto">Aanmelden
+                                                            bij dit domein</a>
                                                     </div>
-                                                </div>
-                                            ))
+                                                </div>))
                                         ) : (
                                             <p>Geen data beschikbaar.</p>
                                         )}
