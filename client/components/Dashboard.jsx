@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import BaseLayout from './BaseLayout';
-import api from '../api';
+import {enrollStudent} from '../api';
+import {getDashboardData} from '../api';
 
 function Dashboard() {
     const [data, setData] = useState(null);
-
     const [showModal, setShowModal] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [hasDomain, setHasDomain] = useState(false);
+
+    const studentId = 1065913;
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -15,10 +19,22 @@ function Dashboard() {
         setShowModal(false);
     };
 
+    const handleEnrollStudent = (courseId) => {
+        enrollStudent(studentId, courseId)
+            .then(() => {
+                handleCloseModal();
+                setShowSuccessAlert(true);
+                setTimeout(() => setShowSuccessAlert(false), 5000); // Verberg de alert na 5 seconden
+            });
+    };
+
     useEffect(() => {
         const interval = setInterval(() => {
-            api.get('/api/dashboard')
-                .then(response => setData(response.data))
+            getDashboardData(studentId)
+                .then(response => {
+                    setData(response.data.data);
+                    setHasDomain(!!response.data.student_domain);
+                })
                 .catch(error => console.error('Error fetching data:', error));
         }, 1000);
 
@@ -28,6 +44,11 @@ function Dashboard() {
 
     return (
         <BaseLayout>
+            {showSuccessAlert && (
+                <div className="alert alert-success" role="alert">
+                    U heeft zich succesvol aangemeld voor het domein!
+                </div>
+            )}
             <div className="container">
                 <div className="row">
                     <div className="col-md-12"><h1>Dashboard</h1></div>
@@ -40,8 +61,13 @@ function Dashboard() {
                     </div>
                     <div className="col-md-6">
                         <h2>Domeinen</h2>
-                        <p>Je hebt nog geen domein toegevoegd. Klik <a href="#" onClick={handleOpenModal}>hier</a> om
-                            een domein te volgen.</p>
+                        {hasDomain ? (
+                            <p>U volgt al een domein.</p>
+                        ) : (
+                            <p>Je hebt nog geen domein toegevoegd. Klik <a href="#"
+                                                                           onClick={handleOpenModal}>hier</a> om
+                                een domein te volgen.</p>
+                        )}
                     </div>
                 </div>
 
@@ -67,6 +93,10 @@ function Dashboard() {
                                                         <h5 className="card-title">{item.course_name}</h5>
                                                         <p className="card-text">{item.course_description}</p>
                                                         <a href={`domein/${item.course_id}`}
+                                                           onClick={(event) => {
+                                                               event.preventDefault();
+                                                               handleEnrollStudent(item.course_id);
+                                                           }}
                                                            className="btn btn-primary mt-auto">Aanmelden
                                                             bij dit domein</a>
                                                     </div>
