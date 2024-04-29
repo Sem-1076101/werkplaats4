@@ -17,4 +17,13 @@ export function enrollStudent(studentId, courseId) {
         });
 }
 
+export function getDashboardData(studentId) {
+    return connection.get('/api/dashboard', { params: { studentnumber: studentId } })
+        .then(response => response.data)
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            throw error;
+        });
+}
+
 export default connection;
