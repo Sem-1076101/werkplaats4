@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import datetime
 from flask_cors import CORS
-from database import get_all_categories_from_database, enroll_student_in_database, get_student_domain
+from database import get_all_categories_from_database, enroll_student_in_database
 
 app = Flask(__name__)
 CORS(app)
@@ -15,9 +15,8 @@ def inject_current_year():
 @app.route('/api/dashboard', methods=['GET'])
 def get_data():
     data = get_all_categories_from_database()
-    studentnumber = request.args.get('studentnumber')
-    student_domain = get_student_domain(studentnumber) if studentnumber else None
-    return jsonify({'data': data, 'student_domain': student_domain})
+    return jsonify(data)
+
 
 @app.route('/api/enroll', methods=['POST'])
 def enroll_student():
