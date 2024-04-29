@@ -4,6 +4,7 @@ import base64
 def get_db():
     return sqlite3.connect('./instance/glitch.db')
 
+
 def get_all_categories_from_database():
     conn = get_db()
     cursor = conn.cursor()
@@ -19,3 +20,19 @@ def get_all_categories_from_database():
             row_dict['course_image'] = base64.b64encode(row_dict['course_image']).decode('utf-8')
         data.append(row_dict)
     return data
+
+
+def enroll_student_in_database(studentnumber, course_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE students SET course_id=? WHERE studentnumber=?", (course_id, studentnumber))
+    conn.commit()
+    conn.close()
+
+def get_student_domain(studentnumber):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT course_id FROM students WHERE studentnumber=?", (studentnumber,))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else None
