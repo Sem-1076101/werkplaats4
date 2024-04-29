@@ -17,4 +17,14 @@ export function enrollStudent(studentId, courseId) {
         });
 }
 
+export function checkEnrollment(studentId) {
+    return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
+        .then(response => {
+            return response.data.course_name;
+        })
+        .catch(error => {
+            console.error('Error checking enrollment:', error);
+        });
+}
+
 export default connection;
