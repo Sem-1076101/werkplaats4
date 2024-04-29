@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import BaseLayout from './BaseLayout';
-import {enrollStudent} from '../api';
-import {getDashboardData} from '../api';
+import connection from '../api';
+import { enrollStudent } from '../api';
 
 function Dashboard() {
     const [data, setData] = useState(null);
+
     const [showModal, setShowModal] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-    const [hasDomain, setHasDomain] = useState(false);
 
     const studentId = 1065913;
 
@@ -24,17 +24,14 @@ function Dashboard() {
             .then(() => {
                 handleCloseModal();
                 setShowSuccessAlert(true);
-                setTimeout(() => setShowSuccessAlert(false), 5000); // Verberg de alert na 5 seconden
+                setTimeout(() => setShowSuccessAlert(false), 5000);
             });
     };
 
     useEffect(() => {
         const interval = setInterval(() => {
-            getDashboardData(studentId)
-                .then(response => {
-                    setData(response.data.data);
-                    setHasDomain(!!response.data.student_domain);
-                })
+            connection.get('/api/dashboard')
+                .then(response => setData(response.data))
                 .catch(error => console.error('Error fetching data:', error));
         }, 1000);
 
@@ -61,13 +58,8 @@ function Dashboard() {
                     </div>
                     <div className="col-md-6">
                         <h2>Domeinen</h2>
-                        {hasDomain ? (
-                            <p>U volgt al een domein.</p>
-                        ) : (
-                            <p>Je hebt nog geen domein toegevoegd. Klik <a href="#"
-                                                                           onClick={handleOpenModal}>hier</a> om
-                                een domein te volgen.</p>
-                        )}
+                        <p>Je hebt nog geen domein toegevoegd. Klik <a href="#" onClick={handleOpenModal}>hier</a> om
+                            een domein te volgen.</p>
                     </div>
                 </div>
 
