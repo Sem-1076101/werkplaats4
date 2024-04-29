@@ -8,19 +8,16 @@ function FooterLayout() {
             <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
                 {/* Logo */}
                 <p className="col-md-4 mb-0 text-muted">
-                    <Link to="/flask/static"
+                    <Link to="/"
                           className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
                         <img src={logo} height="50" width="auto" alt="GLITCH-logo"/>
                     </Link>
                 </p>
 
                 {/* Copyright */}
-                <Link
-                    to="/flask/static"
-                    className="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-auto me-md-auto link-dark text-decoration-none"
-                >
+                <p>
                     © {new Date().getFullYear()} GLITCH, Inc
-                </Link>
+                </p>
 
                 {/* Navigatie */}
                 <ul className="nav col-md-4 justify-content-end">
