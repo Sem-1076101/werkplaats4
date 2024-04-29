@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import datetime
 from flask_cors import CORS
-from database import get_all_categories_from_database, enroll_student_in_database
+from database import get_all_categories_from_database, enroll_student_in_database, get_student_domain, get_course_name
 
 app = Flask(__name__)
 CORS(app)
@@ -30,6 +30,19 @@ def enroll_student():
     enroll_student_in_database(studentnumber, course_id)
 
     return {'message': 'Student enrolled successfully'}, 200
+
+
+@app.route('/api/check_enrollment', methods=['GET'])
+def check_enrollment():
+    studentnumber = request.args.get('studentnumber')
+
+    if not studentnumber:
+        return {'message': 'Studentnumber is required'}, 400
+
+    course_id = get_student_domain(studentnumber)
+    course_name = get_course_name(course_id)
+
+    return {'course_name': course_name}, 200
 
 
 if __name__ == '__main__':
