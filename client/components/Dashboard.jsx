@@ -31,21 +31,26 @@ function Dashboard() {
     };
 
     useEffect(() => {
-        checkEnrollment(studentId)
-            .then(course_name => {
-                setCourseName(course_name);
-            })
-            .catch(error => {
-                console.error('Error checking enrollment:', error);
-            });
+        const checkEnrollmentInterval = setInterval(() => {
+            checkEnrollment(studentId)
+                .then(course_name => {
+                    setCourseName(course_name);
+                })
+                .catch(error => {
+                    console.error('Error checking enrollment:', error);
+                });
+        }, 1000);
 
-        const interval = setInterval(() => {
+        const fetchDataInterval = setInterval(() => {
             connection.get('/api/dashboard')
                 .then(response => setData(response.data))
                 .catch(error => console.error('Error fetching data:', error));
         }, 1000);
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(checkEnrollmentInterval);
+            clearInterval(fetchDataInterval);
+        };
     }, []);
 
 
