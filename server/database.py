@@ -43,3 +43,11 @@ def get_course_name(course_id):
     result = cursor.fetchone()
     conn.close()
     return result[0] if result else None
+
+def get_all_modules():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM modules")
+    result = cursor.fetchall()
+    conn.close()
+    return result if result else None
