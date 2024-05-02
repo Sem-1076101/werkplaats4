@@ -17,6 +17,17 @@ export function enrollStudent(studentId, courseId) {
         });
 }
 
+export function get_modules() {
+    return connection.get(`/api/modules`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching modules', error);
+            throw error;
+        });
+}
+
 export function checkEnrollment(studentId) {
     return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
         .then(response => {
