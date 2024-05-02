@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 import datetime
 from flask_cors import CORS
-from database import get_all_categories_from_database, enroll_student_in_database, get_student_domain, get_course_name
+from database import get_all_categories_from_database, enroll_student_in_database, get_student_domain, get_course_name, get_all_modules
 
 app = Flask(__name__)
 CORS(app)
@@ -17,6 +17,11 @@ def get_data():
     data = get_all_categories_from_database()
     return jsonify(data)
 
+
+@app.route('/api/modules', methods=['GET'])
+def get_modules():
+    data = get_all_modules()
+    return jsonify(data)
 
 @app.route('/api/enroll', methods=['POST'])
 def enroll_student():
