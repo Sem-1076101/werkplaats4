@@ -7,3 +7,4 @@ __pycache__/
 /client/node_modules/
 /client/.expo/
 /server/.DS_Store
+/venv
