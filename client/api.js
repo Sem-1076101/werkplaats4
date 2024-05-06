@@ -77,4 +77,23 @@ export function getDomain(courseId) {
     });
 }
 
+export function addDomain(domain) {
+    return connection.post('/api/add-domain/', domain, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response) {
+            return response.data;
+        } else {
+            throw new Error('Response is undefined');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
+}
+
 export default connection;
