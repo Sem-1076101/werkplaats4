@@ -1,5 +1,6 @@
 import sqlite3
 import base64
+from flask import jsonify
 
 
 def get_db():
@@ -78,3 +79,14 @@ def edit_domain_in_database(course_id, domain):
     cursor.execute("UPDATE domains SET course_name=?, course_description=? WHERE course_id=?", (domain['course_name'], domain['course_description'], course_id))
     conn.commit()
     conn.close()
+
+
+def add_domain_in_database(domain):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO domains (course_name, course_description) VALUES (?, ?)", (domain['course_name'], domain['course_description']))
+        conn.commit()
+        return jsonify({'id': cursor.lastrowid})
+    finally:
+        conn.close()
