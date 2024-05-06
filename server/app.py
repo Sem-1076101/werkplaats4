@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import datetime
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
-                      get_course_name, delete_domain_from_database, edit_domain_in_database, get_domain_from_database)
+                      get_course_name, delete_domain_from_database, edit_domain_in_database, get_domain_from_database, add_domain_in_database)
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, support_credentials=True)
 
 
 @app.context_processor
@@ -72,6 +72,19 @@ def edit_domain(course_id):
         return jsonify({'message': 'Domein succesvol gewijzigd'}), 200
     except Exception as e:
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het domein: ' + str(e)}), 400
+
+
+@app.route('/api/add-domain/', methods=['POST', 'OPTIONS'])
+@cross_origin(supports_credentials=True)
+def create_domain():
+    if request.method == 'OPTIONS':
+        # Preflight request. Reply successfully:
+        return jsonify({'message':'success'}), 200
+    else:
+        # Actual request; handle POST.
+        data = request.get_json()
+        result = add_domain_in_database(data)
+        return result
 
 
 if __name__ == '__main__':
