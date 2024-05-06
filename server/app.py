@@ -1,7 +1,8 @@
 from flask import Flask, jsonify, request
-import datetime
 from flask_cors import CORS
-from database import get_all_categories_from_database, enroll_student_in_database, get_student_domain, get_course_name
+import datetime
+from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
+                      get_course_name, delete_domain_from_database, edit_domain_in_database, get_domain_from_database)
 
 app = Flask(__name__)
 CORS(app)
@@ -12,7 +13,7 @@ def inject_current_year():
     return {'current_year': datetime.datetime.now().year}
 
 
-@app.route('/api/dashboard', methods=['GET'])
+@app.route('/api/domains', methods=['GET'])
 def get_data():
     data = get_all_categories_from_database()
     return jsonify(data)
@@ -43,6 +44,34 @@ def check_enrollment():
     course_name = get_course_name(course_id)
 
     return {'course_name': course_name}, 200
+
+
+@app.route('/api/domains/<int:course_id>', methods=['DELETE'])
+def delete_domain(course_id):
+    try:
+        delete_domain_from_database(course_id)
+        return {'message': 'Domein succesvol verwijderd'}, 200
+    except Exception as e:
+        return {'message': 'Er is een fout opgetreden bij het verwijderen van het domein: ' + str(e)}, 400
+
+
+@app.route('/api/get-domain/<int:course_id>', methods=['GET'])
+def get_domain(course_id):
+    domain = get_domain_from_database(course_id)
+    if domain:
+        return jsonify(domain), 200
+    else:
+        return jsonify({'message': 'Domein niet gevonden'}), 404
+
+
+@app.route('/api/change-domain/<int:course_id>', methods=['PUT', 'GET'])
+def edit_domain(course_id):
+    data = request.get_json()
+    try:
+        edit_domain_in_database(course_id, data)
+        return jsonify({'message': 'Domein succesvol gewijzigd'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het domein: ' + str(e)}), 400
 
 
 if __name__ == '__main__':
