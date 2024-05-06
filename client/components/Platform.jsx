@@ -44,7 +44,7 @@ function Platform() {
                     <div className="col-12">
                         <div className="d-flex justify-content-between align-items-center">
                             <h1>Wijzig Domein</h1>
-                            <Link to="/platform" className="btn btn-secondary">Domein toevoegen</Link>
+                            <Link to="/aanmaken/domein/" className="btn btn-secondary">Domein toevoegen</Link>
                         </div>
                         {data ? (
                             <table className="table">
