@@ -4,6 +4,7 @@ import Index from './components/Index';
 import Dashboard from './components/Dashboard';
 import Platform from './components/Platform';
 import EditDomain from './components/EditDomain';
+import AddDomain from './components/AddDomain';
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/platform" element={<Platform />} />
                 <Route path="/wijzig/domein/:id" element={<EditDomain />} />
+                <Route path="/aanmaken/domein/" element={<AddDomain />} />
             </Routes>
         </Router>
     );
