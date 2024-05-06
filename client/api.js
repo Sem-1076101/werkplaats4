@@ -27,4 +27,54 @@ export function checkEnrollment(studentId) {
         });
 }
 
+export function domains() {
+    return connection.get('/api/domains')
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching domains:', error);
+        });
+}
+
+export function deleteDomain(courseId) {
+    return connection.delete(`/api/domains/${courseId}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+export function editDomain(courseId, domain) {
+    return connection.put(`/api/change-domain/${courseId}`, domain)
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw error; // re-throw the error so it can be caught in EditDomain.jsx
+        });
+}
+
+export function getDomain(courseId) {
+    return connection.get(`/api/get-domain/${courseId}`)
+    .then(response => {
+        if (response) {
+            return response.data;
+        } else {
+            throw new Error('Response is undefined');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error; // re-throw the error so it can be caught in EditDomain.jsx
+    });
+}
+
 export default connection;
