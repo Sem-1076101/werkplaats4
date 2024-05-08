@@ -2,7 +2,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 import datetime
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
-                      get_course_name, delete_domain_from_database, edit_domain_in_database, get_domain_from_database, add_domain_in_database)
+                      get_course_name, delete_domain_from_database, edit_domain_in_database,
+                      get_domain_from_database, add_domain_in_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -79,7 +80,7 @@ def edit_domain(course_id):
 def create_domain():
     if request.method == 'OPTIONS':
         # Preflight request. Reply successfully:
-        return jsonify({'message':'success'}), 200
+        return jsonify({'message': 'success'}), 200
     else:
         # Actual request; handle POST.
         data = request.get_json()
