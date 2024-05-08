@@ -17,10 +17,17 @@ function App() {
                 <Route path="/wijzig/domein/:id" element={<EditDomain />} />
                 <Route path="/aanmaken/domein/" element={<AddDomain />} />
                 <Route path="/modules" element={<Modules />} />
+
             </Routes>
         </Router>
     );
-
 }
 
 export default App;
+
+
+
+
+
+
+
