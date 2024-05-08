@@ -60,8 +60,7 @@ function Platform() {
                                 <tbody>
                                 {data.map((item, index) => (
                                     <tr key={index}>
-                                        <td><img src={`data:image/jpeg;base64,${item.course_image}`} width="90"
-                                                 height="90"/></td>
+                                        <td><img src={`data:image/jpeg;base64,${item.course_image}`} width="90" height="90"/></td>
                                         <td>{item.course_name}</td>
                                         <td>{item.course_description}</td>
                                         <td><a href={`wijzig/domein/${item.course_id}`} className="btn btn-primary">Wijzig dit
