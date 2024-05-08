@@ -42,7 +42,7 @@ function Dashboard() {
         }, 1000);
 
         const fetchDataInterval = setInterval(() => {
-            connection.get('/api/dashboard')
+            connection.get('/api/domains')
                 .then(response => setData(response.data))
                 .catch(error => console.error('Error fetching data:', error));
         }, 1000);
@@ -68,17 +68,14 @@ function Dashboard() {
                 <div className="row">
                     <div className="col-md-6">
                         <h2>Uitleg</h2>
-                        <p>Welkom op de dashboard pagina. Hier vind je een overzicht van de domeinen die je volgt en de
-                            voortgang die je hebt geboekt.</p>
+                        <p>Welkom op de dashboard pagina. Hier vind je een overzicht van de domeinen die je volgt en de voortgang die je hebt geboekt.</p>
                     </div>
                     <div className="col-md-6">
                         <h2>Domeinen</h2>
                         {courseName ? (
                             <p>Je bent al toegevoegd aan een domein, namelijk {courseName}</p>
                         ) : (
-                            <p>Je hebt nog geen domein toegevoegd. Klik <a href="#"
-                                                                           onClick={handleOpenModal}>hier</a> om
-                                een domein te volgen.</p>
+                            <p>Je hebt nog geen domein toegevoegd. Klik <a href="#" onClick={handleOpenModal}>hier</a> om een domein te volgen.</p>
                         )}
                     </div>
                 </div>

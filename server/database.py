@@ -85,7 +85,8 @@ def add_domain_in_database(domain):
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO domains (course_name, course_description) VALUES (?, ?)", (domain['course_name'], domain['course_description']))
+        course_image = base64.b64decode(domain['course_image']) if domain.get('course_image') else None
+        cursor.execute("INSERT INTO domains (course_name, course_description, course_image) VALUES (?, ?, ?)", (domain['course_name'], domain['course_description'], course_image))
         conn.commit()
         return jsonify({'id': cursor.lastrowid})
     finally:
