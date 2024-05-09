@@ -48,13 +48,15 @@ def get_course_name(course_id):
     conn.close()
     return result[0] if result else None
 
-def get_all_modules():
+
+def get_modules_from_database_with_domain_id(domain_id):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM modules")
-    result = cursor.fetchall()
+    cursor.execute("SELECT * FROM modules WHERE domain_id=?", (domain_id,))
+    result = cursor.fetchone()
     conn.close()
-    return result if result else None
+    return result[0] if result else None
+
 
 def delete_domain_from_database(course_id):
     conn = get_db()
@@ -80,10 +82,31 @@ def get_domain_from_database(course_id):
         return None
 
 
+def get_all_domains_from_database():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM domains")
+    columns = [column[0] for column in cursor.description]
+    result = cursor.fetchall()
+    conn.close()
+    if result:
+        domains = []
+        for row in result:
+            domain = dict(zip(columns, row))
+            if isinstance(domain['course_image'], tuple):
+                domain['course_image'] = bytes(domain['course_image'])
+            domain['course_image'] = base64.b64encode(domain['course_image']).decode('utf-8')
+            domains.append(domain)
+        return domains
+    else:
+        return None
+
+
 def edit_domain_in_database(course_id, domain):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("UPDATE domains SET course_name=?, course_description=? WHERE course_id=?", (domain['course_name'], domain['course_description'], course_id))
+    cursor.execute("UPDATE domains SET course_name=?, course_description=? WHERE course_id=?",
+                   (domain['course_name'], domain['course_description'], course_id))
     conn.commit()
     conn.close()
 
@@ -92,9 +115,9 @@ def add_domain_in_database(domain):
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO domains (course_name, course_description) VALUES (?, ?)", (domain['course_name'], domain['course_description']))
+        cursor.execute("INSERT INTO domains (course_name, course_description) VALUES (?, ?)",
+                       (domain['course_name'], domain['course_description']))
         conn.commit()
         return jsonify({'id': cursor.lastrowid})
     finally:
         conn.close()
-
