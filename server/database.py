@@ -53,9 +53,9 @@ def get_modules_from_database_with_domain_id(domain_id):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM modules WHERE domain_id=?", (domain_id,))
-    result = cursor.fetchone()
+    result = cursor.fetchall()
     conn.close()
-    return result[0] if result else None
+    return result if result else None
 
 
 def delete_domain_from_database(course_id):
