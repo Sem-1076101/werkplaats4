@@ -16,7 +16,7 @@ function App() {
                 <Route path="/platform" element={<Platform />} />
                 <Route path="/wijzig/domein/:id" element={<EditDomain />} />
                 <Route path="/aanmaken/domein/" element={<AddDomain />} />
-                <Route path="/modules/:id" element={<Modules />} />
+                <Route path="/modules/:domain_id" element={<Modules />} />
 
             </Routes>
         </Router>
