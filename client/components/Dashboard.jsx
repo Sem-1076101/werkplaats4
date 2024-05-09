@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout';
 import connection from '../api';
 import {enrollStudent} from '../api';
 import {checkEnrollment} from '../api';
+import {Link} from "react-router-dom";
 
 function Dashboard() {
     const [data, setData] = useState(null);
@@ -43,8 +44,15 @@ function Dashboard() {
 
         const fetchDataInterval = setInterval(() => {
             connection.get('/api/dashboard')
-                .then(response => setData(response.data))
-                .catch(error => console.error('Error fetching data:', error));
+                .then(response => {
+                    if (response && response.data) {
+                        setData(response.data);
+                    }
+                    else {
+                        console.error('Unexpected response:', response);
+                    }
+                })
+                .catch(error => console.error('Error fetching data:', error.response.data));
         }, 1000);
 
         return () => {
@@ -82,7 +90,7 @@ function Dashboard() {
                         )}
                     </div>
                 </div>
-
+                    <Link to="../modules/1">Domein 1</Link>
                 {showModal && (
                     <div className="modal show" tabIndex="-1" role="dialog" style={{display: 'block'}}>
                         <div className="modal-dialog modal-dialog-centered modal-xl" role="document">
