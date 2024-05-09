@@ -47,6 +47,7 @@ function Dashboard() {
                 .then(response => {
                     if (response && response.data) {
                         setData(response.data);
+                        console.log(response.data);
                     }
                     else {
                         console.error('Unexpected response:', response);
