@@ -5,6 +5,7 @@ import Dashboard from './components/Dashboard';
 import Platform from './components/Platform';
 import EditDomain from './components/EditDomain';
 import AddDomain from './components/AddDomain';
+import Modules from "./components/Modules";
 
 function App() {
     return (
@@ -15,9 +16,18 @@ function App() {
                 <Route path="/platform" element={<Platform />} />
                 <Route path="/wijzig/domein/:id" element={<EditDomain />} />
                 <Route path="/aanmaken/domein/" element={<AddDomain />} />
+                <Route path="/modules/:domain_id" element={<Modules />} />
+
             </Routes>
         </Router>
     );
 }
 
 export default App;
+
+
+
+
+
+
+

@@ -5,3 +5,7 @@ __pycache__/
 .vscode
 /client/node_modules/
 /client/.expo/
+
+/server/.DS_Store
+/venv
+.DS_Store
