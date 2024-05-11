@@ -10,6 +10,9 @@ COPY package*.json ./
 # Install any needed packages specified in package.json
 RUN npm install
 
+# Fix incompatible dependencies
+RUN npx expo install --fix
+
 # Copy the rest of the source code from your host to your image filesystem.
 COPY . .
 
@@ -17,4 +20,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the application when the container launches
-CMD ["npx", "expo", "start"]
+CMD ["npx", "expo", "start", "--web"]
