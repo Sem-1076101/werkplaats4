@@ -6,7 +6,7 @@ import Platform from './components/Platform';
 import EditDomain from './components/EditDomain';
 import AddDomain from './components/AddDomain';
 import Modules from "./components/Modules";
-import register from "./components/register"; 
+import Login from "./components/Login"
 import Register from './components/register';
 
 function App() {
@@ -15,6 +15,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/register" element={<Register />} /> {}
+                <Route path="/login" element={<Login />} /> {}
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/platform" element={<Platform />} />
                 <Route path="/wijzig/domein/:id" element={<EditDomain />} />
