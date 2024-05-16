@@ -30,10 +30,8 @@ def register():
     if not email.endswith('@hr.nl'):
         return jsonify({"error": "Registratie is alleen toegestaan voor hr.nl e-mailadressen"}), 400
 
-    # Hash het wachtwoord
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    # Voeg de gebruiker toe aan de database
     add_user_to_db('students', email, hashed_password, first_name, last_name)
 
     return jsonify({"message": "Registratie succesvol"}), 201
@@ -45,6 +43,32 @@ def add_user_to_db(table, email, password, first_name, last_name):
     conn.commit()
     conn.close()
 
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.json.get('email')
+    password = request.json.get('password')
+
+    if not email or not password:
+        return jsonify({"error": "E-mail en wachtwoord zijn verplicht"}), 400
+    
+    user = get_user_from_db(email)
+
+    if not user:
+        return jsonify({"error": "Gebruiker niet gevonden"}), 404
+
+    if not bcrypt.check_password_hash(user[2], password):  
+        return jsonify({"error": "Ongeldig wachtwoord"}), 401
+
+    return jsonify({"message": "Inloggen succesvol"}), 200
+
+
+def get_user_from_db(email):
+    conn = sqlite3.connect('instance/glitch.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM students WHERE email=?", (email,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
 
 @app.route('/api/domains', methods=['GET'])
 def get_data():
