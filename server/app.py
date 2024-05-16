@@ -2,8 +2,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 import datetime
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
-                      get_course_name, delete_domain_from_database, edit_domain_in_database, get_domain_from_database,
-                      add_domain_in_database, get_modules_from_database_with_domain_id, get_all_domains_from_database)
+                      get_course_name, delete_domain_from_database, edit_domain_in_database,
+                      get_domain_from_database, add_domain_in_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -17,20 +17,6 @@ def inject_current_year():
 @app.route('/api/domains', methods=['GET'])
 def get_data():
     data = get_all_categories_from_database()
-    return jsonify(data)
-
-
-@app.route('/api/modules/<int:domain_id>', methods=['GET'])
-def get_modules(domain_id):
-    print('domain_id', domain_id)
-    data = get_modules_from_database_with_domain_id(domain_id)
-    return jsonify(data)
-
-
-@app.route('/api/dashboard', methods=['GET'])
-def get_dashboard_data():
-    data = get_all_domains_from_database()
-    data = list(data)
     return jsonify(data)
 
 
@@ -102,5 +88,5 @@ def create_domain():
         return result
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000, debug=True)

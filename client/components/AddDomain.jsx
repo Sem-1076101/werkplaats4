@@ -6,7 +6,8 @@ import {Link} from "react-router-dom";
 function AddDomain() {
     const [domain, setDomain] = useState({
         course_name: '',
-        course_description: ''
+        course_description: '',
+        course_image: ''
     });
 
     const handleChange = (event) => {
@@ -16,6 +17,19 @@ function AddDomain() {
         });
     };
 
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result.replace('data:image/jpeg;base64,', '');
+            setDomain({
+                ...domain,
+                course_image: base64String
+            });
+        };
+        reader.readAsDataURL(file);
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
         addDomain(domain)
@@ -23,7 +37,8 @@ function AddDomain() {
                 alert('Domein succesvol toegevoegd!');
                 setDomain({
                     course_name: '',
-                    course_description: ''
+                    course_description: '',
+                    course_image: ''
                 });
             })
             .catch(error => {
@@ -48,6 +63,11 @@ function AddDomain() {
                         <label htmlFor="course_description" className="form-label">Domein beschrijving</label>
                         <textarea className="form-control" id="course_description" name="course_description"
                                   value={domain.course_description} onChange={handleChange} required/>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="course_image" className="form-label">Domein afbeelding</label>
+                        <input type="file" className="form-control" id="course_image" name="course_image" accept="image/png, image/jpeg"
+                               onChange={handleImageChange} required/>
                     </div>
                     <button type="submit" className="btn btn-primary">Voeg toe</button>
                 </form>
