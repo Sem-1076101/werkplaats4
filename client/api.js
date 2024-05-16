@@ -37,7 +37,11 @@ export function get_modules(domain_id) {
 export function checkEnrollment(studentId) {
     return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
         .then(response => {
-            return response.data.course_name;
+            if (response.data.course_name) {
+                return response.data.course_name;
+            } else {
+                throw new Error('No course name returned from server');
+            }
         })
         .catch(error => {
             console.error('Error checking enrollment:', error);
