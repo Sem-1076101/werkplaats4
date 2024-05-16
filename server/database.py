@@ -76,7 +76,8 @@ def get_domain_from_database(course_id):
 def edit_domain_in_database(course_id, domain):
     conn = get_db()
     cursor = conn.cursor()
-    cursor.execute("UPDATE domains SET course_name=?, course_description=? WHERE course_id=?", (domain['course_name'], domain['course_description'], course_id))
+    cursor.execute("UPDATE domains SET course_name=?, course_description=? WHERE course_id=?",
+                   (domain['course_name'], domain['course_description'], course_id))
     conn.commit()
     conn.close()
 
@@ -86,8 +87,23 @@ def add_domain_in_database(domain):
     cursor = conn.cursor()
     try:
         course_image = base64.b64decode(domain['course_image']) if domain.get('course_image') else None
-        cursor.execute("INSERT INTO domains (course_name, course_description, course_image) VALUES (?, ?, ?)", (domain['course_name'], domain['course_description'], course_image))
+        cursor.execute("INSERT INTO domains (course_name, course_description, course_image) VALUES (?, ?, ?)",
+                       (domain['course_name'], domain['course_description'], course_image))
         conn.commit()
         return jsonify({'id': cursor.lastrowid})
     finally:
         conn.close()
+
+
+def get_modules_from_database_by_domain_id(domain_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM modules WHERE domain_id=?", (domain_id,))
+    columns = [column[0] for column in cursor.description]
+    modules = cursor.fetchall()
+    conn.close()
+    data = []
+    for row in modules:
+        row_dict = dict(zip(columns, row))
+        data.append(row_dict)
+    return data
