@@ -10,9 +10,6 @@ function Modules() {
     const {domain_id} = useParams();
     const [modules, setModules] = useState(null);
 
-    const [showMedal, setShowModal] = useState(false);
-    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-
     useEffect(() => {
         const fetchDataInterval = setInterval(() => {
             connection.get('/api/modules/' + domain_id)
@@ -46,6 +43,7 @@ function Modules() {
                                     <tr>
                                         <th>Module naam</th>
                                         <th>Beschrijving</th>
+                                        <th>Progressie indicator</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -53,6 +51,7 @@ function Modules() {
                                         <tr key={index}>
                                             <td>{item[1]}</td>
                                             <td>{item[2]}</td>
+                                            <td>{item[3]}</td>
                                         </tr>
                                     ))}
                                     </tbody>
