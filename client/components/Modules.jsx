@@ -51,7 +51,7 @@ function Modules() {
                                         <tr key={index}>
                                             <td>{item[1]}</td>
                                             <td>{item[2]}</td>
-                                            <td>{item[3]}</td>
+                                            <td>{item[3]}%</td>
                                         </tr>
                                     ))}
                                     </tbody>
