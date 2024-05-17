@@ -3,6 +3,7 @@ import BaseLayout from "./BaseLayout";
 import connection from "../api";
 import {get_modules} from "../api";
 import {useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 // In je component
 
@@ -49,9 +50,12 @@ function Modules() {
                                     <tbody>
                                     {modules.map((item, index) => (
                                         <tr key={index}>
-                                            <td>{item[1]}</td>
-                                            <td>{item[2]}</td>
-                                            <td>{item[3]}%</td>
+                                            <td>{item.module_name}</td>
+                                            <td>{item.description}</td>
+                                            <td>{item.progress_indicator}%</td>
+                                            <td>
+                                                <Link to={`/levels/${item.id}`}>Bekijk levels</Link>
+                                            </td>
                                         </tr>
                                     ))}
                                     </tbody>
