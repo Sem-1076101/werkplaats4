@@ -6,10 +6,10 @@ import {checkEnrollment} from '../api';
 
 function Dashboard() {
     const [data, setData] = useState(null);
-
     const [showModal, setShowModal] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [courseName, setCourseName] = useState(null);
+    const [courseId, setCourseId] = useState(null);
 
     const studentId = 1065913;
 
@@ -33,8 +33,10 @@ function Dashboard() {
     useEffect(() => {
         const checkEnrollmentInterval = setInterval(() => {
             checkEnrollment(studentId)
-                .then(course_name => {
-                    setCourseName(course_name);
+                .then(response => {
+                    console.log('Response:', response);
+                    setCourseName(response.course_name);
+                    setCourseId(response.course_id);
                 })
                 .catch(error => {
                     console.error('Error checking enrollment:', error);
@@ -73,7 +75,9 @@ function Dashboard() {
                     <div className="col-md-6">
                         <h2>Domeinen</h2>
                         {courseName ? (
-                            <p>Je bent al toegevoegd aan een domein, namelijk {courseName}</p>
+                            <p>
+                                Je bent al toegevoegd aan een domein, namelijk <a href={`/modules/${courseId}`}>{courseName}</a>.
+                            </p>
                         ) : (
                             <p>Je hebt nog geen domein toegevoegd. Klik <a href="#" onClick={handleOpenModal}>hier</a> om een domein te volgen.</p>
                         )}
