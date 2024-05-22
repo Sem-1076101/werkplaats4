@@ -3,15 +3,13 @@ import BaseLayout from "./BaseLayout";
 import connection from "../api";
 import {get_modules} from "../api";
 import {useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 // In je component
 
 function Modules() {
     const {domain_id} = useParams();
     const [modules, setModules] = useState(null);
-
-    const [showMedal, setShowModal] = useState(false);
-    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
     useEffect(() => {
         const fetchDataInterval = setInterval(() => {
@@ -46,13 +44,18 @@ function Modules() {
                                     <tr>
                                         <th>Module naam</th>
                                         <th>Beschrijving</th>
+                                        <th>Progressie indicator</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {modules.map((item, index) => (
                                         <tr key={index}>
-                                            <td>{item[1]}</td>
-                                            <td>{item[2]}</td>
+                                            <td>{item.module_name}</td>
+                                            <td>{item.description}</td>
+                                            <td>{item.progress_indicator}%</td>
+                                            <td>
+                                                <Link to={`/levels/${item.id}`}>Bekijk levels</Link>
+                                            </td>
                                         </tr>
                                     ))}
                                     </tbody>
