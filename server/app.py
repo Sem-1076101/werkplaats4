@@ -32,14 +32,14 @@ def register():
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    add_user_to_db('students', email, hashed_password, first_name, last_name)
+    add_user_to_db('students', email, hashed_password, first_name, last_name, studentnumber)
 
     return jsonify({"message": "Registratie succesvol"}), 201
 
-def add_user_to_db(table, email, password, first_name, last_name):
+def add_user_to_db(table, email, password, first_name, last_name, studentnumber):
     conn = sqlite3.connect('instance/glitch.db')  
     cursor = conn.cursor()
-    cursor.execute(f"INSERT INTO {table} (email, password, first_name, last_name) VALUES (?, ?, ?, ?)", (email, password, first_name, last_name))
+    cursor.execute(f"INSERT INTO {table} (email, password, first_name, last_name, studentnumber) VALUES (?, ?, ?, ?, ?)", (email, password, first_name, last_name, studentnumber))
     conn.commit()
     conn.close()
 
