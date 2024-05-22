@@ -6,30 +6,27 @@ import Platform from './components/Platform';
 import EditDomain from './components/EditDomain';
 import AddDomain from './components/AddDomain';
 import Modules from "./components/Modules";
+import Login from "./components/Login"
+import Register from './components/register';
 import Levels from "./components/Levels";
+
 
 function App() {
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/register" element={<Register />} /> {}
+                <Route path="/login" element={<Login />} /> {}
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/platform" element={<Platform />} />
                 <Route path="/wijzig/domein/:id" element={<EditDomain />} />
                 <Route path="/aanmaken/domein/" element={<AddDomain />} />
                 <Route path="/modules/:domain_id" element={<Modules />} />
                 <Route path="/levels/:module_id" element={<Levels />} />
-
             </Routes>
         </Router>
     );
 }
 
 export default App;
-
-
-
-
-
-
-
