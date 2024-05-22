@@ -45,6 +45,7 @@ function Modules() {
                                         <th>Module naam</th>
                                         <th>Beschrijving</th>
                                         <th>Progressie indicator</th>
+                                        <th>Level</th>
                                     </tr>
                                     </thead>
                                     <tbody>
