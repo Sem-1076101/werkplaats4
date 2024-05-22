@@ -65,6 +65,26 @@ export function checkEnrollment(studentId) {
         });
 }
 
+export function fetchModules() {
+    return connection.get('/api/modules')
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching modules:', error);
+        });
+}
+
+export function deleteModule(moduleId) {
+    return connection.delete(`/api/modules/${moduleId}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 export function domains() {
     return connection.get('/api/domains')
         .then(response => {
