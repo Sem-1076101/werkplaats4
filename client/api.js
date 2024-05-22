@@ -22,8 +22,7 @@ export function get_modules(domain_id) {
         .then(response => {
             if (response) {
                 return response.data;
-            }
-            else {
+            } else {
                 throw new Error('Response is undefined');
             }
         })
@@ -39,8 +38,7 @@ export function get_level(module_id) {
         .then(response => {
             if (response) {
                 return response.data;
-            }
-            else {
+            } else {
                 throw new Error('Response is undefined');
             }
         })
@@ -54,10 +52,13 @@ export function get_level(module_id) {
 export function checkEnrollment(studentId) {
     return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
         .then(response => {
-            if (response.data.course_name) {
-                return response.data.course_name;
+            if (response.data.course_name && response.data.course_id) {
+                return {
+                    course_name: response.data.course_name,
+                    course_id: response.data.course_id
+                };
             } else {
-                throw new Error('No course name returned from server');
+                throw new Error('No course name or course id returned from server');
             }
         })
         .catch(error => {
@@ -102,17 +103,17 @@ export function editDomain(courseId, domain) {
 
 export function getDomain(courseId) {
     return connection.get(`/api/get-domain/${courseId}`)
-    .then(response => {
-        if (response) {
-            return response.data;
-        } else {
-            throw new Error('Response is undefined');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        throw error; // re-throw the error so it can be caught in EditDomain.jsx
-    });
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw error; // re-throw the error so it can be caught in EditDomain.jsx
+        });
 }
 
 export function addDomain(domain) {
@@ -121,17 +122,17 @@ export function addDomain(domain) {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => {
-        if (response) {
-            return response.data;
-        } else {
-            throw new Error('Response is undefined');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        throw error;
-    });
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw error;
+        });
 }
 
 export default connection;
