@@ -57,7 +57,7 @@ def check_enrollment():
     course_id = get_student_domain(studentnumber)
     course_name = get_course_name(course_id)
 
-    return {'course_name': course_name}, 200
+    return {'course_name': course_name, 'course_id': course_id}, 200
 
 
 @app.route('/api/domains/<int:course_id>', methods=['DELETE'])
