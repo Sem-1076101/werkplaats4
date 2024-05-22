@@ -95,6 +95,19 @@ def add_domain_in_database(domain):
         conn.close()
 
 
+def get_all_modules_from_database():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM modules")
+    columns = [column[0] for column in cursor.description]
+    categories = cursor.fetchall()
+    conn.close()
+    data = []
+    for row in categories:
+        row_dict = dict(zip(columns, row))
+        data.append(row_dict)
+    return data
+
 def get_modules_from_database_by_domain_id(domain_id):
     conn = get_db()
     cursor = conn.cursor()
