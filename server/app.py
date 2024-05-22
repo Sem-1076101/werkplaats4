@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 import datetime
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
-                      get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id, get_level_by_module_id)
+                      get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id, get_level_by_module_id, get_all_modules_from_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -25,6 +25,12 @@ def get_level(module_id):
     levels = get_level_by_module_id(module_id)
     print(levels)
     return jsonify(levels)
+
+
+@app.route('/api/modules', methods=['GET'])
+def get_modules_for_platform():
+    modules = get_all_modules_from_database()
+    return jsonify(modules)
 
 
 @app.route('/api/domains', methods=['GET'])
