@@ -34,6 +34,23 @@ export function get_modules(domain_id) {
         });
 }
 
+export function get_level(module_id) {
+    return connection.get(`/api/levels/${module_id}`)
+        .then(response => {
+            if (response) {
+                return response.data;
+            }
+            else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching levels', error);
+            console.error('Error fetching levels details ', error.response.data);
+            throw error;
+        });
+}
+
 export function checkEnrollment(studentId) {
     return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
         .then(response => {
