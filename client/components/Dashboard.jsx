@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout';
 import connection from '../api';
 import {enrollStudent} from '../api';
 import {checkEnrollment} from '../api';
+import {Link} from 'react-router-dom';
 
 function Dashboard() {
     const [data, setData] = useState(null);
@@ -10,6 +11,8 @@ function Dashboard() {
     const [showModal, setShowModal] = useState(false);
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [courseName, setCourseName] = useState(null);
+    const [courseId, setCourseId] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const studentId = 1065913;
 
@@ -33,8 +36,9 @@ function Dashboard() {
     useEffect(() => {
         const checkEnrollmentInterval = setInterval(() => {
             checkEnrollment(studentId)
-                .then(course_name => {
+                .then(({ course_name, course_id }) => {
                     setCourseName(course_name);
+                    setCourseId(course_id);
                 })
                 .catch(error => {
                     console.error('Error checking enrollment:', error);
@@ -72,8 +76,10 @@ function Dashboard() {
                     </div>
                     <div className="col-md-6">
                         <h2>Domeinen</h2>
-                        {courseName ? (
-                            <p>Je bent al toegevoegd aan een domein, namelijk {courseName}</p>
+                        {courseName && courseId ? (
+                            <p>Je bent al toegevoegd aan een domein, namelijk <br></br>
+                                <Link to={`/modules/${courseId}`}> {courseName}</Link>
+                            </p>
                         ) : (
                             <p>Je hebt nog geen domein toegevoegd. Klik <a href="#" onClick={handleOpenModal}>hier</a> om een domein te volgen.</p>
                         )}
