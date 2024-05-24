@@ -5,6 +5,8 @@ import Dashboard from './components/Dashboard';
 import Platform from './components/Platform';
 import EditDomain from './components/EditDomain';
 import AddDomain from './components/AddDomain';
+import EditModule from './components/EditModule';
+import AddModule from './components/AddModule';
 import Modules from "./components/Modules";
 import Levels from "./components/Levels";
 import Platform_modules from "./components/Platform_modules";
@@ -17,6 +19,8 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/platform" element={<Platform />} />
                 <Route path="/wijzig/domein/:id" element={<EditDomain />} />
+                <Route path="/wijzig/module/:id" element={<EditModule />} />
+                {/*<Routh path="/aanmaken/module/" element={<AddModule />} />*/}
                 <Route path="/aanmaken/domein/" element={<AddDomain />} />
                 <Route path="/modules/:domain_id" element={<Modules />} />
                 <Route path="/levels/:module_id" element={<Levels />} />
