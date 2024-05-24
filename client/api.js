@@ -17,6 +17,24 @@ export function enrollStudent(studentId, courseId) {
         });
 }
 
+
+export function get_modules_by_id(id) {
+    return connection.get(`/api/modules/${id}`)
+        .then(response => {
+            if (response) {
+                return response.data;
+            }
+            else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching modules', error);
+            console.error('Error fetching modules details ', error.response.data);
+            throw error;
+        });
+}
+
 export function get_modules(domain_id) {
     return connection.get(`/api/modules/${domain_id}`)
         .then(response => {
@@ -65,7 +83,7 @@ export function checkEnrollment(studentId) {
         });
 }
 
-export function fetchModules() {
+export function getModules() {
     return connection.get('/api/modules')
         .then(response => {
             return response.data;
@@ -75,13 +93,28 @@ export function fetchModules() {
         });
 }
 
-export function deleteModule(moduleId) {
-    return connection.delete(`/api/modules/${moduleId}`)
+export function deleteModule(id) {
+    return connection.delete(`/api/modules/${id}`)
         .then(response => {
             return response.data;
         })
         .catch(error => {
             console.error('Error:', error);
+        });
+}
+
+export function editModule(id, module) {
+    return connection.put(`/api/change-module/${id}`, module)
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw error;
         });
 }
 
@@ -116,7 +149,7 @@ export function editDomain(courseId, domain) {
         })
         .catch(error => {
             console.error('Error:', error);
-            throw error; // re-throw the error so it can be caught in EditDomain.jsx
+            throw error;
         });
 }
 
