@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import BaseLayout from './BaseLayout';
-import {fetchModules, deleteModule} from '../api'
+import {getModules, deleteModule} from '../api'
 import {Link} from "react-router-dom";
 import platform from "./Platform";
 
@@ -8,7 +8,7 @@ function Platform_modules() {
     const [modules, setPlatform_modules] = useState(null);
 
     useEffect(() => {
-        fetchModules()
+        getModules()
             .then(responseData => {
                 setPlatform_modules(responseData);
             })
@@ -20,7 +20,7 @@ function Platform_modules() {
     function handleDeleteModule(moduleId) {
         deleteModule(moduleId)
             .then(() => {
-                fetchModules()
+                getModules()
                     .then(responseData => {
                         setPlatform_modules(responseData);
                     })
@@ -57,6 +57,8 @@ function Platform_modules() {
                                 <tr>
                                     <th>Naam</th>
                                     <th>Beschrijving</th>
+                                    <th>Progressie indicator</th>
+                                    <th>domain_id</th>
                                     <th>Wijzigen</th>
                                     <th>Verwijderen</th>
                                 </tr>
@@ -66,7 +68,8 @@ function Platform_modules() {
                                     <tr key={platform_module.id}>
                                         <td>{platform_module.module_name}</td>
                                         <td>{platform_module.description}</td>
-                                        <td>{platform_module.progress_indicator}</td>
+                                        <td>{platform_module.progress_indicator}%</td>
+                                        <td>{platform_module.domain_id}</td>
                                         <td>
                                             <Link to={`/wijzig/module/${platform_module.id}`}
                                                   className="btn btn-primary">Wijzigen</Link>
