@@ -108,6 +108,25 @@ def get_all_modules_from_database():
         data.append(row_dict)
     return data
 
+
+def get_module_by_id_from_database(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM modules WHERE id=?", (id,))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else None
+
+
+def edit_module_in_database(id, module):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE modules SET module_name=?, description=?, progress_indicator=? WHERE id=?",
+                   (module['module_name'], module['description'], module['progress_indicator'], id))
+    conn.commit()
+    conn.close()
+
+
 def get_modules_from_database_by_domain_id(domain_id):
     conn = get_db()
     cursor = conn.cursor()
