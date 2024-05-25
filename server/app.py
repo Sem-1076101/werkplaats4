@@ -46,16 +46,17 @@ def login():
 
     if not email or not password:
         return jsonify({"error": "E-mail en wachtwoord zijn verplicht"}), 400
-    
+
     user = get_user_from_db(email)
 
     if not user:
         return jsonify({"error": "Gebruiker niet gevonden"}), 404
 
-    if not bcrypt.check_password_hash(user[2], password):  
+    if not bcrypt.check_password_hash(user[2], password):
         return jsonify({"error": "Ongeldig wachtwoord"}), 401
 
-    return jsonify({"message": "Inloggen succesvol"}), 200
+    # Return the studentnumber as part of the response
+    return jsonify({"message": "Inloggen succesvol", "studentnumber": user[5]}), 200
 
 
 @app.route('/api/modules/<int:domain_id>', methods=['GET'])
