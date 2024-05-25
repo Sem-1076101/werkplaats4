@@ -16,6 +16,8 @@ function Login() {
             console.log('Logging in:', formData);
             const response = await axios.post('http://localhost:5000/login', formData);
             console.log('Response:', response.data);
+            localStorage.setItem('studentnumber', response.data.studentnumber);
+            console.log('Stored studentnumber:', localStorage.getItem('studentnumber')); // Log the stored studentnumber
             navigate('/dashboard');
         } catch (error) {
             console.error('Error:', error.response.data);
