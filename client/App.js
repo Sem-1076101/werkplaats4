@@ -7,7 +7,7 @@ import EditDomain from './components/EditDomain';
 import AddDomain from './components/AddDomain';
 import Modules from "./components/Modules";
 import Login from "./components/Login"
-import Register from './components/register';
+import Register from './components/Register';
 import Levels from "./components/Levels";
 
 
