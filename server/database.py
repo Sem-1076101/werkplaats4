@@ -115,7 +115,12 @@ def get_module_by_id_from_database(id):
     cursor.execute("SELECT * FROM modules WHERE id=?", (id,))
     result = cursor.fetchone()
     conn.close()
-    return result[0] if result else None
+    if result:
+        columns = [column[0] for column in cursor.description]
+        module = dict(zip(columns, result))
+        return module
+    else:
+        return None
 
 
 def edit_module_in_database(id, module):
