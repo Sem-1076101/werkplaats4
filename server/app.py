@@ -4,7 +4,7 @@ import datetime
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
-                      get_level_by_module_id, get_all_modules_from_database, edit_module_in_database, get_module_by_id_from_database)
+                      get_level_by_module_id, get_all_modules_from_database, edit_module_in_database, get_module_by_id_from_database, delete_module_from_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -95,6 +95,14 @@ def delete_domain(course_id):
         return {'message': 'Er is een fout opgetreden bij het verwijderen van het domein: ' + str(e)}, 400
 
 
+@app.route('/api/modules/<int:id>', methods=['DELETE'])
+def delete_module(id):
+    try:
+        delete_module_from_database(id)
+        return {'message': 'Module succesvol verwijderd'}, 200
+    except Exception as e:
+        return {'message': 'Er is een fout opgetreden bij het verwijderen van de module: ' + str(e)}, 400
+
 @app.route('/api/get-domain/<int:course_id>', methods=['GET'])
 def get_domain(course_id):
     domain = get_domain_from_database(course_id)
@@ -118,13 +126,22 @@ def edit_domain(course_id):
 @cross_origin(supports_credentials=True)
 def create_domain():
     if request.method == 'OPTIONS':
-        # Preflight request. Reply successfully:
         return jsonify({'message': 'success'}), 200
     else:
-        # Actual request; handle POST.
         data = request.get_json()
         result = add_domain_in_database(data)
         return result
+
+
+# @app.route('/api/add-module/', methods=['POST', 'OPTIONS'])
+# @cross_origin(supports_credentials=True)
+# def create_module():
+#     if request.method == 'OPTIONS':
+#         return jsonify({'message': 'success'}), 200
+#     else:
+#         data = request.get_json()
+#         result = add_module_in_database(data)
+#         return result
 
 
 if __name__ == "__main__":
