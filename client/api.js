@@ -4,18 +4,40 @@ const connection = axios.create({
     baseURL: 'http://127.0.0.1:5000',
 });
 
-export function enrollStudent(studentId, courseId) {
-    return connection.post('/api/enroll', {
-        student_id: studentId,
-        course_id: courseId
-    })
+// level functions
+export function get_level(module_id) {
+    return connection.get(`/api/levels/${module_id}`)
         .then(response => {
-            console.log(response.data);
+            if (response) {
+                return response.data;
+            }
+            else {
+                throw new Error('Response is undefined');
+            }
         })
         .catch(error => {
-            console.error('Error enrolling student:', error);
+            console.error('Error fetching levels', error);
+            console.error('Error fetching levels details ', error.response.data);
+            throw error;
         });
 }
+
+export function checkEnrollment(studentId) {
+    return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
+        .then(response => {
+            if (response.data.course_name) {
+                return response.data.course_name;
+            } else {
+                throw new Error('No course name returned from server');
+            }
+        })
+        .catch(error => {
+            console.error('Error checking enrollment:', error);
+        });
+}
+
+
+// module functions
 
 
 export function get_modules_by_id(id) {
@@ -52,37 +74,6 @@ export function get_modules(domain_id) {
         });
 }
 
-export function get_level(module_id) {
-    return connection.get(`/api/levels/${module_id}`)
-        .then(response => {
-            if (response) {
-                return response.data;
-            }
-            else {
-                throw new Error('Response is undefined');
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching levels', error);
-            console.error('Error fetching levels details ', error.response.data);
-            throw error;
-        });
-}
-
-export function checkEnrollment(studentId) {
-    return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
-        .then(response => {
-            if (response.data.course_name) {
-                return response.data.course_name;
-            } else {
-                throw new Error('No course name returned from server');
-            }
-        })
-        .catch(error => {
-            console.error('Error checking enrollment:', error);
-        });
-}
-
 export function getModules() {
     return connection.get('/api/modules')
         .then(response => {
@@ -91,6 +82,26 @@ export function getModules() {
         .catch(error => {
             console.error('Error fetching modules:', error);
         });
+}
+
+
+export function addModule(module) {
+    return connection.post('/api/add-module/', module, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response) {
+            return response.data;
+        } else {
+            throw new Error('Response is undefined');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
 }
 
 export function deleteModule(id) {
@@ -115,6 +126,22 @@ export function editModule(id, module) {
         .catch(error => {
             console.error('Error:', error);
             throw error;
+        });
+}
+
+
+
+// domains functions
+export function enrollStudent(studentId, courseId) {
+    return connection.post('/api/enroll', {
+        student_id: studentId,
+        course_id: courseId
+    })
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error('Error enrolling student:', error);
         });
 }
 
@@ -186,5 +213,8 @@ export function addDomain(domain) {
         throw error;
     });
 }
+
+
+
 
 export default connection;
