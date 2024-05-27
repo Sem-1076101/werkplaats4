@@ -7,6 +7,8 @@ def get_db():
     return sqlite3.connect('./instance/glitch.db')
 
 
+# domain queries
+
 def get_all_categories_from_database():
     conn = get_db()
     cursor = conn.cursor()
@@ -95,6 +97,21 @@ def add_domain_in_database(domain):
         conn.close()
 
 
+# modules  queries
+
+def add_module_in_database(module):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO modules (module_name, description, progress_indicator, domain_id) VALUES (?, ?, ?, ?)",
+            (module['module_name'], module['description'], module['progress_indicator'], module['domain_id']))
+        conn.commit()
+        return jsonify({'id': cursor.lastrowid})
+    finally:
+        conn.close()
+
+
 def get_all_modules_from_database():
     conn = get_db()
     cursor = conn.cursor()
@@ -145,6 +162,16 @@ def get_modules_from_database_by_domain_id(domain_id):
         data.append(row_dict)
     return data
 
+
+def delete_module_from_database(id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM modules WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+
+
+# level queries
 
 def get_level_by_module_id(module_id):
     conn = get_db()
