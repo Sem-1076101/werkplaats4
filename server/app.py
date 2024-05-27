@@ -44,6 +44,15 @@ def get_modules_for_platform():
     return jsonify(modules)
 
 
+@app.route('/api/get-modules/<int:id>', methods=['GET'])
+def get_modules_by_id(id):
+    data = get_module_by_id_from_database(id)
+    if data:
+        return jsonify(data), 200
+    else:
+        return jsonify({'message': 'Module niet gevonden'}), 404
+
+
 @app.route('/api/domains', methods=['GET'])
 def get_data():
     data = get_all_categories_from_database()
