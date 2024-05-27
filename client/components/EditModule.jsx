@@ -51,7 +51,7 @@ const EditModule = () => {
                 <div className="row">
                     <div className="d-flex justify-content-between align-items-center">
                         <h1>Wijzig module</h1>
-                        <Link to="/platform" className="btn btn-secondary">Terug naar Platform</Link>
+                        <Link to="/platform/modules" className="btn btn-secondary">Terug naar Platform-Modules</Link>
                     </div>
                 </div>
                 <div className="row">
@@ -68,11 +68,11 @@ const EditModule = () => {
                                        className="form-control"/>
                             </div>
                             <div className="form-group">
-                                <label>Voortgang indicator:</label>
+                                <label>Voortgang indicator: (in %)</label>
                                 <input type="text" name="progress_indicator" value={module.progress_indicator}
                                        onChange={handleChange} className="form-control"/>
                             </div>
-                            <button type="submit" className="btn btn-primary">Opslaan</button>
+                            <button type="submit" className="btn btn-primary mt-3">Opslaan</button>
                         </form>
                     </div>
                 </div>
