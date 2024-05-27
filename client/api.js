@@ -19,7 +19,7 @@ export function enrollStudent(studentId, courseId) {
 
 
 export function get_modules_by_id(id) {
-    return connection.get(`/api/modules/${id}`)
+    return connection.get(`/api/get-modules/${id}`)
         .then(response => {
             if (response) {
                 return response.data;
