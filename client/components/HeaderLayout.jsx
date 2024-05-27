@@ -17,6 +17,10 @@ function HeaderLayout() {
                 </ul>
 
                 <div className="col-md-9 text-end">
+                    <Link className="btn btn-primary me-2" to="/platform/modules"
+                          role="button">Modules</Link>
+                    <Link className="btn btn-primary me-2" to="/platform"
+                          role="button">Domeinen</Link>
                     <Link className="btn btn-outline-primary login-button me-1" to="/login" role="button">Inloggen</Link>
                     <Link className="btn btn-primary register-button me-2" to="/register"
                           role="button">Registreren</Link>
