@@ -20,7 +20,7 @@ function App() {
                 <Route path="/platform" element={<Platform />} />
                 <Route path="/wijzig/domein/:id" element={<EditDomain />} />
                 <Route path="/wijzig/module/:id" element={<EditModule />} />
-                {/*<Routh path="/aanmaken/module/" element={<AddModule />} />*/}
+                <Route path="/aanmaken/module/" element={<AddModule />} />
                 <Route path="/aanmaken/domein/" element={<AddDomain />} />
                 <Route path="/modules/:domain_id" element={<Modules />} />
                 <Route path="/levels/:module_id" element={<Levels />} />
