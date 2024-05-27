@@ -76,4 +76,4 @@ function AddModule() {
     );
 }
 
-export default AddDomain;
+export default AddModule;
