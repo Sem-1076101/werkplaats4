@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Button, SafeAreaView, Text } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 import HeaderLayout from './HeaderLayout';
 import FooterLayout from './FooterLayout';
-import { useTheme } from './ThemeContext';
 
 export default function BaseLayout({ children }) {
     const [theme, setTheme] = useState('light');
@@ -12,13 +12,15 @@ export default function BaseLayout({ children }) {
     };
 
     return (
-        <SafeAreaView style={[styles.container, theme === 'dark' ? styles.darkTheme : styles.lightTheme]}>
-            <HeaderLayout />
-            <View style={styles.content}>
-                {children}
-            </View>
-            <FooterLayout />
-        </SafeAreaView>
+        <NavigationContainer>
+            <SafeAreaView style={[styles.container, theme === 'dark' ? styles.darkTheme : styles.lightTheme]}>
+                <HeaderLayout />
+                <View style={styles.content}>
+                    {children}
+                </View>
+                <FooterLayout />
+            </SafeAreaView>
+        </NavigationContainer>
     );
 }
 
