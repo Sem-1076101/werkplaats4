@@ -9,26 +9,22 @@ export function enrollStudent(studentId, courseId) {
         student_id: studentId,
         course_id: courseId
     })
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error('Error enrolling student:', error);
-        });
 }
 
 export function get_modules(domain_id) {
+    console.log('domain_id:', domain_id); // Log de waarde van domain_id
     return connection.get(`/api/modules/${domain_id}`)
         .then(response => {
-            if (response) {
+            if (response && response.data) {
                 return response.data;
             } else {
-                throw new Error('Response is undefined');
+                console.error('Fout bij ophalen van modules: geen data-eigenschap in de reactie');
+                throw new Error('Geen data-eigenschap in de reactie');
             }
         })
         .catch(error => {
-            console.error('Error fetching modules', error);
-            console.error('Error fetching modules details ', error.response.data);
+            console.error('Fout bij ophalen van modules:', error);
+            console.error('Fout bij ophalen van modulesdetails:', error.response.data);
             throw error;
         });
 }
