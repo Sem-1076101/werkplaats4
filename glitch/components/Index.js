@@ -1,10 +1,8 @@
 import React from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import BaseLayout from './BaseLayout';
 
 function Index() {
     return (
-        <BaseLayout>
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.row}>
                     <View style={styles.col}>
@@ -42,7 +40,6 @@ function Index() {
                     </View>
                 </View>
             </ScrollView>
-        </BaseLayout>
     );
 }
 
