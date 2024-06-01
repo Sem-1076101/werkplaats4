@@ -1,25 +1,29 @@
 import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useTheme } from './ThemeContext';
+import {Helmet} from 'react-helmet';
+import {View, Text, Image, TouchableOpacity, StyleSheet} from 'react-native';
+import useNavigation from './useNavigation';
+import {useTheme} from './ThemeContext';
 
 const logo = require('../static/images/glitch-logo.png');
 const themeSwitch = require('../static/images/circle-half-stroke-solid.png');
 
 export default function HeaderLayout() {
     const navigation = useNavigation();
-    const { theme, toggleTheme } = useTheme();
+    const {theme, toggleTheme} = useTheme();
 
     const styles = getStyles(theme);
 
     return (
         <View style={styles.container}>
+            <Helmet>
+                <title>Glitch</title>
+            </Helmet>
             <View style={styles.header}>
                 <TouchableOpacity
                     onPress={() => navigation.navigate('Home')}
                     style={styles.logoContainer}
                 >
-                    <Image source={logo} style={styles.logo} />
+                    <Image source={logo} style={styles.logo}/>
                 </TouchableOpacity>
 
                 <View style={styles.buttonsContainer}>
@@ -39,7 +43,7 @@ export default function HeaderLayout() {
                         style={styles.themeButton}
                         onPress={toggleTheme}
                     >
-                        <Image source={themeSwitch} style={styles.themeSwitchIcon} />
+                        <Image source={themeSwitch} style={styles.themeSwitchIcon}/>
                     </TouchableOpacity>
                 </View>
             </View>
