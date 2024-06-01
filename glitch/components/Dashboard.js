@@ -1,11 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Button, StyleSheet, Alert, Modal, ScrollView, Image, TouchableOpacity} from 'react-native';
-import axios from 'axios';
+import {View, Text, Button, StyleSheet, Modal, ScrollView, Image, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import BaseLayout from './BaseLayout';
 import connection from '../api';
 import {enrollStudent} from '../api';
 import {checkEnrollment} from '../api';
+import {useNavigate} from 'react-router-dom';
+import isWeb from '../isWeb';
+
 
 function Dashboard({navigation}) {
     const [data, setData] = useState(null);
@@ -14,6 +15,10 @@ function Dashboard({navigation}) {
     const [courseName, setCourseName] = useState(null);
     const [courseId, setCourseId] = useState(null);
     const [studentnumber, setStudentnumber] = useState('');
+    let navigate;
+    if (isWeb) {
+        navigate = useNavigate();
+    }
 
     useEffect(() => {
         const fetchStudentnumber = async () => {
@@ -47,7 +52,6 @@ function Dashboard({navigation}) {
             if (studentnumber) {
                 try {
                     const response = await checkEnrollment(studentnumber);
-                    console.log('Response:', response);
                     setCourseName(response.course_name);
                     setCourseId(response.course_id);
                 } catch (error) {
@@ -91,7 +95,14 @@ function Dashboard({navigation}) {
                         {courseName ? (
                             <Text style={styles.paragraph}>
                                 Je bent al toegevoegd aan een domein, namelijk <Text style={styles.link}
-                                                                                     onPress={() => navigation.navigate('Modules', {courseId})}>{courseName}</Text>.
+                                                                                     onPress={() => {
+                                                                                         console.log('Navigating with domain_id:', courseId);
+                                                                                         if (isWeb) {
+                                                                                             navigate(`/modules/${courseId}`);
+                                                                                         } else {
+                                                                                             navigation.navigate('Modules', {domain_id: courseId});
+                                                                                         }
+                                                                                     }}>{courseName}</Text>.
                             </Text>
                         ) : (
                             <Text style={styles.paragraph}>
