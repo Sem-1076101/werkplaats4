@@ -6,6 +6,7 @@ import { ThemeProvider } from './components/ThemeContext';
 import Index from './components/Index';
 import Login from './components/Login';
 import Dashboard from './components/Dashboard';
+import Modules from './components/Modules';
 import BaseLayout from './components/BaseLayout';
 
 const Stack = createStackNavigator();
@@ -21,6 +22,7 @@ function App() {
                             <Route path="/home" element={<Index />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/modules/:domain_id" element={<Modules />} />
                         </Routes>
                     </BaseLayout>
                 </Router>
@@ -34,6 +36,7 @@ function App() {
                         <Stack.Screen name="Home" component={Index} />
                         <Stack.Screen name="Login" component={Login} />
                         <Stack.Screen name="Dashboard" component={Dashboard} />
+                        <Stack.Screen name="Modules" component={Modules} />
                     </Stack.Navigator>
                 </BaseLayout>
             </ThemeProvider>
