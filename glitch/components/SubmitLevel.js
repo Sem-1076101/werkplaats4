@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Alert, Button, StyleSheet, Text, TextInput, View, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import axios from 'axios';
+import { useRoute } from '@react-navigation/native';
+import { get_level } from '../api';
 
-function SubmitLevel({ level_id }) {
+function SubmitLevel() {
+    const route = useRoute();
+    const { level_id } = route.params;
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState('');
+    const [level, setLevel] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        get_level(level_id)
+            .then(data => {
+                setLevel(data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error('Error fetching level data:', error);
+                setLoading(false);
+            });
+    }, [level_id]);
 
     const handleFilePick = async () => {
         let result = await DocumentPicker.getDocumentAsync({});
@@ -24,7 +42,7 @@ function SubmitLevel({ level_id }) {
         formData.append('level_file', {
             uri: file.uri,
             name: file.name,
-            type: 'application/octet-stream', // Pas dit aan als je een specifiek bestandstype verwacht
+            type: file.mimeType || 'application/octet-stream', // Pas dit aan als je een specifiek bestandstype verwacht
         });
         formData.append('level_description', description);
 
@@ -42,15 +60,15 @@ function SubmitLevel({ level_id }) {
             });
     };
 
-    // ... rest of your code ...
-}
-
-export default SubmitLevel;
-
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Level Inleveren</Text>
-            {level ? (
+            {loading ? (
+                <View style={styles.loading}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                    <Text>Level gegevens worden geladen...</Text>
+                </View>
+            ) : level ? (
                 <>
                     <Text style={styles.label}>Naam: {level.assignment_title}</Text>
                     <Text style={styles.label}>Beschrijving: {level.assignment_description}</Text>
@@ -66,12 +84,13 @@ export default SubmitLevel;
                 </>
             ) : (
                 <View style={styles.loading}>
-                    <Text>Levelgegevens worden geladen...</Text>
+                    <Text>Geen levelgegevens gevonden.</Text>
                 </View>
             )}
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     container: {
