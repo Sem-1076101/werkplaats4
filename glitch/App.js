@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Dashboard from './components/Dashboard';
 import Modules from './components/Modules';
 import BaseLayout from './components/BaseLayout';
+import Levels from './components/Levels';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ function App() {
                             <Route path="/login" element={<Login />} />
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/modules/:domain_id" element={<Modules />} />
+                            <Route path="/levels/:module_id" element={<Levels />} />
                         </Routes>
                     </BaseLayout>
                 </Router>
@@ -37,6 +39,7 @@ function App() {
                         <Stack.Screen name="Login" component={Login} />
                         <Stack.Screen name="Dashboard" component={Dashboard} />
                         <Stack.Screen name="Modules" component={Modules} />
+                        <Stack.Screen name="Levels" component={Levels} />
                     </Stack.Navigator>
                 </BaseLayout>
             </ThemeProvider>
