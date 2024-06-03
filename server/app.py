@@ -1,18 +1,64 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
+from flask_bcrypt import Bcrypt
 import datetime
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
-                      get_level_by_module_id, get_all_modules_from_database, edit_module_in_database, get_module_by_id_from_database, delete_module_from_database)
+
+                      get_level_by_module_id, get_all_modules_from_database, edit_module_in_database, get_module_by_id_from_database, delete_module_from_database, add_user_to_db, get_user_from_db)
+
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
+bcrypt = Bcrypt(app)
 
 
 @app.context_processor
 def inject_current_year():
     return {'current_year': datetime.datetime.now().year}
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    studentnumber = data.get('studentnumber') 
+
+    if not email or not password:
+        return jsonify({"error": "E-mail en wachtwoord zijn verplicht"}), 400
+
+    if not email.endswith('@hr.nl'):
+        return jsonify({"error": "Registratie is alleen toegestaan voor hr.nl e-mailadressen"}), 400
+
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    add_user_to_db('students', email, hashed_password, first_name, last_name, studentnumber)
+
+    return jsonify({"message": "Registratie succesvol"}), 201
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.json.get('email')
+    password = request.json.get('password')
+
+    if not email or not password:
+        return jsonify({"error": "E-mail en wachtwoord zijn verplicht"}), 400
+
+    user = get_user_from_db(email)
+
+    if not user:
+        return jsonify({"error": "Gebruiker niet gevonden"}), 404
+
+    if not bcrypt.check_password_hash(user[2], password):
+        return jsonify({"error": "Ongeldig wachtwoord"}), 401
+
+    # Return the studentnumber as part of the response
+    return jsonify({"message": "Inloggen succesvol", "studentnumber": user[5]}), 200
 
 
 @app.route('/api/modules/<int:domain_id>', methods=['GET'])
@@ -83,7 +129,7 @@ def check_enrollment():
     course_id = get_student_domain(studentnumber)
     course_name = get_course_name(course_id)
 
-    return {'course_name': course_name}, 200
+    return {'course_name': course_name, 'course_id': course_id}, 200
 
 
 @app.route('/api/domains/<int:course_id>', methods=['DELETE'])
@@ -93,7 +139,7 @@ def delete_domain(course_id):
         return {'message': 'Domein succesvol verwijderd'}, 200
     except Exception as e:
         return {'message': 'Er is een fout opgetreden bij het verwijderen van het domein: ' + str(e)}, 400
-
+    
 
 @app.route('/api/modules/<int:id>', methods=['DELETE'])
 def delete_module(id):
@@ -133,6 +179,7 @@ def create_domain():
         return result
 
 
+
 # @app.route('/api/add-module/', methods=['POST', 'OPTIONS'])
 # @cross_origin(supports_credentials=True)
 # def create_module():
@@ -144,5 +191,6 @@ def create_domain():
 #         return result
 
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+if __name__ == '__main__':
+    app.run(host='192.168.1.142', port=5000)
+

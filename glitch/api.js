@@ -1,42 +1,33 @@
 import axios from 'axios';
 
 const connection = axios.create({
-    baseURL: 'http://127.0.0.1:5000',
+    baseURL: 'http://192.168.1.142:5000',
 });
-
-
 
 export function enrollStudent(studentId, courseId) {
     return connection.post('/api/enroll', {
         student_id: studentId,
         course_id: courseId
     })
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error('Error enrolling student:', error);
-        });
 }
 
 export function get_modules(domain_id) {
+    console.log('domain_id:', domain_id); // Log de waarde van domain_id
     return connection.get(`/api/modules/${domain_id}`)
         .then(response => {
-            if (response) {
+            if (response && response.data) {
                 return response.data;
             } else {
-                throw new Error('Response is undefined');
+                console.error('Fout bij ophalen van modules: geen data-eigenschap in de reactie');
+                throw new Error('Geen data-eigenschap in de reactie');
             }
         })
         .catch(error => {
-            console.error('Error fetching modules', error);
-            console.error('Error fetching modules details ', error.response.data);
+            console.error('Fout bij ophalen van modules:', error);
+            console.error('Fout bij ophalen van modulesdetails:', error.response.data);
             throw error;
         });
 }
-
-// level functions
-
 
 export function get_level(module_id) {
     return connection.get(`/api/levels/${module_id}`)
@@ -71,115 +62,6 @@ export function checkEnrollment(studentId) {
         });
 }
 
-
-// module functions
-
-
-export function get_modules_by_id(id) {
-    return connection.get(`/api/get-modules/${id}`)
-        .then(response => {
-            if (response) {
-                return response.data;
-            }
-            else {
-                throw new Error('Response is undefined');
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching modules', error);
-            console.error('Error fetching modules details ', error.response.data);
-            throw error;
-        });
-}
-
-export function get_modules(domain_id) {
-    return connection.get(`/api/modules/${domain_id}`)
-        .then(response => {
-            if (response) {
-                return response.data;
-            }
-            else {
-                throw new Error('Response is undefined');
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching modules', error);
-            console.error('Error fetching modules details ', error.response.data);
-            throw error;
-        });
-}
-
-export function getModules() {
-    return connection.get('/api/modules')
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            console.error('Error fetching modules:', error);
-        });
-}
-
-
-export function addModule(module) {
-    return connection.post('/api/add-module/', module, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (response) {
-            return response.data;
-        } else {
-            throw new Error('Response is undefined');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        throw error;
-    });
-}
-
-export function deleteModule(id) {
-    return connection.delete(`/api/modules/${id}`)
-        .then(response => {
-            return response.data;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
-
-export function editModule(id, module) {
-    return connection.put(`/api/change-module/${id}`, module)
-        .then(response => {
-            if (response) {
-                return response.data;
-            } else {
-                throw new Error('Response is undefined');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            throw error;
-        });
-}
-
-
-
-// domains functions
-export function enrollStudent(studentId, courseId) {
-    return connection.post('/api/enroll', {
-        student_id: studentId,
-        course_id: courseId
-    })
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error('Error enrolling student:', error);
-        });
-}
-
 export function domains() {
     return connection.get('/api/domains')
         .then(response => {
@@ -211,7 +93,7 @@ export function editDomain(courseId, domain) {
         })
         .catch(error => {
             console.error('Error:', error);
-            throw error;
+            throw error; // re-throw the error so it can be caught in EditDomain.jsx
         });
 }
 
@@ -248,8 +130,5 @@ export function addDomain(domain) {
             throw error;
         });
 }
-
-
-
 
 export default connection;

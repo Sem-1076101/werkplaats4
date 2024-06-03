@@ -11,7 +11,12 @@ function Dashboard() {
     const [courseName, setCourseName] = useState(null);
     const [courseId, setCourseId] = useState(null);
 
-    const studentId = 1065913;
+    const [studentnumber, setStudentnumber] = useState('');
+
+    useEffect(() => {
+        const storedStudentnumber = localStorage.getItem('studentnumber');
+        setStudentnumber(storedStudentnumber);
+    }, []);
 
     const handleOpenModal = () => {
         setShowModal(true);
@@ -22,7 +27,7 @@ function Dashboard() {
     };
 
     const handleEnrollStudent = (courseId) => {
-        enrollStudent(studentId, courseId)
+        enrollStudent(studentnumber, courseId)
             .then(() => {
                 handleCloseModal();
                 setShowSuccessAlert(true);
@@ -32,15 +37,17 @@ function Dashboard() {
 
     useEffect(() => {
         const checkEnrollmentInterval = setInterval(() => {
-            checkEnrollment(studentId)
-                .then(response => {
-                    console.log('Response:', response);
-                    setCourseName(response.course_name);
-                    setCourseId(response.course_id);
-                })
-                .catch(error => {
-                    console.error('Error checking enrollment:', error);
-                });
+            if (studentnumber) {
+                checkEnrollment(studentnumber)
+                    .then(response => {
+                        console.log('Response:', response);
+                        setCourseName(response.course_name);
+                        setCourseId(response.course_id);
+                    })
+                    .catch(error => {
+                        console.error('Error checking enrollment:', error);
+                    });
+            }
         }, 1000);
 
         const fetchDataInterval = setInterval(() => {
@@ -53,7 +60,7 @@ function Dashboard() {
             clearInterval(checkEnrollmentInterval);
             clearInterval(fetchDataInterval);
         };
-    }, []);
+    }, [studentnumber]);
 
 
     return (
@@ -70,16 +77,21 @@ function Dashboard() {
                 <div className="row">
                     <div className="col-md-6">
                         <h2>Uitleg</h2>
-                        <p>Welkom op de dashboard pagina. Hier vind je een overzicht van de domeinen die je volgt en de voortgang die je hebt geboekt.</p>
+                        <p>Welkom op de dashboard pagina. Hier vind je een overzicht van de domeinen die je volgt en de
+                            voortgang die je hebt geboekt.</p>
                     </div>
                     <div className="col-md-6">
                         <h2>Domeinen</h2>
                         {courseName ? (
                             <p>
-                                Je bent al toegevoegd aan een domein, namelijk <a href={`/modules/${courseId}`}>{courseName}</a>.
+                                Je bent al toegevoegd aan een domein, namelijk <a
+                                href={`/modules/${courseId}`}>{courseName}</a>.
+
                             </p>
                         ) : (
-                            <p>Je hebt nog geen domein toegevoegd. Klik <a href="#" onClick={handleOpenModal}>hier</a> om een domein te volgen.</p>
+                            <p>Je hebt nog geen domein toegevoegd. Klik <a href="#"
+                                                                           onClick={handleOpenModal}>hier</a> om een
+                                domein te volgen.</p>
                         )}
                     </div>
                 </div>
