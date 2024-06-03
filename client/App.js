@@ -1,19 +1,19 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
 import Index from './components/Index';
 import Dashboard from './components/Dashboard';
 import Platform from './components/Platform';
 import EditDomain from './components/EditDomain';
 import AddDomain from './components/AddDomain';
-import EditModule from './components/EditModule';
-import AddModule from './components/AddModule';
+// import EditModule from './components/EditModule';
+// import AddModule from './components/AddModule';
 import Modules from "./components/Modules";
 import Login from "./components/Login"
 import Register from './components/Register';
 import Levels from "./components/Levels";
-import PlatformModules from "./components/PlatformModules"; // pas de bestandsnaam aan
+// import PlatformModules from "./components/PlatformModules"; // pas de bestandsnaam aan
 
 
 function App() {
