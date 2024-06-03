@@ -25,6 +25,18 @@ export default function HeaderLayout() {
                 >
                     <Image source={logo} style={styles.logo}/>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.button]}
+                    onPress={() => navigation.navigate('Modules')}
+                >
+                    <Text style={styles.buttonText}>Modules</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={[styles.button]}
+                    onPress={() => navigation.navigate('Dashboard')}
+                >
+                    <Text style={styles.buttonText}>Domeinen</Text>
+                </TouchableOpacity>
 
                 <View style={styles.buttonsContainer}>
                     <TouchableOpacity
