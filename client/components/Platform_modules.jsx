@@ -1,139 +1,96 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { getModules, deleteModule } from '../api'; // Pas de import path aan zoals nodig
+import React, {useState, useEffect} from 'react';
+import BaseLayout from './BaseLayout';
+import {getModules, deleteModule} from '../api'
+import {Link} from "react-router-dom";
+import platform from "./Platform";
 
-function PlatformModules() {
-    const [modules, setPlatformModules] = useState([]);
-    const navigation = useNavigation();
+function Platform_modules() {
+    const [modules, setPlatform_modules] = useState(null);
 
     useEffect(() => {
-        fetchModules();
-    }, []);
-
-    const fetchModules = () => {
         getModules()
             .then(responseData => {
-                setPlatformModules(responseData);
+                setPlatform_modules(responseData);
             })
             .catch(error => {
                 console.error('Er was een fout bij het ophalen van de data:', error);
             });
-    };
+    }, []);
 
-    const handleDeleteModule = (moduleId) => {
+    function handleDeleteModule(moduleId) {
         deleteModule(moduleId)
             .then(() => {
-                fetchModules();
-            })
-            .catch(error => {
-                console.error('Er was een fout bij het verwijderen van de module:', error);
+                getModules()
+                    .then(responseData => {
+                        setPlatform_modules(responseData);
+                    })
+                    .catch(error => {
+                        console.error('Er was een fout bij het ophalen van de data:', error);
+                    });
             });
-    };
+    }
+
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.header}>Modules Platform</Text>
-            <Text style={styles.subHeader}>Welkom op de modules platform pagina, hier kan je nieuwe modules toevoegen die studenten kunnen volgen.</Text>
-            <TouchableOpacity
-                style={styles.addButton}
-                onPress={() => navigation.navigate('AddModule')}
-            >
-                <Text style={styles.buttonText}>Module toevoegen</Text>
-            </TouchableOpacity>
-            {modules.length > 0 ? (
-                <FlatList
-                    data={modules}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.moduleContainer}>
-                            <Text style={styles.moduleText}>{item.module_name}</Text>
-                            <Text style={styles.moduleText}>{item.description}</Text>
-                            <Text style={styles.moduleText}>{item.progress_indicator}%</Text>
-                            <Text style={styles.moduleText}>{item.domain_id}</Text>
-                            <TouchableOpacity
-                                style={styles.editButton}
-                                onPress={() => navigation.navigate('EditModule', { moduleId: item.id })}
-                            >
-                                <Text style={styles.buttonText}>Wijzigen</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={styles.deleteButton}
-                                onPress={() => {
-                                    Alert.alert(
-                                        "Verwijderen",
-                                        "Weet je zeker dat je deze module wilt verwijderen?",
-                                        [
-                                            {
-                                                text: "Nee",
-                                                style: "cancel"
-                                            },
-                                            {
-                                                text: "Ja",
-                                                onPress: () => handleDeleteModule(item.id)
-                                            }
-                                        ]
-                                    );
-                                }}
-                            >
-                                <Text style={styles.buttonText}>Verwijderen</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
-                />
-            ) : (
-                <Text>Geen modules gevonden</Text>
-            )}
-        </View>
+        <BaseLayout>
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-12">
+                        <h1>Modules platform</h1>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12">
+                        <h2>Uitleg</h2>
+                        <p>Welkom op de modules platform pagina, hier kan je nieuwe modules toevoegen die studenten
+                            kunnen
+                            volgen.</p>
+                    </div>
+                    <div className="col-12">
+                        <div className="d-flex justify-content-between align-items-center">
+                            <h1>Wijzig Module</h1>
+                            <Link to="/aanmaken/module/" className="btn btn-secondary">Module toevoegen</Link>
+                        </div>
+                        {modules ? (
+                            <table className="table">
+                                <thead>
+                                <tr>
+                                    <th>Naam</th>
+                                    <th>Beschrijving</th>
+                                    <th>Progressie indicator</th>
+                                    <th>domain_id</th>
+                                    <th>Wijzigen</th>
+                                    <th>Verwijderen</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {modules.map(platform_module => (
+                                    <tr key={platform_module.id}>
+                                        <td>{platform_module.module_name}</td>
+                                        <td>{platform_module.description}</td>
+                                        <td>{platform_module.progress_indicator}%</td>
+                                        <td>{platform_module.domain_id}</td>
+                                        <td>
+                                            <Link to={`/wijzig/module/${platform_module.id}`}
+                                                  className="btn btn-primary">Wijzigen</Link>
+                                        </td>
+                                        <td>
+                                            <button onClick={() => handleDeleteModule(platform_module.id)}
+                                                    className="btn btn-danger">Verwijderen
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        ) : (
+                            <p>Geen modules gevonden</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </BaseLayout>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#fff',
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 16,
-    },
-    subHeader: {
-        fontSize: 16,
-        marginBottom: 16,
-    },
-    addButton: {
-        backgroundColor: '#6200ee',
-        padding: 10,
-        borderRadius: 5,
-        marginBottom: 20,
-    },
-    buttonText: {
-        color: '#fff',
-        textAlign: 'center',
-        fontWeight: 'bold',
-    },
-    moduleContainer: {
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    moduleText: {
-        fontSize: 16,
-    },
-    editButton: {
-        backgroundColor: '#6200ee',
-        padding: 10,
-        borderRadius: 5,
-        marginVertical: 5,
-    },
-    deleteButton: {
-        backgroundColor: '#b00020',
-        padding: 10,
-        borderRadius: 5,
-        marginVertical: 5,
-    },
-});
-
-export default PlatformModules;
+export default Platform_modules;
