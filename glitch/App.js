@@ -6,7 +6,7 @@ import { ThemeProvider } from './components/ThemeContext';
 import BaseLayout from './components/BaseLayout';
 import Index from './components/Index';
 import Login from './components/Login';
-import Register from './components/register';
+import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Modules from './components/Modules';
 import Levels from './components/Levels';
