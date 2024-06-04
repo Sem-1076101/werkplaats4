@@ -178,19 +178,5 @@ def create_domain():
         result = add_domain_in_database(data)
         return result
 
-
-
-# @app.route('/api/add-module/', methods=['POST', 'OPTIONS'])
-# @cross_origin(supports_credentials=True)
-# def create_module():
-#     if request.method == 'OPTIONS':
-#         return jsonify({'message': 'success'}), 200
-#     else:
-#         data = request.get_json()
-#         result = add_module_in_database(data)
-#         return result
-
-
-if __name__ == '__main__':
-    app.run(host='192.168.1.142', port=5000)
-
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000, debug=True)
