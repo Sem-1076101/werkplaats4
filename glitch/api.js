@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const connection = axios.create({
-    baseURL: 'http://192.168.1.142:5000',
+    baseURL: 'http://145.137.16.211:5000',
 });
 
 export function enrollStudent(studentId, courseId) {
