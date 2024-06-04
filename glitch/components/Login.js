@@ -4,7 +4,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb from '../isWeb';
 import { useNavigate } from 'react-router-dom';
-
+import { SERVER_IP } from '../config';
 
 function Login({navigation}) {
     const [formData, setFormData] = useState({email: '', password: ''});
@@ -21,8 +21,13 @@ function Login({navigation}) {
     const handleLogin = async () => {
         try {
             console.log('Inloggen:', formData);
+<<<<<<< HEAD
             axios.defaults.timeout = 5000;
             const response = await axios.post('http://145.137.16.211:5000/login', formData);
+=======
+            axios.defaults.timeout = 10000;
+            const response = await axios.post(`http://${SERVER_IP}:5000/login`, formData);
+>>>>>>> 9aa369afd342bca3da74175c5836db3375084541
             if (response && response.data) {
                 console.log('Response:', response.data);
 

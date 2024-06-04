@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import isWeb from './isWeb';
 import { createStackNavigator } from '@react-navigation/stack';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from './components/ThemeContext';
+import BaseLayout from './components/BaseLayout';
 import Index from './components/Index';
 import Login from './components/Login';
 import Register from './components/register';
 import Dashboard from './components/Dashboard';
 import Modules from './components/Modules';
-import BaseLayout from './components/BaseLayout';
+import Levels from './components/Levels';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +26,7 @@ function App() {
                             <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/modules/:domain_id" element={<Modules />} />
+                            <Route path="/levels/:module_id" element={<Levels />} />
                         </Routes>
                     </BaseLayout>
                 </Router>
@@ -40,6 +42,7 @@ function App() {
                         <Stack.Screen name="Register" component={Register} />
                         <Stack.Screen name="Dashboard" component={Dashboard} />
                         <Stack.Screen name="Modules" component={Modules} />
+                        <Stack.Screen name="Levels" component={Levels} />
                     </Stack.Navigator>
                 </BaseLayout>
             </ThemeProvider>
