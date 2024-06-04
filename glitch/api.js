@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SERVER_IP } from './config';
+import {SERVER_IP} from './config';
 
 const connection = axios.create({
     baseURL: `http://${SERVER_IP}:5000`,
@@ -49,18 +49,14 @@ export function get_level(module_id) {
 export function checkEnrollment(studentId) {
     return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
         .then(response => {
-            if (response.data.course_name && response.data.course_id) {
-                return {
-                    course_name: response.data.course_name,
-                    course_id: response.data.course_id
-                };
-            } else {
-                throw new Error('No course name or course id returned from server');
+                if (response.data.course_name && response.data.course_id) {
+                    return {
+                        course_name: response.data.course_name,
+                        course_id: response.data.course_id
+                    };
+                }
             }
-        })
-        .catch(error => {
-            console.error('Error checking enrollment:', error);
-        });
+        )
 }
 
 export function domains() {
