@@ -2,11 +2,7 @@ import axios from 'axios';
 import {SERVER_IP} from './config';
 
 const connection = axios.create({
-<<<<<<< HEAD
-    baseURL: 'http://145.137.16.211:5000',
-=======
     baseURL: `http://${SERVER_IP}:5000`,
->>>>>>> 9aa369afd342bca3da74175c5836db3375084541
 });
 
 export function enrollStudent(studentId, courseId) {
