@@ -10,6 +10,7 @@ import Register from './components/register';
 import Dashboard from './components/Dashboard';
 import Modules from './components/Modules';
 import Levels from './components/Levels';
+import SubmitLevel from "./components/SubmitLevel";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,7 @@ function App() {
                         <Stack.Screen name="Dashboard" component={Dashboard} />
                         <Stack.Screen name="Modules" component={Modules} />
                         <Stack.Screen name="Levels" component={Levels} />
+                        <Stack.Screen name="SubmitLevel" component={SubmitLevel} />
                     </Stack.Navigator>
                 </BaseLayout>
             </ThemeProvider>
