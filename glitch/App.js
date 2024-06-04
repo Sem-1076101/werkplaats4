@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-route
 import { ThemeProvider } from './components/ThemeContext';
 import Index from './components/Index';
 import Login from './components/Login';
+import Register from './components/register';
 import Dashboard from './components/Dashboard';
 import Modules from './components/Modules';
 import BaseLayout from './components/BaseLayout';
@@ -21,6 +22,7 @@ function App() {
                             <Route path="/" element={<Index />} />
                             <Route path="/home" element={<Index />} />
                             <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/modules/:domain_id" element={<Modules />} />
                         </Routes>
@@ -35,6 +37,7 @@ function App() {
                     <Stack.Navigator initialRouteName="Home">
                         <Stack.Screen name="Home" component={Index} />
                         <Stack.Screen name="Login" component={Login} />
+                        <Stack.Screen name="Register" component={Register} />
                         <Stack.Screen name="Dashboard" component={Dashboard} />
                         <Stack.Screen name="Modules" component={Modules} />
                     </Stack.Navigator>

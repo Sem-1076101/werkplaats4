@@ -1,15 +1,19 @@
 import React, {useState} from 'react';
 import {View, Text, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb from '../isWeb';
 import { useNavigate } from 'react-router-dom';
 
+function Register({navigation}) {
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        first_name: '',
+        last_name: '',
+        studentnumber: ''
+    });
 
-function Login({navigation}) {
-    const [formData, setFormData] = useState({email: '', password: ''});
-
-    let navigate
+    let navigate;
     if (isWeb) {
         navigate = useNavigate();
     }
@@ -18,24 +22,17 @@ function Login({navigation}) {
         setFormData({...formData, [name]: value});
     };
 
-    const handleLogin = async () => {
+    const handleRegister = async () => {
         try {
-            console.log('Inloggen:', formData);
-            axios.defaults.timeout = 5000;
-            const response = await axios.post('http://145.137.16.211:5000/login', formData);
+            console.log('Registering:', formData);
+            axios.defaults.timeout = 10000;
+            const response = await axios.post('http://145.137.16.211:5000/register', formData);
             if (response && response.data) {
                 console.log('Response:', response.data);
-
-                let studentnumber = response.data.studentnumber;
-                let stringifiedStudentnumber = JSON.stringify(studentnumber);
-                await AsyncStorage.setItem('studentnumber', stringifiedStudentnumber);
-
-                console.log('Opgeslagen studentnummer:', await AsyncStorage.getItem('studentnumber'));
-
                 if (isWeb) {
-                    navigate('/dashboard');
+                    navigate('/login');
                 } else {
-                    navigation.navigate('Dashboard');
+                    navigation.navigate('Login');
                 }
             } else {
                 console.error('Ongeldige respons:', response);
@@ -45,9 +42,9 @@ function Login({navigation}) {
             console.error('Error:', error);
             if (error.response && error.response.data) {
                 console.error('Error data:', error.response.data);
-                Alert.alert('Fout', error.response.data.message || 'Er is een fout opgetreden tijdens het inloggen.');
+                Alert.alert('Fout', error.response.data.message || 'Er is een fout opgetreden tijdens de registratie.');
             } else {
-                Alert.alert('Fout', 'Er is een fout opgetreden tijdens het inloggen.');
+                Alert.alert('Fout', 'Er is een fout opgetreden tijdens de registratie.');
             }
         }
     };
@@ -56,7 +53,7 @@ function Login({navigation}) {
         <View style={styles.container}>
             <View style={styles.row}>
                 <View style={styles.col}>
-                    <Text style={styles.header}>Inloggen</Text>
+                    <Text style={styles.header}>Registratie</Text>
                     <View style={styles.inputContainer}>
                         <Text style={styles.label}>E-mail</Text>
                         <TextInput
@@ -76,7 +73,31 @@ function Login({navigation}) {
                             secureTextEntry
                         />
                     </View>
-                    <Button title="Inloggen" onPress={handleLogin}/>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.label}>Voornaam</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={formData.first_name}
+                            onChangeText={(value) => handleChange('first_name', value)}
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.label}>Achternaam</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={formData.last_name}
+                            onChangeText={(value) => handleChange('last_name', value)}
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Text style={styles.label}>Studentnummer</Text>
+                        <TextInput
+                            style={styles.input}
+                            value={formData.studentnumber}
+                            onChangeText={(value) => handleChange('studentnumber', value)}
+                        />
+                    </View>
+                    <Button title="Registreren" onPress={handleRegister}/>
                 </View>
             </View>
         </View>
@@ -117,4 +138,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login;
+export default Register;
