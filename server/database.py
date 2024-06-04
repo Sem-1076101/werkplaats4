@@ -86,11 +86,16 @@ def add_domain_in_database(domain):
     conn = get_db()
     cursor = conn.cursor()
     try:
-        course_image = base64.b64decode(domain['course_image']) if domain.get('course_image') else None
+        course_image = domain.get('course_image')
+        if course_image:
+            course_image = base64.b64encode(course_image.read()).decode('utf-8')
         cursor.execute("INSERT INTO domains (course_name, course_description, course_image) VALUES (?, ?, ?)",
                        (domain['course_name'], domain['course_description'], course_image))
         conn.commit()
         return jsonify({'id': cursor.lastrowid})
+    except Exception as e:
+        print('Fout bij het toevoegen van het domein:', e)
+        return jsonify({'error': 'Er is een fout opgetreden tijdens het toevoegen van het domein.'}), 500
     finally:
         conn.close()
 
