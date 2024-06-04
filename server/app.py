@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_bcrypt import Bcrypt
 import datetime
+import base64
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
@@ -24,7 +25,7 @@ def register():
     password = data.get('password')
     first_name = data.get('first_name')
     last_name = data.get('last_name')
-    studentnumber = data.get('studentnumber') 
+    studentnumber = data.get('studentnumber')
 
     if not email or not password:
         return jsonify({"error": "E-mail en wachtwoord zijn verplicht"}), 400
@@ -112,7 +113,7 @@ def delete_domain(course_id):
         return {'message': 'Domein succesvol verwijderd'}, 200
     except Exception as e:
         return {'message': 'Er is een fout opgetreden bij het verwijderen van het domein: ' + str(e)}, 400
-    
+
 
 @app.route('/api/get-domain/<int:course_id>', methods=['GET'])
 def get_domain(course_id):
@@ -137,11 +138,16 @@ def edit_domain(course_id):
 @cross_origin(supports_credentials=True)
 def create_domain():
     if request.method == 'OPTIONS':
-        # Preflight request. Reply successfully:
         return jsonify({'message': 'success'}), 200
     else:
-        # Actual request; handle POST.
-        data = request.get_json()
+        data = request.form.to_dict()
+        if 'course_image' in request.files:
+            course_image = request.files['course_image']
+            if course_image.filename:
+                course_image_data = course_image.read()
+                course_image_base64 = base64.b64encode(course_image_data).decode('utf-8')
+                # Vervang het bestand door de base64-gecodeerde string
+                data['course_image'] = course_image_base64
         result = add_domain_in_database(data)
         return result
 
