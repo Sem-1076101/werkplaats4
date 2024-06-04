@@ -45,7 +45,7 @@ function Modules({navigation, route}) {
                             if (isWeb) {
                                 navigate(`/Levels/${item.id}`);
                             } else {
-                                navigation.navigate('Levels', {id: item.id});
+                                navigation.navigate('Levels', {module_id: item.id});
                             }
                         }} key={index}>
                             <View style={[styles.card, {width: isWeb ? cardWidthWeb : '100%'}]}>
