@@ -3,6 +3,8 @@ import {View, Text, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import axios from 'axios';
 import isWeb from '../isWeb';
 import { useNavigate } from 'react-router-dom';
+import { SERVER_IP } from '../config';
+
 
 function Register({navigation}) {
     const [formData, setFormData] = useState({
@@ -26,7 +28,7 @@ function Register({navigation}) {
         try {
             console.log('Registering:', formData);
             axios.defaults.timeout = 10000;
-            const response = await axios.post('http://145.137.16.211:5000/register', formData);
+            const response = await axios.post(`http://${SERVER_IP}:5000/register`, formData);
             if (response && response.data) {
                 console.log('Response:', response.data);
                 if (isWeb) {
