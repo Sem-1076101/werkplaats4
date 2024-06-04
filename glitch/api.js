@@ -14,7 +14,6 @@ export function enrollStudent(studentId, courseId) {
 }
 
 export function get_modules(domain_id) {
-    console.log('domain_id:', domain_id); // Log de waarde van domain_id
     return connection.get(`/api/modules/${domain_id}`)
         .then(response => {
             if (response && response.data) {
