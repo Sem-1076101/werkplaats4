@@ -1,15 +1,24 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
-import { useRoute } from '@react-navigation/native';
+import {View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity} from "react-native";
+import {useNavigate, useParams} from 'react-router-dom';
+import {useRoute} from '@react-navigation/native';
 import {get_level} from '../api';
 import axios from 'axios';
+import isWeb from "../isWeb";
 
-function Levels() {
+function Levels({navigation}) {
     const route = useRoute();
-    const { module_id } = route.params;
+    const {module_id} = route.params;
     const [levels, setLevels] = useState(null);
 
-       useEffect(() => {
+    let navigate;
+    if (isWeb) {
+        navigate = useNavigate();
+    } else {
+        navigate = navigation.navigate;
+    }
+
+    useEffect(() => {
         const fetchDataInterval = setInterval(() => {
             get_level(module_id)
                 .then(data => {
@@ -30,20 +39,20 @@ function Levels() {
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.header}>Level:</Text>
-             <View>
+            <View>
                 {levels ? (
                     levels.map((level, index) => (
                         <TouchableOpacity
                             key={index}
                             style={styles.level}
-                            onPress={() => navigation.navigate('SubmitLevel', { level_id: level.assignment_id })}>
+                            onPress={() => navigate('SubmitLevel', {level_id: level.assignment_id})}>
                             <Text style={styles.levelText}>Naam: {level.assignment_title}</Text>
                             <Text style={styles.levelText}>Beschrijving: {level.assignment_description}</Text>
                         </TouchableOpacity>
                     ))
                 ) : (
                     <View style={styles.loading}>
-                        <ActivityIndicator size="large" color="#0000ff" />
+                        <ActivityIndicator size="large" color="#0000ff"/>
                         <Text>Levels zijn aan het laden.</Text>
                     </View>
                 )}
