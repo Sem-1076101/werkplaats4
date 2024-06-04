@@ -35,6 +35,7 @@ function Login({navigation}) {
                 if (isWeb) {
                     navigate('/dashboard');
                 } else {
+                    localStorage.setItem('domain_id', response.data.domain_id);
                     navigation.navigate('Dashboard');
                 }
             } else {
