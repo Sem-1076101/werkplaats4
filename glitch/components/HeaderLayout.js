@@ -13,6 +13,12 @@ export default function HeaderLayout() {
 
     const styles = getStyles(theme);
 
+    const handleNavigationToModules = () => {
+        //localStorage.getItem('domain_id');
+        const domain_id = '10';
+        navigation.navigate('Modules', { domain_id });
+    };
+
     return (
         <View style={styles.container}>
             <Helmet>
@@ -27,7 +33,7 @@ export default function HeaderLayout() {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.button]}
-                    onPress={() => navigation.navigate('Modules')}
+                    onPress={handleNavigationToModules}
                 >
                     <Text style={styles.buttonText}>Modules</Text>
                 </TouchableOpacity>
