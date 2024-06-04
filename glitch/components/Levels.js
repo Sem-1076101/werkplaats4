@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
 import { useRoute } from '@react-navigation/native';
+import {get_level} from '../api';
 import axios from 'axios';
 
 function Levels() {
@@ -8,20 +9,19 @@ function Levels() {
     const { module_id } = route.params;
     const [levels, setLevels] = useState(null);
 
-    useEffect(() => {
+       useEffect(() => {
         const fetchDataInterval = setInterval(() => {
-            axios.get(`/api/levels/${module_id}`)
-                .then(response => {
-                    if (response && response.data) {
-                        setLevels(response.data);
-                        console.log(response.data);
+            get_level(module_id)
+                .then(data => {
+                    if (data) {
+                        setLevels(data);
+                        console.log(data);
                     } else {
-                        console.error('Unexpected response:', response);
+                        console.error('Unexpected response:', data);
                     }
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }, 1000);
-
         return () => {
             clearInterval(fetchDataInterval);
         };
