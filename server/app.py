@@ -148,5 +148,4 @@ def create_domain():
 
 
 if __name__ == '__main__':
-    host_ip = socket.gethostbyname(socket.gethostname())
-    app.run(host=host_ip, port=5000)
+    app.run(host='192.168.1.127', port=5000)
