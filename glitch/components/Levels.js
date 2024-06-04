@@ -1,27 +1,43 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity } from "react-native";
-import { useRoute } from '@react-navigation/native';
+import {View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity} from "react-native";
+import {useNavigate, useParams} from 'react-router-dom';
+import {useRoute} from '@react-navigation/native';
+import {get_level} from '../api';
 import axios from 'axios';
+import isWeb from "../isWeb";
 
-function Levels() {
-    const route = useRoute();
-    const { module_id } = route.params;
+function Levels({navigation}) {
     const [levels, setLevels] = useState(null);
+
+    let module_id;
+    if (isWeb) {
+        let params = useParams();
+        module_id = params.module_id;
+    } else {
+        const route = useRoute();
+        module_id = route.params.module_id;
+    }
+
+    let navigate;
+    if (isWeb) {
+        navigate = useNavigate();
+    } else {
+        navigate = navigation.navigate;
+    }
 
     useEffect(() => {
         const fetchDataInterval = setInterval(() => {
-            axios.get(`/api/levels/${module_id}`)
-                .then(response => {
-                    if (response && response.data) {
-                        setLevels(response.data);
-                        console.log(response.data);
+            get_level(module_id)
+                .then(data => {
+                    if (data) {
+                        setLevels(data);
+                        console.log(data);
                     } else {
-                        console.error('Unexpected response:', response);
+                        console.error('Unexpected response:', data);
                     }
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }, 1000);
-
         return () => {
             clearInterval(fetchDataInterval);
         };
@@ -30,20 +46,24 @@ function Levels() {
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.header}>Level:</Text>
-             <View>
+            <View>
                 {levels ? (
-                    levels.map((level, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            style={styles.level}
-                            onPress={() => navigation.navigate('SubmitLevel', { level_id: level.assignment_id })}>
-                            <Text style={styles.levelText}>Naam: {level.name}</Text>
-                            <Text style={styles.levelText}>Beschrijving: {level.description}</Text>
-                        </TouchableOpacity>
-                    ))
+                    levels.length > 0 ? (
+                        levels.map((level, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                style={styles.level}
+                                onPress={() => navigate('SubmitLevel', {level_id: level.assignment_id})}>
+                                <Text style={styles.levelText}>Naam: {level.assignment_title}</Text>
+                                <Text style={styles.levelText}>Beschrijving: {level.assignment_description}</Text>
+                            </TouchableOpacity>
+                        ))
+                    ) : (
+                        <Text>Er zijn geen levels.</Text>
+                    )
                 ) : (
                     <View style={styles.loading}>
-                        <ActivityIndicator size="large" color="#0000ff" />
+                        <ActivityIndicator size="large" color="#0000ff"/>
                         <Text>Levels zijn aan het laden.</Text>
                     </View>
                 )}
