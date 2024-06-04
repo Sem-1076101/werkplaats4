@@ -37,8 +37,8 @@ function Levels() {
                             key={index}
                             style={styles.level}
                             onPress={() => navigation.navigate('SubmitLevel', { level_id: level.assignment_id })}>
-                            <Text style={styles.levelText}>Naam: {level.name}</Text>
-                            <Text style={styles.levelText}>Beschrijving: {level.description}</Text>
+                            <Text style={styles.levelText}>Naam: {level.assignment_title}</Text>
+                            <Text style={styles.levelText}>Beschrijving: {level.assignment_description}</Text>
                         </TouchableOpacity>
                     ))
                 ) : (
