@@ -148,8 +148,4 @@ def create_domain():
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-    app.run(host='145.137.16.211', port=5000)
-=======
     app.run(host='192.168.1.127', port=5000)
->>>>>>> 9aa369afd342bca3da74175c5836db3375084541
