@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, View, ActivityIndicator } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Alert, Button, StyleSheet, Text, TextInput, View, ActivityIndicator} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import axios from 'axios';
-import { useRoute } from '@react-navigation/native';
-import { get_level } from '../api';
+import {useRoute} from '@react-navigation/native';
+import {get_level} from '../api';
 
 function SubmitLevel() {
     const route = useRoute();
-    const { level_id } = route.params;
+    const {level_id} = route.params;
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState('');
     const [level, setLevel] = useState(null);
@@ -27,6 +27,7 @@ function SubmitLevel() {
 
     const handleFilePick = async () => {
         let result = await DocumentPicker.getDocumentAsync({});
+        console.log(result);
         if (result.type === 'success') {
             setFile(result);
         }
@@ -42,7 +43,7 @@ function SubmitLevel() {
         formData.append('level_file', {
             uri: file.uri,
             name: file.name,
-            type: file.mimeType || 'application/octet-stream', // Pas dit aan als je een specifiek bestandstype verwacht
+            type: file.type || 'application/octet-stream',
         });
         formData.append('level_description', description);
 
@@ -60,19 +61,19 @@ function SubmitLevel() {
             });
     };
 
+
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Level Inleveren</Text>
             {loading ? (
                 <View style={styles.loading}>
-                    <ActivityIndicator size="large" color="#0000ff" />
+                    <ActivityIndicator size="large" color="#0000ff"/>
                     <Text>Level gegevens worden geladen...</Text>
                 </View>
             ) : level ? (
                 <>
-                    <Text style={styles.label}>Naam: {level.assignment_title}</Text>
-                    <Text style={styles.label}>Beschrijving: {level.assignment_description}</Text>
-                    <Button title="Kies een bestand" onPress={handleFilePick} />
+                    <Text style={styles.label}>Beschrijving: {level.level_description}</Text>
+                    <Button title="Kies een bestand" onPress={handleFilePick}/>
                     {file && <Text style={styles.fileName}>Geselecteerd bestand: {file.name}</Text>}
                     <TextInput
                         style={styles.textInput}
@@ -80,7 +81,7 @@ function SubmitLevel() {
                         value={description}
                         onChangeText={setDescription}
                     />
-                    <Button title="Inleveren" onPress={handleSubmit} />
+                    <Button title="Inleveren" onPress={handleSubmit}/>
                 </>
             ) : (
                 <View style={styles.loading}>
