@@ -71,8 +71,7 @@ function Dashboard({navigation}) {
             try {
                 const response = await connection.get('/api/domains');
                 setData(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            } catch {
             }
         }, 1000);
 
