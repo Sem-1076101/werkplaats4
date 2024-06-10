@@ -109,22 +109,35 @@ export function getDomain(courseId) {
 }
 
 export function addDomain(domain) {
-    return connection.post('/api/add-domain/', domain, {
+    return axios.post(`http://${SERVER_IP}:5000/api/add-domain/`, domain, {
         headers: {
             'Content-Type': 'application/json'
         }
     })
+    .then(response => {
+        if (response) {
+            return response.data;
+        } else {
+            throw new Error('Response is undefined');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
+}
+
+export function addModule(moduleData) {
+    return connection.post('/api/add-module/', moduleData)
         .then(response => {
-            if (response) {
-                return response.data;
-            } else {
-                throw new Error('Response is undefined');
-            }
+            return response.data;
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error adding module:', error);
             throw error;
         });
 }
+
+
 
 export default connection;

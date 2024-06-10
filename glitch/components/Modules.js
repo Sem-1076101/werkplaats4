@@ -8,7 +8,7 @@ const screenWidth = Dimensions.get('window').width;
 const cardWidthWeb = screenWidth / 4 - 20; // 20 is voor margin
 
 function Modules({navigation, route}) {
-    const { domain_id } = isWeb ? useParams() : route.params;
+    const {domain_id} = isWeb ? useParams() : route.params;
     const [modules, setModules] = useState(null);
 
     let navigate;
@@ -53,7 +53,16 @@ function Modules({navigation, route}) {
                                     <Text style={styles.cardTitle}>{item.module_name}</Text>
                                     <Text style={styles.cardText}>{item.description}</Text>
                                     <Text style={styles.cardText}>{item.progress_indicator}%</Text>
-                                    <TouchableOpacity style={styles.cardButton}>
+                                    <TouchableOpacity
+                                        style={styles.cardButton}
+                                        onPress={() => {
+                                            if (isWeb) {
+                                                navigate(`/Levels/${item.id}`);
+                                            } else {
+                                                navigation.navigate('Levels', {module_id: item.id});
+                                            }
+                                        }}
+                                    >
                                         <Text style={styles.cardButtonText}>Bekijk levels</Text>
                                     </TouchableOpacity>
                                 </View>

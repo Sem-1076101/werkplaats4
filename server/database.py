@@ -86,13 +86,16 @@ def add_domain_in_database(domain):
     conn = get_db()
     cursor = conn.cursor()
     try:
-        course_image = base64.b64decode(domain['course_image']) if domain.get('course_image') else None
-        cursor.execute("INSERT INTO domains (course_name, course_description, course_image) VALUES (?, ?, ?)",
-                       (domain['course_name'], domain['course_description'], course_image))
+        cursor.execute("INSERT INTO domains (course_name, course_description) VALUES (?, ?)",
+                       (domain['course_name'], domain['course_description']))
         conn.commit()
         return jsonify({'id': cursor.lastrowid})
+    except Exception as e:
+        print('Fout bij het toevoegen van het domein:', e)
+        return jsonify({'error': 'Er is een fout opgetreden tijdens het toevoegen van het domein.'}), 500
     finally:
         conn.close()
+
 
 
 def get_modules_from_database_by_domain_id(domain_id):
@@ -136,3 +139,18 @@ def get_user_from_db(email):
     user = cursor.fetchone()
     conn.close()
     return user
+
+
+def add_module_in_database(data):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO modules (module_name, description, domain_id) VALUES (?, ?, ?)",
+                       (data['module_name'], data['module_description'], data['domain_id']))
+        conn.commit()
+        return jsonify({'id': cursor.lastrowid}), 201
+    except Exception as e:
+        print('Fout bij het toevoegen van de module:', e)
+        return jsonify({'error': 'Er is een fout opgetreden tijdens het toevoegen van de module.'}), 500
+    finally:
+        conn.close()

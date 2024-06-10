@@ -2,10 +2,11 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_bcrypt import Bcrypt
 import datetime
+import base64
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
-                      get_level_by_module_id, add_user_to_db, get_user_from_db)
+                      get_level_by_module_id, add_user_to_db, get_user_from_db, add_module_in_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -24,7 +25,7 @@ def register():
     password = data.get('password')
     first_name = data.get('first_name')
     last_name = data.get('last_name')
-    studentnumber = data.get('studentnumber') 
+    studentnumber = data.get('studentnumber')
 
     if not email or not password:
         return jsonify({"error": "E-mail en wachtwoord zijn verplicht"}), 400
@@ -112,7 +113,7 @@ def delete_domain(course_id):
         return {'message': 'Domein succesvol verwijderd'}, 200
     except Exception as e:
         return {'message': 'Er is een fout opgetreden bij het verwijderen van het domein: ' + str(e)}, 400
-    
+
 
 @app.route('/api/get-domain/<int:course_id>', methods=['GET'])
 def get_domain(course_id):
@@ -133,18 +134,31 @@ def edit_domain(course_id):
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het domein: ' + str(e)}), 400
 
 
-@app.route('/api/add-domain/', methods=['POST', 'OPTIONS'])
+@app.route('/api/add-domain/', methods=['POST', 'OPTIONS', 'GET'])
 @cross_origin(supports_credentials=True)
 def create_domain():
     if request.method == 'OPTIONS':
-        # Preflight request. Reply successfully:
         return jsonify({'message': 'success'}), 200
     else:
-        # Actual request; handle POST.
         data = request.get_json()
+        print('Ontvangen domeingegevens:', data) # Voeg deze regel toe
         result = add_domain_in_database(data)
         return result
 
 
+@app.route('/api/add-module/', methods=['POST'])
+def create_module():
+    data = request.get_json()
+    print('Ontvangen modulegegevens:', data)  # Voeg deze regel toe
+
+    # Verander 'course_id' naar 'domain_id'
+    if 'course_id' in data:
+        data['domain_id'] = data.pop('course_id')
+
+    result = add_module_in_database(data)
+    return result
+
+
 if __name__ == '__main__':
-    app.run(host='192.168.1.127', port=5000)
+    # app.run(host='192.168.1.127', port=5000)
+    app.run(host='192.168.56.1', port=5000, debug=True)
