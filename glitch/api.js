@@ -108,10 +108,10 @@ export function getDomain(courseId) {
         });
 }
 
-export function addDomainWithImage(domain) {
+export function addDomain(domain) {
     return axios.post(`http://${SERVER_IP}:5000/api/add-domain/`, domain, {
         headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'application/json'
         }
     })
     .then(response => {
