@@ -6,7 +6,7 @@ import base64
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
-                      get_level_by_module_id, add_user_to_db, get_user_from_db)
+                      get_level_by_module_id, add_user_to_db, get_user_from_db, add_module_in_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -145,6 +145,18 @@ def create_domain():
         result = add_domain_in_database(data)
         return result
 
+
+@app.route('/api/add-module/', methods=['POST'])
+def create_module():
+    data = request.get_json()
+    print('Ontvangen modulegegevens:', data)  # Voeg deze regel toe
+
+    # Verander 'course_id' naar 'domain_id'
+    if 'course_id' in data:
+        data['domain_id'] = data.pop('course_id')
+
+    result = add_module_in_database(data)
+    return result
 
 
 if __name__ == '__main__':
