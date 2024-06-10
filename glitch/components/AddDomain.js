@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, Button, StyleSheet, Alert, Image, Platform} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import {View, Text, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import {useNavigate} from 'react-router-dom';
-import {addDomainWithImage} from '../api';
+import {addDomain} from '../api';
 import isWeb from '../isWeb';
 
 function AddDomain({navigation}) {
@@ -10,7 +9,6 @@ function AddDomain({navigation}) {
         course_name: '',
         course_description: '',
     });
-    const [selectedImage, setSelectedImage] = useState(null);
 
     let navigate;
     if (isWeb) {
@@ -21,51 +19,20 @@ function AddDomain({navigation}) {
         setDomain({...domain, [name]: value});
     };
 
-    const handleImageChange = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        if (!result.cancelled) {
-            setSelectedImage(result);
-        }
-    };
-
     const handleSubmit = async () => {
-        console.log('handleSubmit wordt aangeroepen');
         try {
-            if (!selectedImage || !selectedImage.uri) {
-                Alert.alert('Fout', 'Selecteer een afbeelding voordat u doorgaat.');
-                return;
-            }
-
-            const formData = new FormData();
-            formData.append('course_name', domain.course_name);
-            formData.append('course_description', domain.course_description);
-
-            // Voeg de afbeeldingsgegevens direct toe als een blob aan de FormData
-            formData.append('course_image', {
-                uri: selectedImage.uri,
-                name: 'photo.jpg',
-                type: 'image/jpeg',
-            });
-
-            const response = await addDomainWithImage(formData);
+            const response = await addDomain(domain);
             if (response) {
                 Alert.alert('Succes', 'Domein succesvol toegevoegd!');
                 setDomain({
                     course_name: '',
                     course_description: '',
                 });
-                setSelectedImage(null);
 
                 if (isWeb) {
-                    navigate('/platform');
+                    navigate('/dashboard');
                 } else {
-                    navigation.navigate('Platform');
+                    navigation.navigate('Dashboard');
                 }
             } else {
                 console.error('Ongeldige respons:', response);
@@ -76,7 +43,6 @@ function AddDomain({navigation}) {
             Alert.alert('Fout', 'Er is een fout opgetreden tijdens het opslaan.');
         }
     };
-
 
     return (
         <View style={styles.container}>
@@ -98,10 +64,6 @@ function AddDomain({navigation}) {
                     multiline
                 />
             </View>
-            <Button title="Kies Afbeelding" onPress={handleImageChange}/>
-            {selectedImage && (
-                <Image source={{uri: selectedImage.uri}} style={styles.image}/>
-            )}
             <Button title="Voeg toe" onPress={handleSubmit}/>
         </View>
     );
@@ -132,13 +94,6 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         padding: 12,
         fontSize: 16,
-    },
-    image: {
-        width: 200,
-        height: 200,
-        marginTop: 10,
-        marginBottom: 20,
-        alignSelf: 'center',
     },
 });
 
