@@ -134,23 +134,19 @@ def edit_domain(course_id):
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het domein: ' + str(e)}), 400
 
 
-@app.route('/api/add-domain/', methods=['POST', 'OPTIONS'])
+@app.route('/api/add-domain/', methods=['POST', 'OPTIONS', 'GET'])
 @cross_origin(supports_credentials=True)
 def create_domain():
     if request.method == 'OPTIONS':
         return jsonify({'message': 'success'}), 200
     else:
-        data = request.form.to_dict()
-        if 'course_image' in request.files:
-            course_image = request.files['course_image']
-            if course_image.filename:
-                course_image_data = course_image.read()
-                course_image_base64 = base64.b64encode(course_image_data).decode('utf-8')
-                # Vervang het bestand door de base64-gecodeerde string
-                data['course_image'] = course_image_base64
+        data = request.get_json()
+        print('Ontvangen domeingegevens:', data) # Voeg deze regel toe
         result = add_domain_in_database(data)
         return result
 
 
+
 if __name__ == '__main__':
-    app.run(host='192.168.1.127', port=5000)
+    # app.run(host='192.168.1.127', port=5000)
+    app.run(host='192.168.56.1', port=5000, debug=True)
