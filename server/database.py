@@ -139,3 +139,18 @@ def get_user_from_db(email):
     user = cursor.fetchone()
     conn.close()
     return user
+
+
+def add_module_in_database(data):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO modules (module_name, description, domain_id) VALUES (?, ?, ?)",
+                       (data['module_name'], data['module_description'], data['domain_id']))
+        conn.commit()
+        return jsonify({'id': cursor.lastrowid}), 201
+    except Exception as e:
+        print('Fout bij het toevoegen van de module:', e)
+        return jsonify({'error': 'Er is een fout opgetreden tijdens het toevoegen van de module.'}), 500
+    finally:
+        conn.close()
