@@ -127,5 +127,17 @@ export function addDomain(domain) {
     });
 }
 
+export function addModule(moduleData) {
+    return connection.post('/api/add-module/', moduleData)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error adding module:', error);
+            throw error;
+        });
+}
+
+
 
 export default connection;
