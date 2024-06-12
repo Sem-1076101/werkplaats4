@@ -62,6 +62,15 @@ export function get_all_levels() {
         });
 }
 
+export function deleteLevel(assignment_id) {
+    return connection.delete(`/api/domains/${assignment_id}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
 
 export function get_level_by_id(assignment_id) {
     return connection.get(`/api/levels/${assignment_id}`)
