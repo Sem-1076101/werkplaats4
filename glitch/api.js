@@ -46,6 +46,22 @@ export function get_level(module_id) {
         });
 }
 
+export function get_all_levels() {
+        return connection.get(`/api/levels`)
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching levels', error);
+            console.error('Error fetching levels details ', error.response.data);
+            throw error;
+        });
+}
+
 
 export function get_level_by_id(assignment_id) {
     return connection.get(`/api/levels/${assignment_id}`)
