@@ -6,7 +6,8 @@ import base64
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
-                      get_level_by_module_id, add_user_to_db, get_user_from_db, add_module_in_database)
+                      get_levels_by_module_id, get_assignment_by_assignment_id, add_user_to_db, get_user_from_db,
+                      add_module_in_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -55,8 +56,6 @@ def login():
 
     if not bcrypt.check_password_hash(user[2], password):
         return jsonify({"error": "Ongeldig wachtwoord"}), 401
-
-    # Return the studentnumber as part of the response
     return jsonify({"message": "Inloggen succesvol", "studentnumber": user[5]}), 200
 
 
@@ -68,9 +67,18 @@ def get_modules(domain_id):
 
 @app.route('/api/levels/<int:module_id>', methods=['GET'])
 def get_level(module_id):
-    levels = get_level_by_module_id(module_id)
+    levels = get_levels_by_module_id(module_id)
     print(levels)
     return jsonify(levels)
+
+
+@app.route('/api/assignment/<int:assignment_id>', methods=['GET'])
+def get_assignment(assignment_id):
+    assignment = get_assignment_by_assignment_id(assignment_id)
+    if assignment:
+        return jsonify(assignment), 200
+    else:
+        return jsonify({'message': 'Assignment niet gevonden'}), 404
 
 
 @app.route('/api/domains', methods=['GET'])
