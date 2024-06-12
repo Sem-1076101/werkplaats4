@@ -45,6 +45,21 @@ export function get_levels_from_module(module_id) {
         });
 }
 
+export function get_assignment_by_assignment_id(assignment_id) {
+    return connection.get(`/api/assignment/${assignment_id}`)
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Fout bij het ophalen van het assignment:', error);
+            throw error;
+        });
+}
+
 export function checkEnrollment(studentId) {
     return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
         .then(response => {
