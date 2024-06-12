@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity} from "react-native";
 import {useNavigate, useParams} from 'react-router-dom';
 import {useRoute} from '@react-navigation/native';
-import {get_level} from '../api';
+import {get_levels_from_module} from '../api';
 import axios from 'axios';
 import isWeb from "../isWeb";
 
@@ -27,7 +27,7 @@ function Levels({navigation}) {
 
     useEffect(() => {
         const fetchDataInterval = setInterval(() => {
-            get_level(module_id)
+            get_levels_from_module(module_id)
                 .then(data => {
                     if (data) {
                         setLevels(data);
