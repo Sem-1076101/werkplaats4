@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { getLevels, deleteLevel } from '../api'; // Pas de import path aan zoals nodig
+import { get_all_levels, deleteLevel } from '../api'; // Pas de import path aan zoals nodig
 
 function LevelsOverview() {
     const [levels, setLevels] = useState([]);
@@ -12,7 +12,7 @@ function LevelsOverview() {
     }, []);
 
     const fetchLevels = () => {
-        getLevels()
+        get_all_levels()
             .then(responseData => {
                 setLevels(responseData);
             })
