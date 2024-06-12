@@ -122,12 +122,30 @@ def get_level_by_module_id(module_id):
         data.append(row_dict)
     return data
 
+
+def get_level_by__id(assignment_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM levels WHERE assignment_id=?", (assignment_id,))
+    columns = [column[0] for column in cursor.description]
+    levels = cursor.fetchall()
+    conn.close()
+    data = []
+    for row in levels:
+        row_dict = dict(zip(columns, row))
+        data.append(row_dict)
+    return data
+
+
 def add_user_to_db(table, email, password, first_name, last_name, studentnumber):
     conn = sqlite3.connect('instance/glitch.db')
     cursor = conn.cursor()
-    cursor.execute(f"INSERT INTO {table} (email, password, first_name, last_name, studentnumber) VALUES (?, ?, ?, ?, ?)", (email, password, first_name, last_name, studentnumber))
+    cursor.execute(
+        f"INSERT INTO {table} (email, password, first_name, last_name, studentnumber) VALUES (?, ?, ?, ?, ?)",
+        (email, password, first_name, last_name, studentnumber))
     conn.commit()
     conn.close()
+
 
 def get_user_from_db(email):
     conn = sqlite3.connect('instance/glitch.db')
