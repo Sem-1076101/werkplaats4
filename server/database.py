@@ -112,7 +112,7 @@ def get_modules_from_database_by_domain_id(domain_id):
     return data
 
 
-def get_level_by_module_id(module_id):
+def get_levels_by_module_id(module_id):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM levels WHERE module_id=?", (module_id,))
@@ -124,6 +124,21 @@ def get_level_by_module_id(module_id):
         row_dict = dict(zip(columns, row))
         data.append(row_dict)
     return data
+
+
+def get_assignment_by_assignment_id(assignment_id):
+    conn = get_db()  # Je moet nog de get_db() functie implementeren om de databaseverbinding te krijgen
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM levels WHERE assignment_id=?", (assignment_id,))
+    columns = [column[0] for column in cursor.description]
+    assignment = cursor.fetchone()
+    conn.close()
+    if assignment:
+        assignment_dict = dict(zip(columns, assignment))
+        return assignment_dict
+    else:
+        return None
+
 
 def add_user_to_db(table, email, password, first_name, last_name, studentnumber):
     conn = sqlite3.connect('instance/glitch.db')
