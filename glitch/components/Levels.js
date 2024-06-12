@@ -7,16 +7,9 @@ import axios from 'axios';
 import isWeb from "../isWeb";
 
 function Levels({navigation}) {
+    const route = useRoute();
+    const {module_id} = route.params;
     const [levels, setLevels] = useState(null);
-
-    let module_id;
-    if (isWeb) {
-        let params = useParams();
-        module_id = params.module_id;
-    } else {
-        const route = useRoute();
-        module_id = route.params.module_id;
-    }
 
     let navigate;
     if (isWeb) {
@@ -48,19 +41,15 @@ function Levels({navigation}) {
             <Text style={styles.header}>Level:</Text>
             <View>
                 {levels ? (
-                    levels.length > 0 ? (
-                        levels.map((level, index) => (
-                            <TouchableOpacity
-                                key={index}
-                                style={styles.level}
-                                onPress={() => navigate('SubmitLevel', {level_id: level.assignment_id})}>
-                                <Text style={styles.levelText}>Naam: {level.assignment_title}</Text>
-                                <Text style={styles.levelText}>Beschrijving: {level.assignment_description}</Text>
-                            </TouchableOpacity>
-                        ))
-                    ) : (
-                        <Text>Er zijn geen levels.</Text>
-                    )
+                    levels.map((level, index) => (
+                        <TouchableOpacity
+                            key={index}
+                            style={styles.level}
+                            onPress={() => navigate('SubmitLevel', {level_id: level.assignment_id})}>
+                            <Text style={styles.levelText}>Naam: {level.assignment_title}</Text>
+                            <Text style={styles.levelText}>Beschrijving: {level.assignment_description}</Text>
+                        </TouchableOpacity>
+                    ))
                 ) : (
                     <View style={styles.loading}>
                         <ActivityIndicator size="large" color="#0000ff"/>
