@@ -3,18 +3,18 @@ import {Alert, Button, StyleSheet, Text, TextInput, View, ActivityIndicator} fro
 import * as DocumentPicker from 'expo-document-picker';
 import axios from 'axios';
 import {useRoute} from '@react-navigation/native';
-import {get_level} from '../api';
+import {get_level, get_level_by_id} from '../api';
 
 function SubmitLevel() {
     const route = useRoute();
-    const {level_id} = route.params;
+    const {assignment_id} = route.params;
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState('');
     const [level, setLevel] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        get_level(level_id)
+        get_level_by_id(assignment_id)
             .then(data => {
                 setLevel(data);
                 setLoading(false);
@@ -23,7 +23,7 @@ function SubmitLevel() {
                 console.error('Error fetching level data:', error);
                 setLoading(false);
             });
-    }, [level_id]);
+    }, [assignment_id]);
 
     const handleFilePick = async () => {
         let result = await DocumentPicker.getDocumentAsync({});
