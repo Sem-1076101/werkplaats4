@@ -29,7 +29,7 @@ export function get_modules(domain_id) {
         });
 }
 
-export function get_level(module_id) {
+export function get_levels_from_module(module_id) {
     return connection.get(`/api/levels/${module_id}`)
         .then(response => {
             if (response) {
