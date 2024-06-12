@@ -12,7 +12,7 @@ import Modules from './components/Modules';
 import Levels from './components/Levels';
 import AddDomain from './components/AddDomain';
 import AddModules from './components/AddModules';
-import SubmitLevel from "./components/SubmitLevel";
+import SubmitLevel from './components/SubmitLevel';  // Zorg ervoor dat je SubmitLevel importeert
 
 const Stack = createStackNavigator();
 
@@ -32,6 +32,7 @@ function App() {
                             <Route path="/levels/:module_id" element={<Levels />} />
                             <Route path="/add-domain" element={<AddDomain />} />
                             <Route path="/add-modules" element={<AddModules />} />
+                            <Route path="/levels/:assignment_id/submitlevel" element={<SubmitLevel />} />
                         </Routes>
                     </BaseLayout>
                 </Router>
