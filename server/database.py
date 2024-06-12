@@ -136,6 +136,19 @@ def get_level_by__id(assignment_id):
         data.append(row_dict)
     return data
 
+def get_all_levels_from_database():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM levels")
+    columns = [column[0] for column in cursor.description]
+    levels = cursor.fetchall()
+    conn.close()
+    data = []
+    for row in levels:
+        row_dict = dict(zip(columns, row))
+        data.append(row_dict)
+    return data
+
 
 def add_user_to_db(table, email, password, first_name, last_name, studentnumber):
     conn = sqlite3.connect('instance/glitch.db')
