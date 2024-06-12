@@ -6,10 +6,12 @@ import { ThemeProvider } from './components/ThemeContext';
 import BaseLayout from './components/BaseLayout';
 import Index from './components/Index';
 import Login from './components/Login';
-import Register from './components/register';
+import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import Modules from './components/Modules';
 import Levels from './components/Levels';
+import AddDomain from './components/AddDomain';
+import AddModules from './components/AddModules';
 import SubmitLevel from "./components/SubmitLevel";
 
 const Stack = createStackNavigator();
@@ -28,6 +30,8 @@ function App() {
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/modules/:domain_id" element={<Modules />} />
                             <Route path="/levels/:module_id" element={<Levels />} />
+                            <Route path="/add-domain" element={<AddDomain />} />
+                            <Route path="/add-modules" element={<AddModules />} />
                         </Routes>
                     </BaseLayout>
                 </Router>
@@ -45,6 +49,8 @@ function App() {
                         <Stack.Screen name="Modules" component={Modules} />
                         <Stack.Screen name="Levels" component={Levels} />
                         <Stack.Screen name="SubmitLevel" component={SubmitLevel} />
+                        <Stack.Screen name="AddDomain" component={AddDomain} />
+                        <Stack.Screen name="AddModules" component={AddModules} />
                     </Stack.Navigator>
                 </BaseLayout>
             </ThemeProvider>
