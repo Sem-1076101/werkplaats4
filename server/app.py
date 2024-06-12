@@ -6,7 +6,7 @@ import socket
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
-                      get_level_by_module_id, get_level_by_id, add_user_to_db, get_user_from_db)
+                      get_level_by_module_id, get_level_by_id, get_all_levels_fom_database, add_user_to_db, get_user_from_db)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -69,6 +69,11 @@ def get_modules(domain_id):
 @app.route('/api/levels/<int:module_id>', methods=['GET'])
 def get_level(module_id):
     levels = get_level_by_module_id(module_id)
+    return jsonify(levels)
+
+@app.route('/api/levels', methods=['GET'])
+def get_all_levels():
+    levels = get_all_levels_from_database()
     return jsonify(levels)
 
 @app.route('/api/levels/<int:module_id>', methods=['GET'])
