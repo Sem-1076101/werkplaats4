@@ -134,6 +134,14 @@ def edit_module_in_database(module_id, module):
     conn.close()
 
 
+def delete_module_from_database(module_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM modules WHERE id=?", (module_id,))
+    conn.commit()
+    conn.close()
+
+
 def get_level_by_module_id(module_id):
     conn = get_db()
     cursor = conn.cursor()
