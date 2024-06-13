@@ -95,7 +95,6 @@ def add_domain_in_database(domain):
         conn.close()
 
 
-
 def get_module_by_id(module_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -122,6 +121,17 @@ def get_modules_from_database_by_domain_id(domain_id):
         row_dict = dict(zip(columns, row))
         data.append(row_dict)
     return data
+
+
+def edit_module_in_database(module_id, module):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE modules SET module_name=?, description=?, progress_indicator=?, domain_id=? WHERE module_id=?",
+        (module['module_name'], module['description'], module['progress_indicator'], module['domain_id'], module_id)
+    )
+    conn.commit()
+    conn.close()
 
 
 def get_level_by_module_id(module_id):
@@ -164,6 +174,8 @@ def get_all_levels_from_database():
         row_dict = dict(zip(columns, row))
         data.append(row_dict)
     return data
+
+
 
 
 def edit_level_in_database(assignment_id, level):
