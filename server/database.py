@@ -184,8 +184,6 @@ def get_all_levels_from_database():
     return data
 
 
-
-
 def edit_level_in_database(assignment_id, level):
     conn = get_db()
     cursor = conn.cursor()
@@ -193,6 +191,14 @@ def edit_level_in_database(assignment_id, level):
         "UPDATE levels SET assignment_title=?, assignment_description=? WHERE assignment_id=?",
         (level['assignment_title'], level['assignment_description'], assignment_id)
     )
+    conn.commit()
+    conn.close()
+
+
+def delete_level_from_database(assignment_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM levels WHERE assignment_id=?", (assignment_id,))
     conn.commit()
     conn.close()
 
