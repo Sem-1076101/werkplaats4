@@ -13,6 +13,7 @@ import Levels from './components/Levels';
 import AddDomain from './components/AddDomain';
 import AddModules from './components/AddModules';
 import SubmitLevel from "./components/SubmitLevel";
+import EditLevel from "./components/EditLevel";
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,7 @@ function App() {
                         <Stack.Screen name="SubmitLevel" component={SubmitLevel} />
                         <Stack.Screen name="AddDomain" component={AddDomain} />
                         <Stack.Screen name="AddModules" component={AddModules} />
+                        <Stack.Screen name="EditLevel" component={EditLevel} />
                     </Stack.Navigator>
                 </BaseLayout>
             </ThemeProvider>
