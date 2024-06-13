@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { get_all_levels, deleteLevel } from '../api'; // Pas de import path aan zoals nodig
+import { get_all_levels, deleteLevel } from '../api';
+import isWeb from "../isWeb";
+import {useNavigate} from "react-router-dom"; // Pas de import path aan zoals nodig
 
 function LevelsOverview() {
     const [levels, setLevels] = useState([]);
     const navigation = useNavigation();
+
+    let navigate;
+    if (isWeb) {
+        navigate = useNavigate();
+    }
 
     useEffect(() => {
         fetchLevels();
@@ -49,6 +56,18 @@ function LevelsOverview() {
                         <View style={styles.levelContainer}>
                             <Text style={styles.levelText}>{item.assignment_title}</Text>
                             <Text style={styles.levelText}>{item.assignment_description}</Text>
+                           <TouchableOpacity
+                                style={styles.editButton}
+                                onPress={() => {
+                                    if (isWeb) {
+                                        navigate(`/modules/${item.assignment_id}`);
+                                    } else {
+                                        navigation.navigate('LevelDetails', { assignment_id: item.assignment_id });
+                                    }
+                                }}
+                            >
+                                <Text style={styles.buttonText}>Opdrachten bekijken</Text>
+                            </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.editButton}
                                 onPress={() => navigation.navigate('EditLevel.js', { assignment_id: item.assignment_id })}
