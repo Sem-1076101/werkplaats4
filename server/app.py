@@ -8,7 +8,9 @@ from database import (get_all_categories_from_database, enroll_student_in_databa
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
                       get_module_by_id, edit_module_in_database,
                       get_level_by_module_id, get_level_by_id, get_all_levels_fom_database, edit_level_in_database,
-                      add_user_to_db, get_user_from_db, delete_level_from_database, delete_module_from_database)
+                      add_user_to_db, get_user_from_db, delete_level_from_database, delete_module_from_database,
+                      get_all_levels_from_database, submit_teacher_review_in_database,
+                      get_submissions_for_level_from_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -128,6 +130,28 @@ def delete_level(assignment_id):
         return {'message': 'Level succesvol verwijderd'}, 200
     except Exception as e:
         return {'message': 'Er is een fout opgetreden bij het verwijderen van level: ' + str(e)}, 400
+
+
+@app.route('/api/submissions/<int:assignment_id>', methods=['GET'])
+def get_submissions_for_level(assignment_id):
+    submissions = get_submissions_for_level_from_database(assignment_id)
+    return jsonify(submissions)
+
+
+@app.route('/api/review/<int:submission_id>', methods=['PUT'])
+def submit_teacher_review(submission_id):
+    data = request.get_json()
+    teacher_review = data.get('teacher_review')
+    rating = data.get('rating')
+
+    if not teacher_review or not rating:
+        return jsonify({'error': 'Incomplete data provided'}), 400
+
+    try:
+        submit_teacher_review_in_database(submission_id, teacher_review, rating)
+        return jsonify({'message': 'Review submitted successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': f'Failed to submit review: {str(e)}'}), 500
 
 
 @app.route('/api/domains', methods=['GET'])
