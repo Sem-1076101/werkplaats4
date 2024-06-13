@@ -3,9 +3,9 @@ import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Alert } fro
 import { useNavigation } from '@react-navigation/native';
 import { get_all_levels, deleteLevel } from '../api';
 import isWeb from "../isWeb";
-import {useNavigate} from "react-router-dom"; // Pas de import path aan zoals nodig
+import { useNavigate } from "react-router-dom";
 
-function LevelsOverview() {
+function DashboardLevels() {
     const [levels, setLevels] = useState([]);
     const navigation = useNavigation();
 
@@ -15,23 +15,29 @@ function LevelsOverview() {
     }
 
     useEffect(() => {
+        const fetchLevels = () => {
+            get_all_levels()
+                .then(responseData => {
+                    setLevels(responseData);
+                })
+                .catch(error => {
+                    console.error('Er was een fout bij het ophalen van de data:', error);
+                });
+        };
+
         fetchLevels();
     }, []);
-
-    const fetchLevels = () => {
-        get_all_levels()
-            .then(responseData => {
-                setLevels(responseData);
-            })
-            .catch(error => {
-                console.error('Er was een fout bij het ophalen van de data:', error);
-            });
-    };
 
     const handleDeleteLevel = (levelId) => {
         deleteLevel(levelId)
             .then(() => {
-                fetchLevels();
+                get_all_levels()
+                    .then(responseData => {
+                        setLevels(responseData);
+                    })
+                    .catch(error => {
+                        console.error('Er was een fout bij het ophalen van de data:', error);
+                    });
             })
             .catch(error => {
                 console.error('Er was een fout bij het verwijderen van het level:', error);
@@ -56,7 +62,7 @@ function LevelsOverview() {
                         <View style={styles.levelContainer}>
                             <Text style={styles.levelText}>{item.assignment_title}</Text>
                             <Text style={styles.levelText}>{item.assignment_description}</Text>
-                           <TouchableOpacity
+                            <TouchableOpacity
                                 style={styles.editButton}
                                 onPress={() => {
                                     if (isWeb) {
@@ -70,7 +76,7 @@ function LevelsOverview() {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.editButton}
-                                onPress={() => navigation.navigate('EditLevel.js', { assignment_id: item.assignment_id })}
+                                onPress={() => navigation.navigate('EditLevel', { assignment_id: item.assignment_id })}
                             >
                                 <Text style={styles.buttonText}>Wijzigen</Text>
                             </TouchableOpacity>
@@ -153,4 +159,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default LevelsOverview;
+export default DashboardLevels;
