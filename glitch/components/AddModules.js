@@ -93,7 +93,7 @@ function AddModule({ navigation }) {
                 >
                     <Picker.Item label="Selecteer een domein" value={null} />
                     {domainList.map((domain) => (
-                        <Picker.Item key={domain.id} label={domain.course_name} value={domain.course_id} /> // Gebruik course_id in plaats van domain_id
+                        <Picker.Item key={domain.id} label={domain.course_name} value={domain.course_id} />
                     ))}
                 </Picker>
             </View>

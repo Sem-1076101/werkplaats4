@@ -157,11 +157,14 @@ def get_user_from_db(email):
 
 
 def add_module_in_database(data):
+    if 'course_id' not in data:
+        return jsonify({'error': 'De sleutel course_id is vereist.'}), 400
+
     conn = get_db()
     cursor = conn.cursor()
     try:
         cursor.execute("INSERT INTO modules (module_name, description, domain_id) VALUES (?, ?, ?)",
-                       (data['module_name'], data['module_description'], data['domain_id']))
+                       (data['module_name'], data['module_description'], int(data['course_id']) ))
         conn.commit()
         return jsonify({'id': cursor.lastrowid}), 201
     except Exception as e:

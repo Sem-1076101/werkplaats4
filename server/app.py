@@ -145,7 +145,7 @@ def create_module():
     print('Ontvangen modulegegevens:', data)
 
     if 'course_id' in data:
-        data['domain_id'] = data.pop('course_id')
+        data['domain_id'] = data['course_id']
 
     result = add_module_in_database(data)
     return result
