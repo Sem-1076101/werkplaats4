@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_bcrypt import Bcrypt
 import datetime
-import base64
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
@@ -13,11 +12,9 @@ app = Flask(__name__)
 CORS(app, support_credentials=True)
 bcrypt = Bcrypt(app)
 
-
 @app.context_processor
 def inject_current_year():
     return {'current_year': datetime.datetime.now().year}
-
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -40,7 +37,6 @@ def register():
 
     return jsonify({"message": "Registratie succesvol"}), 201
 
-
 @app.route('/login', methods=['POST'])
 def login():
     email = request.json.get('email')
@@ -58,19 +54,16 @@ def login():
         return jsonify({"error": "Ongeldig wachtwoord"}), 401
     return jsonify({"message": "Inloggen succesvol", "studentnumber": user[5]}), 200
 
-
 @app.route('/api/modules/<int:domain_id>', methods=['GET'])
 def get_modules(domain_id):
     modules = get_modules_from_database_by_domain_id(domain_id)
     return jsonify(modules)
-
 
 @app.route('/api/levels/<int:module_id>', methods=['GET'])
 def get_level(module_id):
     levels = get_levels_by_module_id(module_id)
     print(levels)
     return jsonify(levels)
-
 
 @app.route('/api/assignment/<int:assignment_id>', methods=['GET'])
 def get_assignment(assignment_id):
@@ -80,12 +73,10 @@ def get_assignment(assignment_id):
     else:
         return jsonify({'message': 'Assignment niet gevonden'}), 404
 
-
 @app.route('/api/domains', methods=['GET'])
 def get_data():
     data = get_all_categories_from_database()
     return jsonify(data)
-
 
 @app.route('/api/enroll', methods=['POST'])
 def enroll_student():
@@ -100,7 +91,6 @@ def enroll_student():
 
     return {'message': 'Student enrolled successfully'}, 200
 
-
 @app.route('/api/check_enrollment', methods=['GET'])
 def check_enrollment():
     studentnumber = request.args.get('studentnumber')
@@ -113,7 +103,6 @@ def check_enrollment():
 
     return {'course_name': course_name, 'course_id': course_id}, 200
 
-
 @app.route('/api/domains/<int:course_id>', methods=['DELETE'])
 def delete_domain(course_id):
     try:
@@ -122,7 +111,6 @@ def delete_domain(course_id):
     except Exception as e:
         return {'message': 'Er is een fout opgetreden bij het verwijderen van het domein: ' + str(e)}, 400
 
-
 @app.route('/api/get-domain/<int:course_id>', methods=['GET'])
 def get_domain(course_id):
     domain = get_domain_from_database(course_id)
@@ -130,7 +118,6 @@ def get_domain(course_id):
         return jsonify(domain), 200
     else:
         return jsonify({'message': 'Domein niet gevonden'}), 404
-
 
 @app.route('/api/change-domain/<int:course_id>', methods=['PUT', 'GET'])
 def edit_domain(course_id):
@@ -141,7 +128,6 @@ def edit_domain(course_id):
     except Exception as e:
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het domein: ' + str(e)}), 400
 
-
 @app.route('/api/add-domain/', methods=['POST', 'OPTIONS', 'GET'])
 @cross_origin(supports_credentials=True)
 def create_domain():
@@ -149,24 +135,20 @@ def create_domain():
         return jsonify({'message': 'success'}), 200
     else:
         data = request.get_json()
-        print('Ontvangen domeingegevens:', data) # Voeg deze regel toe
+        print('Ontvangen domeingegevens:', data)
         result = add_domain_in_database(data)
         return result
-
 
 @app.route('/api/add-module/', methods=['POST'])
 def create_module():
     data = request.get_json()
-    print('Ontvangen modulegegevens:', data)  # Voeg deze regel toe
+    print('Ontvangen modulegegevens:', data)
 
-    # Verander 'course_id' naar 'domain_id'
     if 'course_id' in data:
         data['domain_id'] = data.pop('course_id')
 
     result = add_module_in_database(data)
     return result
 
-
 if __name__ == '__main__':
-    # app.run(host='192.168.1.127', port=5000)
-    app.run(host='192.168.56.1', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
