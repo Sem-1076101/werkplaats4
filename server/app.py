@@ -8,7 +8,7 @@ from database import (get_all_categories_from_database, enroll_student_in_databa
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
                       get_module_by_id, edit_module_in_database,
                       get_level_by_module_id, get_level_by_id, get_all_levels_fom_database, edit_level_in_database,
-                      add_user_to_db, get_user_from_db)
+                      add_user_to_db, get_user_from_db, delete_level_from_database, delete_module_from_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
