@@ -229,7 +229,7 @@ def create_domain():
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.225', port=5000)
+    app.run(host='172.20.10.2', port=5000)
     # app.run(host='192.168.1.127', port=5000)
 # if __name__ == '__main__':
 #     app.run(host='0.0.0.0', port=5000)
