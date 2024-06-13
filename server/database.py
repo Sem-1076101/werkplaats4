@@ -136,6 +136,7 @@ def get_level_by__id(assignment_id):
         data.append(row_dict)
     return data
 
+
 def get_all_levels_from_database():
     conn = get_db()
     cursor = conn.cursor()
@@ -148,6 +149,17 @@ def get_all_levels_from_database():
         row_dict = dict(zip(columns, row))
         data.append(row_dict)
     return data
+
+
+def edit_level_in_database(assignment_id, level):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE levels SET assignment_title=?, assignment_description=? WHERE assignment_id=?",
+        (level['assignment_title'], level['assignment_description'], assignment_id)
+    )
+    conn.commit()
+    conn.close()
 
 
 def add_user_to_db(table, email, password, first_name, last_name, studentnumber):
