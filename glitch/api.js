@@ -79,7 +79,7 @@ export function get_all_levels() {
 }
 
 export function deleteLevel(assignment_id) {
-    return connection.delete(`/api/domains/${assignment_id}`)
+    return connection.delete(`/api/level/${assignment_id}`)
         .then(response => {
             return response.data;
         })
@@ -220,7 +220,7 @@ export function getDomain(courseId) {
         })
         .catch(error => {
             console.error('Error:', error);
-            throw error; // re-throw the error so it can be caught in EditDomain.jsx
+            throw error;
         });
 }
 
