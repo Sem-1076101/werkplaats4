@@ -120,6 +120,42 @@ export function get_level_by_id(assignment_id) {
 }
 
 
+export function getSubmissionsForLevel(assignment_id) {
+    return connection.get(`/api/submissions/${assignment_id}`)
+        .then(response => {
+            if (response && response.data) {
+                return response.data;
+            } else {
+                console.error('Fout bij ophalen van ingeleverde opdrachten voor level:', assignment_id);
+                throw new Error('Geen data-eigenschap in de reactie');
+            }
+        })
+        .catch(error => {
+            console.error('Fout bij ophalen van ingeleverde opdrachten:', error);
+            throw error;
+        });
+}
+
+export function submitTeacherReview(submission_id, teacherReview, rating) {
+    return connection.put(`/api/review/${submission_id}`, {
+        teacher_review: teacherReview,
+        rating: rating
+    })
+        .then(response => {
+            if (response && response.data) {
+                return response.data;
+            } else {
+                console.error('Fout bij opslaan van beoordeling voor inzending:', submission_id);
+                throw new Error('Geen data-eigenschap in de reactie');
+            }
+        })
+        .catch(error => {
+            console.error('Fout bij opslaan van beoordeling:', error);
+            throw error;
+        });
+}
+
+
 
 export function checkEnrollment(studentId) {
     return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
