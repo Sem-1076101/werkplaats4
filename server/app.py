@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from flask_bcrypt import Bcrypt
 import datetime
-import socket
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
@@ -123,7 +122,7 @@ def edit_level(assignment_id):
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het Level: ' + str(e)}), 400
 
 
-@app.route('/api/levels/<int:assignment_idd>', methods=['DELETE'])
+@app.route('/api/levels/<int:assignment_id>', methods=['DELETE'])
 def delete_level(assignment_id):
     try:
         delete_level_from_database(assignment_id)
@@ -229,7 +228,4 @@ def create_domain():
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.225', port=5000)
-    # app.run(host='192.168.1.127', port=5000)
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)

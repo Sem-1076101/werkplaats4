@@ -63,20 +63,20 @@ export function get_level(module_id) {
 }
 
 export function get_all_levels() {
-        return connection.get(`/api/levels`)
+    return connection.get('/api/levels')
         .then(response => {
-            if (response) {
+            if (response && response.data) {
                 return response.data;
             } else {
-                throw new Error('Response is undefined');
+                throw new Error('Geen data ontvangen van de server');
             }
         })
         .catch(error => {
-            console.error('Error fetching levels', error);
-            console.error('Error fetching levels details ', error.response.data);
+            console.error('Fout bij het ophalen van niveaus:', error);
             throw error;
         });
 }
+
 
 export function deleteLevel(assignment_id) {
     return connection.delete(`/api/domains/${assignment_id}`)

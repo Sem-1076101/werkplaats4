@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { get_all_levels, deleteLevel } from '../api';
+import React, {useState, useEffect} from 'react';
+import {View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Alert} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {get_all_levels, deleteLevel} from '../api';
 import isWeb from "../isWeb";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function DashboardLevels() {
     const [levels, setLevels] = useState([]);
     const navigation = useNavigation();
+    const keyExtractor = (item, index) => {
+        if (item) {
+            return item.toString();
+        } else {
+            console.warn(`Undefined item at index ${index}`);
+            return index.toString();
+        }
+    };
 
     let navigate;
     if (isWeb) {
@@ -15,14 +23,15 @@ function DashboardLevels() {
     }
 
     useEffect(() => {
-        const fetchLevels = () => {
-            get_all_levels()
-                .then(responseData => {
-                    setLevels(responseData);
-                })
-                .catch(error => {
-                    console.error('Er was een fout bij het ophalen van de data:', error);
-                });
+        const fetchLevels = async () => {
+            try {
+                const responseData = await get_all_levels();
+                console.log('responseData:', responseData); // Voeg deze regel toe
+                setLevels(responseData);
+            } catch (error) {
+                console.error('Er was een fout bij het ophalen van de data:', error);
+                Alert.alert('Fout', 'Er is een fout opgetreden bij het ophalen van de niveaus.');
+            }
         };
 
         fetchLevels();
@@ -31,23 +40,19 @@ function DashboardLevels() {
     const handleDeleteLevel = (levelId) => {
         deleteLevel(levelId)
             .then(() => {
-                get_all_levels()
-                    .then(responseData => {
-                        setLevels(responseData);
-                    })
-                    .catch(error => {
-                        console.error('Er was een fout bij het ophalen van de data:', error);
-                    });
+                fetchLevels(); // Herlaad niveaus na verwijderen
             })
             .catch(error => {
                 console.error('Er was een fout bij het verwijderen van het level:', error);
+                Alert.alert('Fout', 'Er is een fout opgetreden bij het verwijderen van het level.');
             });
     };
 
     return (
         <View style={styles.container}>
             <Text style={styles.header}>Levels Overzicht</Text>
-            <Text style={styles.subHeader}>Welkom op de levels overzicht pagina, hier kan je nieuwe levels toevoegen, wijzigen en verwijderen.</Text>
+            <Text style={styles.subHeader}>Welkom op de levels overzicht pagina, hier kan je nieuwe levels toevoegen,
+                wijzigen en verwijderen.</Text>
             <TouchableOpacity
                 style={styles.addButton}
                 onPress={() => navigation.navigate('AddLevel')}
@@ -57,8 +62,8 @@ function DashboardLevels() {
             {levels.length > 0 ? (
                 <FlatList
                     data={levels}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
+                    keyExtractor={keyExtractor}
+                    renderItem={({item}) => (
                         <View style={styles.levelContainer}>
                             <Text style={styles.levelText}>{item.assignment_title}</Text>
                             <Text style={styles.levelText}>{item.assignment_description}</Text>
@@ -68,7 +73,7 @@ function DashboardLevels() {
                                     if (isWeb) {
                                         navigate(`/modules/${item.assignment_id}`);
                                     } else {
-                                        navigation.navigate('LevelDetails', { assignment_id: item.assignment_id });
+                                        navigation.navigate('LevelDetails', {assignment_id: item.assignment_id});
                                     }
                                 }}
                             >
@@ -76,7 +81,7 @@ function DashboardLevels() {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={styles.editButton}
-                                onPress={() => navigation.navigate('EditLevel', { assignment_id: item.assignment_id })}
+                                onPress={() => navigation.navigate('EditLevel', {assignment_id: item.assignment_id})}
                             >
                                 <Text style={styles.buttonText}>Wijzigen</Text>
                             </TouchableOpacity>
