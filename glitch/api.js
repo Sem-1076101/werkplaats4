@@ -72,6 +72,21 @@ export function deleteLevel(assignment_id) {
         });
 }
 
+export function editLevel(assignment_id, level) {
+    return connection.put(`/api/change-level/${assignment_id}`, level)
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw error; // re-throw the error so it can be caught in EditDomain.jsx
+        });
+}
+
 export function get_level_by_id(assignment_id) {
     return connection.get(`/api/levels/${assignment_id}`)
         .then(response => {
