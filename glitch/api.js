@@ -13,6 +13,22 @@ export function enrollStudent(studentId, courseId) {
     })
 }
 
+export function get_module_by_id(module_id) {
+    return connection.get(`/api/modules/${module_id}`)
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching levels', error);
+            console.error('Error fetching levels details ', error.response.data);
+            throw error;
+        });
+}
+
 export function get_modules(domain_id) {
     return connection.get(`/api/modules/${domain_id}`)
         .then(response => {
