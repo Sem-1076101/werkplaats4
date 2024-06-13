@@ -75,7 +75,7 @@ def get_modoule_by_id(module_id):
 
 
 @app.route('/api/change-module/<int:module_id>', methods=['PUT', 'GET'])
-def edit_level(module_id):
+def edit_module(module_id):
     data = request.get_json()
     try:
         edit_module_in_database(module_id, data)
