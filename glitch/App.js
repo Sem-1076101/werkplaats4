@@ -7,6 +7,8 @@ import BaseLayout from './components/BaseLayout';
 import Index from './components/Index';
 import Login from './components/Login';
 import Register from './components/Register';
+import Platform from './components/Platform';
+import PlatformModules from "./components/PlatformModules";
 import Dashboard from './components/Dashboard';
 import DashboardLevels from "./components/DashboardLevels";
 import Modules from './components/Modules';
@@ -34,11 +36,15 @@ function App() {
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/platform" element={<Platform />} />
+                            <Route path="/platform-modules" element={<PlatformModules />} />
                             <Route path="/dashboard-levels" element={<DashboardLevels />} />
                             <Route path="/modules/:domain_id" element={<Modules />} />
                             <Route path="/levels/:module_id" element={<Levels />} />
                             <Route path="/add-domain" element={<AddDomain />} />
                             <Route path="/add-modules" element={<AddModules />} />
+                            <Route path="/domains/:course_id/edit-domain" element={<EditDomain />} />
+                            <Route path="/modules/:module_id/edit-module" element={<EditModule />} />
                             <Route path="/levels/:assignment_id/submit-level" element={<SubmitLevel />} />
                             <Route path="/levels/:assignment_id/edit-level" element={<EditLevel />} />
                             <Route path="/modules/:module_id/edit-module" element={<EditModule />} />
@@ -59,6 +65,8 @@ function App() {
                         <Stack.Screen name="Login" component={Login} />
                         <Stack.Screen name="Register" component={Register} />
                         <Stack.Screen name="Dashboard" component={Dashboard} />
+                        <Stack.Screen name="Platform" component={Platform} />
+                        <Stack.Screen name="PlatformModules" component={PlatformModules} />
                         <Stack.Screen name="DashboardLevels" component={DashboardLevels} />
                         <Stack.Screen name="Modules" component={Modules} />
                         <Stack.Screen name="Levels" component={Levels} />
@@ -68,9 +76,8 @@ function App() {
                         <Stack.Screen name="EditLevel" component={EditLevel} />
                         <Stack.Screen name="EditModule" component={EditModule} />
                         <Stack.Screen name="AddLevel" component={AddLevel} />
-                        <Stack.Screen name="AddModule" component={AddModule} />
                         <Stack.Screen name="EditDomain" component={EditDomain} />
-
+                        <Stack.Screen name="AddModule" component={AddModule} />
                     </Stack.Navigator>
                 </BaseLayout>
             </ThemeProvider>
