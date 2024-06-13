@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { getSubmissionsForLevel, submitTeacherReview } from '../api'; // Importeer je API-functies
+import { getSubmissionsForLevel, submitTeacherReview } from '../api';
 
 function LevelDetails() {
     const route = useRoute();
