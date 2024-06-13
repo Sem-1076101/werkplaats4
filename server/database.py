@@ -95,6 +95,21 @@ def add_domain_in_database(domain):
         conn.close()
 
 
+
+def get_module_by_id(module_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM modules WHERE module_id=?", (module_id,))
+    columns = [column[0] for column in cursor.description]
+    levels = cursor.fetchall()
+    conn.close()
+    data = []
+    for row in levels:
+        row_dict = dict(zip(columns, row))
+        data.append(row_dict)
+    return data
+
+
 def get_modules_from_database_by_domain_id(domain_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -123,7 +138,7 @@ def get_level_by_module_id(module_id):
     return data
 
 
-def get_level_by__id(assignment_id):
+def get_level_by_id(assignment_id):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM levels WHERE assignment_id=?", (assignment_id,))
