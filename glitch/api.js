@@ -120,6 +120,23 @@ export function get_level_by_id(assignment_id) {
 }
 
 
+export function getModules() {
+    return connection.get('/api/modules')
+        .then(response => {
+            if (response && response.data) {
+                return response.data;
+            } else {
+                console.error('Fout bij ophalen van modules: geen data-eigenschap in de reactie');
+                throw new Error('Geen data-eigenschap in de reactie');
+            }
+        })
+        .catch(error => {
+            console.error('Fout bij ophalen van modules:', error);
+            throw error;
+        });
+}
+
+
 export function getSubmissionsForLevel(assignment_id) {
     return connection.get(`/api/submissions/${assignment_id}`)
         .then(response => {
@@ -241,6 +258,26 @@ export function addDomain(domain) {
             console.error('Error:', error);
             throw error;
         });
+}
+
+
+export function addLevel(level) {
+    return connection.post(`/api/add-level/`, level, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.data) {
+            return response.data;
+        } else {
+            throw new Error('Response is undefined');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
 }
 
 export default connection;

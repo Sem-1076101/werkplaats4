@@ -95,6 +95,18 @@ def add_domain_in_database(domain):
         conn.close()
 
 
+def add_level_in_database(level):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO levels (assignment_title, assignment_description, module_id) VALUES (?, ?, ?)",
+                       (level['assignment_title'], level['assignment_description'], level['module_id']))
+        conn.commit()
+        return {'id': cursor.lastrowid}
+    finally:
+        conn.close()
+
+
 def get_module_by_id(module_id):
     conn = get_db()
     cursor = conn.cursor()
@@ -132,6 +144,20 @@ def edit_module_in_database(module_id, module):
     )
     conn.commit()
     conn.close()
+
+
+def get_module_from_database():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM modules")
+    columns = [column[0] for column in cursor.description]
+    modules = cursor.fetchall()
+    conn.close()
+    data = []
+    for row in modules:
+        row_dict = dict(zip(columns, row))
+        data.append(row_dict)
+    return data
 
 
 def delete_module_from_database(module_id):

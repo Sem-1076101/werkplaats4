@@ -9,7 +9,7 @@ from database import (get_all_categories_from_database, enroll_student_in_databa
                       get_level_by_module_id, get_level_by_id, edit_level_in_database,
                       add_user_to_db, get_user_from_db, delete_level_from_database, delete_module_from_database,
                       get_all_levels_from_database, submit_teacher_review_in_database,
-                      get_submissions_for_level_from_database)
+                      get_submissions_for_level_from_database, get_module_from_database, add_level_in_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -88,7 +88,7 @@ def edit_module(module_id):
 @app.route('/api/modules/<int:course_id>', methods=['DELETE'])
 def delete_module(module_id):
     try:
-        delete_module_from_database(module)
+        delete_module_from_database(module_id)
         return {'message': 'Moddule succesvol verwijderd'}, 200
     except Exception as e:
         return {'message': 'Er is een fout opgetreden bij het verwijderen van module: ' + str(e)}, 400
@@ -218,13 +218,28 @@ def edit_domain(course_id):
 @cross_origin(supports_credentials=True)
 def create_domain():
     if request.method == 'OPTIONS':
-        # Preflight request. Reply successfully:
         return jsonify({'message': 'success'}), 200
     else:
-        # Actual request; handle POST.
         data = request.get_json()
         result = add_domain_in_database(data)
         return result
+
+
+
+@app.route('/api/add-level/', methods=['POST', 'OPTIONS'])
+def create_level():
+    if request.method == 'OPTIONS':
+        return jsonify({'message': 'success'}), 200
+    else:
+        data = request.get_json()
+        result = add_level_in_database(data)
+        return jsonify(result)
+
+
+@app.route('/api/modules/', methods=['GET'])
+def get_module():
+    module = get_module_from_database()
+    return jsonify(module)
 
 
 if __name__ == '__main__':
