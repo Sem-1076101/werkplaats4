@@ -6,7 +6,9 @@ import socket
 from database import (get_all_categories_from_database, enroll_student_in_database, get_student_domain,
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
-                      get_level_by_module_id, get_level_by_id, get_all_levels_fom_database, edit_level_in_database, add_user_to_db, get_user_from_db)
+                      get_module_by_id, edit_module_in_database,
+                      get_level_by_module_id, get_level_by_id, get_all_levels_fom_database, edit_level_in_database,
+                      add_user_to_db, get_user_from_db)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -25,7 +27,7 @@ def register():
     password = data.get('password')
     first_name = data.get('first_name')
     last_name = data.get('last_name')
-    studentnumber = data.get('studentnumber') 
+    studentnumber = data.get('studentnumber')
 
     if not email or not password:
         return jsonify({"error": "E-mail en wachtwoord zijn verplicht"}), 400
@@ -66,20 +68,39 @@ def get_modules(domain_id):
     return jsonify(modules)
 
 
+@app.route('/api/modules/<int:module_id>', methods=['GET'])
+def get_modoule_by_id(module_id):
+    level = get_module_by_id(module_id)
+    return jsonify(level)
+
+
+@app.route('/api/change-module/<int:module_id>', methods=['PUT', 'GET'])
+def edit_level(module_id):
+    data = request.get_json()
+    try:
+        edit_module_in_database(module_id, data)
+        return jsonify({'message': 'Module succesvol gewijzigd'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het Module: ' + str(e)}), 400
+
+
 @app.route('/api/levels/<int:module_id>', methods=['GET'])
 def get_level(module_id):
     levels = get_level_by_module_id(module_id)
     return jsonify(levels)
+
 
 @app.route('/api/levels', methods=['GET'])
 def get_all_levels():
     levels = get_all_levels_from_database()
     return jsonify(levels)
 
+
 @app.route('/api/levels/<int:module_id>', methods=['GET'])
 def get_level_by_id(assignment_id):
     level = get_level_by_id(assignment_id)
     return jsonify(level)
+
 
 @app.route('/api/change-level/<int:course_id>', methods=['PUT', 'GET'])
 def edit_level(assignment_id):
@@ -89,8 +110,6 @@ def edit_level(assignment_id):
         return jsonify({'message': 'Level succesvol gewijzigd'}), 200
     except Exception as e:
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het Level: ' + str(e)}), 400
-
-
 
 
 @app.route('/api/domains', methods=['GET'])
@@ -133,7 +152,7 @@ def delete_domain(course_id):
         return {'message': 'Domein succesvol verwijderd'}, 200
     except Exception as e:
         return {'message': 'Er is een fout opgetreden bij het verwijderen van het domein: ' + str(e)}, 400
-    
+
 
 @app.route('/api/get-domain/<int:course_id>', methods=['GET'])
 def get_domain(course_id):
