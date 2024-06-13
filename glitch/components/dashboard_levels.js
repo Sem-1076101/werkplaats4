@@ -51,7 +51,7 @@ function LevelsOverview() {
                             <Text style={styles.levelText}>{item.assignment_description}</Text>
                             <TouchableOpacity
                                 style={styles.editButton}
-                                onPress={() => navigation.navigate('EditLevel', { levelId: item.id })}
+                                onPress={() => navigation.navigate('EditLevel.js', { assignment_id: item.assignment_id })}
                             >
                                 <Text style={styles.buttonText}>Wijzigen</Text>
                             </TouchableOpacity>
