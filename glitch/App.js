@@ -12,7 +12,7 @@ import Modules from './components/Modules';
 import Levels from './components/Levels';
 import AddDomain from './components/AddDomain';
 import AddModules from './components/AddModules';
-import SubmitLevel from './components/SubmitLevel';  // Zorg ervoor dat je SubmitLevel importeert
+import SubmitLevel from './components/SubmitLevel';
 
 const Stack = createStackNavigator();
 

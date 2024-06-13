@@ -127,7 +127,7 @@ def get_levels_by_module_id(module_id):
 
 
 def get_assignment_by_assignment_id(assignment_id):
-    conn = get_db()  # Je moet nog de get_db() functie implementeren om de databaseverbinding te krijgen
+    conn = get_db()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM levels WHERE assignment_id=?", (assignment_id,))
     columns = [column[0] for column in cursor.description]
