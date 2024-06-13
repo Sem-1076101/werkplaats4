@@ -3,22 +3,23 @@ import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 're
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { getDomain, editDomain } from '../api';
 import BaseLayout from './BaseLayout'; // Assuming BaseLayout is a custom layout component
+import isWeb from '../isWeb'; // Import isWeb function
 
 const EditDomain = () => {
     const route = useRoute();
     const navigation = useNavigation();
-    const { id } = route.params;
+    const { course_id } = route.params;
     const [domain, setDomain] = useState({ course_name: '', course_description: '' });
 
     useEffect(() => {
-        getDomain(id)
+        getDomain(course_id)
             .then(domainData => {
                 setDomain(domainData);
             })
             .catch(error => {
                 console.error('Error:', error);
             });
-    }, [id]);
+    }, [course_id]);
 
     const handleChange = (key, value) => {
         setDomain({
@@ -28,7 +29,7 @@ const EditDomain = () => {
     };
 
     const handleSubmit = () => {
-        editDomain(id, domain)
+        editDomain(course_id, domain)
             .then(updatedDomain => {
                 setDomain({
                     course_name: updatedDomain.course_name || '',
@@ -68,7 +69,7 @@ const EditDomain = () => {
                     />
                 </View>
                 <Button title="Wijzig domein" onPress={handleSubmit} />
-                <Button title="Terug naar Platform" onPress={() => navigation.goBack()} />
+                {isWeb && <Button title="Terug naar Platform" onPress={() => navigation.goBack()} />}
             </ScrollView>
         </BaseLayout>
     );
