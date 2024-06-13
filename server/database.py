@@ -195,6 +195,31 @@ def edit_level_in_database(assignment_id, level):
     conn.close()
 
 
+def submit_teacher_review_in_database(submission_id, teacher_review, rating):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE submissions SET teacher_review=?, rating=? WHERE id=?",
+        (teacher_review, rating, submission_id)
+    )
+    conn.commit()
+    conn.close()
+
+
+def get_submissions_for_level_from_database(assignment_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM submissions WHERE assignment_id=?", (assignment_id,))
+    columns = [column[0] for column in cursor.description]
+    submissions = cursor.fetchall()
+    conn.close()
+    data = []
+    for row in submissions:
+        row_dict = dict(zip(columns, row))
+        data.append(row_dict)
+    return data
+
+
 def delete_level_from_database(assignment_id):
     conn = get_db()
     cursor = conn.cursor()
