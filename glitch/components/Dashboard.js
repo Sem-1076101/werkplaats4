@@ -7,7 +7,6 @@ import {checkEnrollment} from '../api';
 import {useNavigate} from 'react-router-dom';
 import isWeb from '../isWeb';
 
-
 function Dashboard({navigation}) {
     const [data, setData] = useState(null);
     const [showModal, setShowModal] = useState(false);
@@ -52,10 +51,18 @@ function Dashboard({navigation}) {
             if (studentnumber) {
                 try {
                     const response = await checkEnrollment(studentnumber);
-                    setCourseName(response.course_name);
-                    setCourseId(response.course_id);
+                    if (response && response.course_name && response.course_id) {
+                        setCourseName(response.course_name);
+                        setCourseId(response.course_id);
+                    } else {
+                        setCourseName(null);
+                        setCourseId(null);
+                    }
                 } catch (error) {
-                    console.error('Error checking enrollment:', error);
+                    // Zachte waarschuwing in plaats van een error loggen
+                    console.warn('Kan de inschrijving niet controleren:', error.message);
+                    setCourseName(null);
+                    setCourseId(null);
                 }
             }
         }, 1000);
@@ -64,8 +71,7 @@ function Dashboard({navigation}) {
             try {
                 const response = await connection.get('/api/domains');
                 setData(response.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
+            } catch {
             }
         }, 1000);
 
@@ -74,6 +80,7 @@ function Dashboard({navigation}) {
             clearInterval(fetchDataInterval);
         };
     }, [studentnumber]);
+
 
     return (
         <View>
@@ -121,7 +128,7 @@ function Dashboard({navigation}) {
                                 <Text style={styles.modalTitle}>Domeinen</Text>
                                 <Button title="Sluiten" onPress={handleCloseModal}/>
                             </View>
-                            <ScrollView contentContainerStyle={styles.modalBody}>
+                            <ScrollView horizontal={true} contentContainerStyle={styles.modalBody}>
                                 {data ? (
                                     data.map((item, index) => (
                                         <View style={styles.card} key={index}>
@@ -192,62 +199,67 @@ const styles = StyleSheet.create({
     modalOverlay: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
+        width: '90%',
         backgroundColor: 'white',
-        margin: 20,
         borderRadius: 10,
-        padding: 20,
+        overflow: 'hidden',
     },
     modalHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 20,
+        padding: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
     },
     modalTitle: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
     },
     modalBody: {
-        flexGrow: 1,
+        flexDirection: 'row',
+        padding: 15,
     },
     card: {
-        backgroundColor: 'white',
+        width: 200,
+        marginRight: 15,
+        backgroundColor: '#f8f8f8',
         borderRadius: 10,
-        marginBottom: 20,
         overflow: 'hidden',
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        elevation: 1,
+        borderWidth: 1,
+        borderColor: '#ddd',
     },
     cardImage: {
         width: '100%',
-        height: 150,
+        height: 100,
     },
     cardBody: {
-        padding: 15,
+        padding: 10,
     },
     cardTitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 5,
     },
     cardText: {
-        fontSize: 16,
+        fontSize: 14,
+        color: '#555',
         marginBottom: 10,
     },
     cardButton: {
-        backgroundColor: 'blue',
+        backgroundColor: '#007BFF',
         padding: 10,
         borderRadius: 5,
+        alignItems: 'center',
     },
     cardButtonText: {
-        color: 'white',
-        textAlign: 'center',
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: 'bold',
     },
 });
 

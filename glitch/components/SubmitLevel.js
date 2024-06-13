@@ -1,29 +1,47 @@
 import React, {useState, useEffect} from 'react';
-import {Alert, Button, StyleSheet, Text, TextInput, View, ActivityIndicator} from 'react-native';
+import {View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import axios from 'axios';
+import {useNavigate, useParams} from 'react-router-dom';
 import {useRoute} from '@react-navigation/native';
-import {get_level} from '../api';
+import axios from 'axios';
+import isWeb from '../isWeb';
+import {get_assignment_by_assignment_id} from "../api";
 
 function SubmitLevel() {
-    const route = useRoute();
-    const {level_id} = route.params;
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState('');
-    const [level, setLevel] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [assignment, setAssignment] = useState(null);
+
+    let assignment_id;
+    if (isWeb) {
+        const params = useParams();
+        assignment_id = params.assignment_id;
+    } else {
+        const route = useRoute();
+        assignment_id = route.params.assignment_id;
+    }
+
+    let navigate;
+    if (isWeb) {
+        navigate = useNavigate();
+    } else {
+        const navigation = useNavigation();
+        navigate = navigation.navigate;
+    }
 
     useEffect(() => {
-        get_level(level_id)
+        get_assignment_by_assignment_id(assignment_id)
             .then(data => {
-                setLevel(data);
-                setLoading(false);
+                if (data) {
+                    setAssignment(data);
+                    setLoading(false);
+                } else {
+                    console.error('Unexpected response:', data);
+                }
             })
-            .catch(error => {
-                console.error('Error fetching level data:', error);
-                setLoading(false);
-            });
-    }, [level_id]);
+            .catch(error => console.error('Error fetching data:', error));
+    }, [assignment_id]);
 
     const handleFilePick = async () => {
         let result = await DocumentPicker.getDocumentAsync({});
@@ -47,20 +65,24 @@ function SubmitLevel() {
         });
         formData.append('level_description', description);
 
-        axios.post(`/api/submit-level/${level_id}`, formData, {
+        axios.post(`/api/submit-level/${assignment_id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
         })
             .then(() => {
                 Alert.alert('Succes', 'Level succesvol ingeleverd!');
+                if (isWeb) {
+                    navigate(`/Levels/${assignment_id}`);
+                } else {
+                    navigate('Levels', {assignment_id});
+                }
             })
             .catch(error => {
                 console.error('Error submitting level:', error);
                 Alert.alert('Fout', 'Er is een fout opgetreden bij het inleveren van het level');
             });
     };
-
 
     return (
         <View style={styles.container}>
@@ -70,11 +92,12 @@ function SubmitLevel() {
                     <ActivityIndicator size="large" color="#0000ff"/>
                     <Text>Level gegevens worden geladen...</Text>
                 </View>
-            ) : level ? (
+            ) : (
                 <>
-                    <Text style={styles.label}>Beschrijving: {level.level_description}</Text>
+                    <Text style={styles.label}>Beschrijving: {assignment && assignment.assignment_title}</Text>
                     <Button title="Kies een bestand" onPress={handleFilePick}/>
                     {file && <Text style={styles.fileName}>Geselecteerd bestand: {file.name}</Text>}
+                    {file && <Image source={{uri: file.uri}} style={styles.imagePreview}/>} {/* Voeg deze regel toe */}
                     <TextInput
                         style={styles.textInput}
                         placeholder="Beschrijving van de inlevering"
@@ -83,15 +106,10 @@ function SubmitLevel() {
                     />
                     <Button title="Inleveren" onPress={handleSubmit}/>
                 </>
-            ) : (
-                <View style={styles.loading}>
-                    <Text>Geen levelgegevens gevonden.</Text>
-                </View>
             )}
         </View>
     );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -114,6 +132,11 @@ const styles = StyleSheet.create({
         marginTop: 8,
         marginBottom: 16,
         fontStyle: 'italic',
+    },
+    imagePreview: {
+        width: 100, // Of een andere breedte die je wilt
+        height: 100, // Of een andere hoogte die je wilt
+        resizeMode: 'contain', // Of 'cover', afhankelijk van wat je wilt
     },
     textInput: {
         height: 40,

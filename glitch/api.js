@@ -1,9 +1,8 @@
 import axios from 'axios';
-import { SERVER_IP } from './config';
+import {SERVER_IP} from './config';
 
 const connection = axios.create({
     baseURL: `http://${SERVER_IP}:5000`,
-
 });
 
 export function enrollStudent(studentId, courseId) {
@@ -30,7 +29,7 @@ export function get_modules(domain_id) {
         });
 }
 
-export function get_level(module_id) {
+export function get_levels_from_module(module_id) {
     return connection.get(`/api/levels/${module_id}`)
         .then(response => {
             if (response) {
@@ -46,21 +45,32 @@ export function get_level(module_id) {
         });
 }
 
-export function checkEnrollment(studentId) {
-    return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
+export function get_assignment_by_assignment_id(assignment_id) {
+    return connection.get(`/api/assignment/${assignment_id}`)
         .then(response => {
-            if (response.data.course_name && response.data.course_id) {
-                return {
-                    course_name: response.data.course_name,
-                    course_id: response.data.course_id
-                };
+            if (response) {
+                return response.data;
             } else {
-                throw new Error('No course name or course id returned from server');
+                throw new Error('Response is undefined');
             }
         })
         .catch(error => {
-            console.error('Error checking enrollment:', error);
+            console.error('Fout bij het ophalen van het assignment:', error);
+            throw error;
         });
+}
+
+export function checkEnrollment(studentId) {
+    return connection.get(`/api/check_enrollment?studentnumber=${studentId}`)
+        .then(response => {
+                if (response.data.course_name && response.data.course_id) {
+                    return {
+                        course_name: response.data.course_name,
+                        course_id: response.data.course_id
+                    };
+                }
+            }
+        )
 }
 
 export function domains() {
@@ -114,22 +124,35 @@ export function getDomain(courseId) {
 }
 
 export function addDomain(domain) {
-    return connection.post('/api/add-domain/', domain, {
+    return axios.post(`http://${SERVER_IP}:5000/api/add-domain/`, domain, {
         headers: {
             'Content-Type': 'application/json'
         }
     })
+    .then(response => {
+        if (response) {
+            return response.data;
+        } else {
+            throw new Error('Response is undefined');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
+}
+
+export function addModule(moduleData) {
+    return connection.post('/api/add-module/', moduleData)
         .then(response => {
-            if (response) {
-                return response.data;
-            } else {
-                throw new Error('Response is undefined');
-            }
+            return response.data;
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Error adding module:', error);
             throw error;
         });
 }
+
+
 
 export default connection;

@@ -86,13 +86,16 @@ def add_domain_in_database(domain):
     conn = get_db()
     cursor = conn.cursor()
     try:
-        course_image = base64.b64decode(domain['course_image']) if domain.get('course_image') else None
-        cursor.execute("INSERT INTO domains (course_name, course_description, course_image) VALUES (?, ?, ?)",
-                       (domain['course_name'], domain['course_description'], course_image))
+        cursor.execute("INSERT INTO domains (course_name, course_description) VALUES (?, ?)",
+                       (domain['course_name'], domain['course_description']))
         conn.commit()
         return jsonify({'id': cursor.lastrowid})
+    except Exception as e:
+        print('Fout bij het toevoegen van het domein:', e)
+        return jsonify({'error': 'Er is een fout opgetreden tijdens het toevoegen van het domein.'}), 500
     finally:
         conn.close()
+
 
 
 def get_modules_from_database_by_domain_id(domain_id):
@@ -109,7 +112,7 @@ def get_modules_from_database_by_domain_id(domain_id):
     return data
 
 
-def get_level_by_module_id(module_id):
+def get_levels_by_module_id(module_id):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM levels WHERE module_id=?", (module_id,))
@@ -121,6 +124,21 @@ def get_level_by_module_id(module_id):
         row_dict = dict(zip(columns, row))
         data.append(row_dict)
     return data
+
+
+def get_assignment_by_assignment_id(assignment_id):
+    conn = get_db()  # Je moet nog de get_db() functie implementeren om de databaseverbinding te krijgen
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM levels WHERE assignment_id=?", (assignment_id,))
+    columns = [column[0] for column in cursor.description]
+    assignment = cursor.fetchone()
+    conn.close()
+    if assignment:
+        assignment_dict = dict(zip(columns, assignment))
+        return assignment_dict
+    else:
+        return None
+
 
 def add_user_to_db(table, email, password, first_name, last_name, studentnumber):
     conn = sqlite3.connect('instance/glitch.db')
@@ -136,3 +154,18 @@ def get_user_from_db(email):
     user = cursor.fetchone()
     conn.close()
     return user
+
+
+def add_module_in_database(data):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO modules (module_name, description, domain_id) VALUES (?, ?, ?)",
+                       (data['module_name'], data['module_description'], data['domain_id']))
+        conn.commit()
+        return jsonify({'id': cursor.lastrowid}), 201
+    except Exception as e:
+        print('Fout bij het toevoegen van de module:', e)
+        return jsonify({'error': 'Er is een fout opgetreden tijdens het toevoegen van de module.'}), 500
+    finally:
+        conn.close()

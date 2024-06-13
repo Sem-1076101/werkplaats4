@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, ActivityIndicator, ScrollView, TouchableOpacity} from "react-native";
+import {View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useRoute} from '@react-navigation/native';
-import {get_level} from '../api';
-import axios from 'axios';
-import isWeb from "../isWeb";
+import {get_levels_from_module} from '../api';
+import isWeb from '../isWeb';
 
 function Levels({navigation}) {
     const [levels, setLevels] = useState(null);
@@ -27,7 +26,7 @@ function Levels({navigation}) {
 
     useEffect(() => {
         const fetchDataInterval = setInterval(() => {
-            get_level(module_id)
+            get_levels_from_module(module_id)
                 .then(data => {
                     if (data) {
                         setLevels(data);
@@ -38,6 +37,7 @@ function Levels({navigation}) {
                 })
                 .catch(error => console.error('Error fetching data:', error));
         }, 1000);
+
         return () => {
             clearInterval(fetchDataInterval);
         };
@@ -53,7 +53,8 @@ function Levels({navigation}) {
                             <TouchableOpacity
                                 key={index}
                                 style={styles.level}
-                                onPress={() => navigate('SubmitLevel', {level_id: level.assignment_id})}>
+                                onPress={() => navigate(`/levels/${level.assignment_id}/submitlevel`)}
+                            >
                                 <Text style={styles.levelText}>Naam: {level.assignment_title}</Text>
                                 <Text style={styles.levelText}>Beschrijving: {level.assignment_description}</Text>
                             </TouchableOpacity>

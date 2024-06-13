@@ -3,9 +3,8 @@
 *.pyc
 __pycache__/
 .vscode
-/client/node_modules/
-/client/.expo/
-
+/glitch/.expo/
+/glitch/node_modules/
 /server/.DS_Store
 /venv
 .DS_Store
