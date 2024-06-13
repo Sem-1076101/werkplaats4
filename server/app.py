@@ -70,8 +70,8 @@ def get_modules(domain_id):
 
 @app.route('/api/modules/<int:module_id>', methods=['GET'])
 def get_modoule_by_id(module_id):
-    level = get_module_by_id(module_id)
-    return jsonify(level)
+    module = get_module_by_id(module_id)
+    return jsonify(module)
 
 
 @app.route('/api/change-module/<int:module_id>', methods=['PUT', 'GET'])
@@ -82,6 +82,15 @@ def edit_module(module_id):
         return jsonify({'message': 'Module succesvol gewijzigd'}), 200
     except Exception as e:
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het Module: ' + str(e)}), 400
+
+
+@app.route('/api/modules/<int:course_id>', methods=['DELETE'])
+def delete_module(module_id):
+    try:
+        delete_module_from_database(module)
+        return {'message': 'Moddule succesvol verwijderd'}, 200
+    except Exception as e:
+        return {'message': 'Er is een fout opgetreden bij het verwijderen van module: ' + str(e)}, 400
 
 
 @app.route('/api/levels/<int:module_id>', methods=['GET'])
@@ -110,6 +119,15 @@ def edit_level(assignment_id):
         return jsonify({'message': 'Level succesvol gewijzigd'}), 200
     except Exception as e:
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het Level: ' + str(e)}), 400
+
+
+@app.route('/api/levels/<int:assignment_idd>', methods=['DELETE'])
+def delete_level(assignment_id):
+    try:
+        delete_level_from_database(assignment_id)
+        return {'message': 'Level succesvol verwijderd'}, 200
+    except Exception as e:
+        return {'message': 'Er is een fout opgetreden bij het verwijderen van level: ' + str(e)}, 400
 
 
 @app.route('/api/domains', methods=['GET'])
