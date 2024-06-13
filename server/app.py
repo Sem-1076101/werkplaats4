@@ -6,7 +6,7 @@ from database import (get_all_categories_from_database, enroll_student_in_databa
                       get_course_name, delete_domain_from_database, edit_domain_in_database,
                       get_domain_from_database, add_domain_in_database, get_modules_from_database_by_domain_id,
                       get_levels_by_module_id, get_assignment_by_assignment_id, add_user_to_db, get_user_from_db,
-                      add_module_in_database)
+                      add_module_in_database, get_all_levels_from_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -142,13 +142,22 @@ def create_domain():
 @app.route('/api/add-module/', methods=['POST'])
 def create_module():
     data = request.get_json()
-    print('Ontvangen modulegegevens:', data)
 
     if 'course_id' in data:
         data['domain_id'] = data['course_id']
 
     result = add_module_in_database(data)
     return result
+
+
+@app.route('/api/get-levels/', methods=['GET'])
+def get_levels():
+    data = request.get_json()
+    assignment = get_all_levels_from_database()
+    if assignment:
+        return jsonify(assignment), 200
+    else:
+        return jsonify({'message': 'Assignment niet gevonden'}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
