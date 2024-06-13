@@ -163,8 +163,8 @@ def add_module_in_database(data):
     conn = get_db()
     cursor = conn.cursor()
     try:
-        cursor.execute("INSERT INTO modules (module_name, description, domain_id) VALUES (?, ?, ?)",
-                       (data['module_name'], data['module_description'], int(data['course_id']) ))
+        cursor.execute("INSERT INTO modules (module_name, description, domain_id, progress_indicator) VALUES (?, ?, ?, ?)",
+                       (data['module_name'], data['module_description'], int(data['course_id']), data['percentage']))
         conn.commit()
         return jsonify({'id': cursor.lastrowid}), 201
     except Exception as e:
@@ -172,3 +172,4 @@ def add_module_in_database(data):
         return jsonify({'error': 'Er is een fout opgetreden tijdens het toevoegen van de module.'}), 500
     finally:
         conn.close()
+

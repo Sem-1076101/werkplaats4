@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert, Picker } from 'react-native';
 import { useNavigate } from 'react-router-dom';
-import { addModule, domains } from '../api'; // Importeer de functie 'domains'
+import { addModule, domains } from '../api';
 import isWeb from '../isWeb';
 
 function AddModule({ navigation }) {
     const [moduleData, setModuleData] = useState({
         module_name: '',
         module_description: '',
-        course_id: null, // Gebruik course_id in plaats van domain_id
+        course_id: null,
+        percentage: '',
     });
-    const [domainList, setDomainList] = useState([]); // State om de lijst met domeinen op te slaan
+    const [domainList, setDomainList] = useState([]);
     const [selectedDomain, setSelectedDomain] = useState(null);
 
     let navigate;
@@ -19,14 +20,13 @@ function AddModule({ navigation }) {
     }
 
     useEffect(() => {
-        // Roep de functie 'fetchDomains' aan bij het laden van de component
         fetchDomains();
     }, []);
 
     const fetchDomains = async () => {
         try {
-            const domainData = await domains(); // Haal de lijst met domeinen op
-            setDomainList(domainData); // Sla de lijst met domeinen op in de state
+            const domainData = await domains();
+            setDomainList(domainData);
         } catch (error) {
             console.error('Fout bij het ophalen van domeinen:', error);
             Alert.alert('Fout', 'Er is een fout opgetreden bij het ophalen van de domeinen.');
@@ -48,6 +48,7 @@ function AddModule({ navigation }) {
                     module_name: '',
                     module_description: '',
                     course_id: null,
+                    percentage: '',
                 });
 
                 if (isWeb) {
@@ -82,6 +83,15 @@ function AddModule({ navigation }) {
                     style={styles.input}
                     value={moduleData.module_description}
                     onChangeText={(value) => handleChange('module_description', value)}
+                    multiline
+                />
+            </View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.label}>Percentage</Text>
+                <TextInput
+                    style={styles.input}
+                    value={moduleData.percentage}
+                    onChangeText={(value) => handleChange('percentage', value)}
                     multiline
                 />
             </View>
