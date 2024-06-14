@@ -46,6 +46,17 @@ export function get_modules(domain_id) {
         });
 }
 
+
+export function deleteModule(module_id) {
+    return connection.delete(`/api/modules/${module_id}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
 export function get_level(module_id) {
     return connection.get(`/api/levels/${module_id}`)
         .then(response => {
