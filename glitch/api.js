@@ -57,7 +57,7 @@ export function deleteModule(module_id) {
         });
 }
 
-export function get_level(module_id) {
+export function get_level_by_module_id(module_id) {
     return connection.get(`/api/levels/${module_id}`)
         .then(response => {
             if (response) {
