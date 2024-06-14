@@ -7,6 +7,8 @@ import BaseLayout from './components/BaseLayout';
 import Index from './components/Index';
 import Login from './components/Login';
 import Register from './components/Register';
+import Platform from './components/Platform';
+import PlatformModules from "./components/PlatformModules";
 import Dashboard from './components/Dashboard';
 import DashboardLevels from "./components/DashboardLevels";
 import Modules from './components/Modules';
@@ -33,6 +35,8 @@ function App() {
                             <Route path="/home" element={<Index />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
+                            <Route path="/platform" element={<Platform />} />
+                            <Route path="/platform-modules" element={<PlatformModules />} />
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/dashboard-levels" element={<DashboardLevels />} />
                             <Route path="/modules/:domain_id" element={<Modules />} />
