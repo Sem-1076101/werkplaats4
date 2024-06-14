@@ -86,10 +86,10 @@ def edit_module(module_id):
         return jsonify({'message': 'Er is een fout opgetreden bij het wijzigen van het Module: ' + str(e)}), 400
 
 
-@app.route('/api/modules/<int:course_id>', methods=['DELETE'])
+@app.route('/api/modules/<int:module_id>', methods=['DELETE'])
 def delete_module(module_id):
     try:
-        delete_module_from_database(module)
+        delete_module_from_database(module_id)
         return {'message': 'Moddule succesvol verwijderd'}, 200
     except Exception as e:
         return {'message': 'Er is een fout opgetreden bij het verwijderen van module: ' + str(e)}, 400
@@ -229,7 +229,6 @@ def create_domain():
 
 
 if __name__ == '__main__':
-    app.run(host='172.20.10.2', port=5000)
+    # app.run(host='172.20.10.2', port=5000)
     # app.run(host='192.168.1.127', port=5000)
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
