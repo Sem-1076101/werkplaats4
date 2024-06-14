@@ -20,7 +20,7 @@ import EditLevel from "./components/EditLevel";
 import EditModule from "./components/EditModule";
 import EditDomain from "./components/EditDomain";
 import AddModule from "./components/AddModules";
-// import AddLevel from "./components/AddLevel";
+import AddLevel from "./components/AddLevel";
 
 const Stack = createStackNavigator();
 
@@ -46,7 +46,7 @@ function App() {
                             <Route path="/levels/:assignment_id/edit-level" element={<EditLevel />} />
                             <Route path="/modules/:module_id/edit-module" element={<EditModule />} />
                             <Route path="/domains/:course_id/edit-domain" element={<EditDomain />} />
-                            {/*<Route path="/add-level" element={<AddLevel />} />*/}
+                            <Route path="/add-level" element={<AddLevel />} />
                             <Route path="/add-module" element={<AddModule />} />
                         </Routes>
                     </BaseLayout>
@@ -71,7 +71,7 @@ function App() {
                         <Stack.Screen name="AddModules" component={AddModules} />
                         <Stack.Screen name="EditLevel" component={EditLevel} />
                         <Stack.Screen name="EditModule" component={EditModule} />
-                        {/*<Stack.Screen name="AddLevel" component={AddLevel} />*/}
+                        <Stack.Screen name="AddLevel" component={AddLevel} />
                         <Stack.Screen name="AddModule" component={AddModule} />
                         <Stack.Screen name="EditDomain" component={EditDomain} />
                     </Stack.Navigator>
