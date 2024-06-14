@@ -280,4 +280,24 @@ export function addLevel(level) {
     });
 }
 
+
+export function addModule(module) {
+    return connection.post('/api/add-module/', module, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw error;
+        });
+}
+
 export default connection;
