@@ -3,6 +3,7 @@
 *.pyc
 __pycache__/
 .vscode
+
 /glitch/.expo/
 /glitch/node_modules/
 /server/.DS_Store
