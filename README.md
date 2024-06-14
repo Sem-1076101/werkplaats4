@@ -89,8 +89,9 @@ Als je je wilt aanmelden voor de opleiding moet je even een account aanmaken en 
 
 
 - Bryan de Knikker
-  - Bryan heeft veel functionaliteiten van de applicatie gemaakt, hij heeft de opzet aangemaakt van de applicatie en de veel van de backend gemaakt onder andere de database en database functies. Bryan heeft ook de applicatie opgezet in Docker en de applicatie omgezet van React naar React Native.
-  
+  - Bryan heeft veel functionaliteiten van de applicatie gemaakt, hij heeft de opzet aangemaakt van de applicatie en een groot deel van de backend gemaakt onder andere de database en database functies. Bryan heeft ook de applicatie opgezet in Docker en de applicatie omgezet van React naar React Native. Bryan heeft ook de andere teamleden geholpen met hun problemen en geprobeerd dit te helpen oplossen, in sommige gevallen is dit gelukt en bij sommige punten moest dit geëscaleerd worden naar een docent.
+  Bryan heeft veel database functies geschreven en de app.py opgezet. Uitzoek werk verricht over hoe we het makkelijkst Expo Go op konden zetten en het ook op je mobiel werkte om te kunnen testen. Hier heeft soms veel tijd in gezeten om alles goed uit te werken. Bryan heeft meerdere keren het project uitgelegd bij grote wijzingen zodat de groep op de hoogte was en hoe zij dingen het best konden aanpakken. Ook was hij de motivator in de groep en de persoon die veel taken op zich nam en zorgde dat er wat gebeurde als de groep soms het project zat was.
+
   - Bronnen
   - https://expo.dev/go
   - https://reactnavigation.org/docs/stack-navigator/
