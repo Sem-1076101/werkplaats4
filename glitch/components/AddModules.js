@@ -7,9 +7,9 @@ import isWeb from '../isWeb';
 function AddModule({ navigation }) {
     const [moduleData, setModuleData] = useState({
         module_name: '',
-        module_description: '',
-        course_id: null,
-        percentage: '',
+        description: '',
+        domain_id: null,
+        progress_indicator: '',
     });
     const [domainList, setDomainList] = useState([]);
     const [selectedDomain, setSelectedDomain] = useState(null);
@@ -46,9 +46,9 @@ function AddModule({ navigation }) {
                 Alert.alert('Succes', 'Module succesvol toegevoegd!');
                 setModuleData({
                     module_name: '',
-                    module_description: '',
-                    course_id: null,
-                    percentage: '',
+                    description: '',
+                    domain_id: null,
+                    progress_indicator: '',
                 });
 
                 if (isWeb) {
