@@ -1,36 +1,39 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView } from 'react-native';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { getDomain, editDomain } from '../api';
-import BaseLayout from './BaseLayout'; // Assuming BaseLayout is a custom layout component
-import isWeb from '../isWeb'; // Import isWeb function
+import BaseLayout from './BaseLayout';
+import isWeb from '../isWeb';
 
-const EditDomain = () => {
-    const route = useRoute();
+const EditDomain = ({ route }) => {
     const navigation = useNavigation();
-    const { course_id } = route.params;
+    const course_id = route.params?.course_id;
     const [domain, setDomain] = useState({ course_name: '', course_description: '' });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         getDomain(course_id)
-            .then(domainData => {
+           .then(domainData => {
                 setDomain(domainData);
+                setLoading(false);
             })
-            .catch(error => {
+           .catch(error => {
                 console.error('Error:', error);
+                setLoading(false);
+                Alert.alert('Fout', 'Kon domeingegevens niet laden.');
             });
     }, [course_id]);
 
     const handleChange = (key, value) => {
         setDomain({
-            ...domain,
+           ...domain,
             [key]: value
         });
     };
 
     const handleSubmit = () => {
         editDomain(course_id, domain)
-            .then(updatedDomain => {
+           .then(updatedDomain => {
                 setDomain({
                     course_name: updatedDomain.course_name || '',
                     course_description: updatedDomain.course_description || ''
@@ -38,13 +41,19 @@ const EditDomain = () => {
                 Alert.alert('Succes', 'Domein succesvol bijgewerkt!');
                 navigation.goBack();
             })
-            .catch(error => {
+           .catch(error => {
                 console.error('Error:', error);
+                Alert.alert('Fout', 'Kon domein niet bijwerken.');
             });
     };
 
-    if (!domain) {
-        return <Text>Gegevens aan het laden...</Text>;
+    if (loading) {
+        return (
+            <BaseLayout>
+                <ActivityIndicator size="large" color="#0000ff" />
+                <Text>Gegevens aan het laden...</Text>
+            </BaseLayout>
+        );
     }
 
     return (
