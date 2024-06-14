@@ -210,8 +210,6 @@ def get_all_levels_from_database():
     return data
 
 
-
-
 def edit_level_in_database(assignment_id, level):
     conn = get_db()
     cursor = conn.cursor()
@@ -273,3 +271,15 @@ def get_user_from_db(email):
     user = cursor.fetchone()
     conn.close()
     return user
+
+
+def add_level_in_database(level):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO levels (assignment_title, assignment_description, module_id) VALUES (?, ?, ?)",
+                       (level['assignment_title'], level['assignment_description'], level['module_id']))
+        conn.commit()
+        return {'id': cursor.lastrowid}
+    finally:
+        conn.close()

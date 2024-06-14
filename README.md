@@ -82,10 +82,39 @@ Als je je wilt aanmelden voor de opleiding moet je even een account aanmaken en 
 
 # Team
 
+- Als Team
+  - We hebben als team veel samengewerkt en elkaar geholpen met de taken die we moesten doen. We hebben veel overlegd en hoe we de taken het beste konden aanpakken.
+  - Daarnaast hadden we de fout gemaakt om te beginnen met React i.p.v. React-Native. Waardoor het overzetten veel gedoe was, vooral omdat alle functionaliteiten werkte op de React manier. 
+    Helaas hebben we het niet voor elkaar gekregen om alles werkend te krijgen, wel hebben we hier erg veel moeite voor gedaan. 
+
+
 - Bryan de Knikker
-  - Bryan heeft veel functionaliteiten van de applicatie gemaakt, hij heeft de opzet aangemaakt van de applicatie en de veel van de backend gemaakt onder andere de database en database functies. Bryan heeft ook de applicatie opgezet in Docker en de applicatie omgezet van React naar React Native.
+  - Bryan heeft veel functionaliteiten van de applicatie gemaakt, hij heeft de opzet aangemaakt van de applicatie en een groot deel van de backend gemaakt onder andere de database en database functies. Bryan heeft ook de applicatie opgezet in Docker en de applicatie omgezet van React naar React Native. Bryan heeft ook de andere teamleden geholpen met hun problemen en geprobeerd dit te helpen oplossen, in sommige gevallen is dit gelukt en bij sommige punten moest dit geëscaleerd worden naar een docent.
+  Bryan heeft veel database functies geschreven en de app.py opgezet. Uitzoek werk verricht over hoe we het makkelijkst Expo Go op konden zetten en het ook op je mobiel werkte om te kunnen testen. Hier heeft soms veel tijd in gezeten om alles goed uit te werken. Bryan heeft meerdere keren het project uitgelegd bij grote wijzingen zodat de groep op de hoogte was en hoe zij dingen het best konden aanpakken. Ook was hij de motivator in de groep en de persoon die veel taken op zich nam en zorgde dat er wat gebeurde als de groep soms het project zat was.
+
+  - Bronnen
+  - https://expo.dev/go
+  - https://reactnavigation.org/docs/stack-navigator/
+  - https://reactnavigation.org/docs/web-support/
+  - https://medium.com/@shawnastaff/react-native-tutorial-1-2405d0c53143
+  
 - Sem Jansen
-    - Sem heeft gewerkt aan de modules en de ERD van de applicatie. Sem heeft ook geholpen bij andere taken van de applicatie.
+    - Sem heeft gewerkt aan de modules en de ERD van de applicatie. Daarnaast heeft Sem veel gedaan aan het omzetten van React naar React native. 
+  Sem: Ik heb ervoor gezorgd dat de modules pagina, level-overzicht pagina en levelsubmitpagina, voor studenten. Daarnaast heb ik het platform (domein overzicht voor docenten)  pagina omgezet en deels werkend gemaakt. De wijziging link komt wel op de pagina maar daar stoei ik met parameter errors. Bij dit stuk heb ik zelfs chatgpt gebruikt omdat ik er niet uitkwam, maar nogsteeds werkt het niet.
+  Daarnaast kampte ik met veel problemen bij het mergen van branches. Elke keer als ik een merge deed miste er hele grote stukken waardoor ik weer opnieuw het erin kon zetten. Vandaar ook sommige commits voor 5 keer etc.
+  Wat ook erg jammer is, is dat veel dingen werkte maar na het overzetten niet meer. Ook zijn de functies die er nu in zitten bijna allemaal werkend, alleen door de verwarrende  userparams werken ze niet.
+  Ook heb ik levelsdetail pagina aangemaakt en platform levels. Ik heb ook veel in de app.py aangemaakt en in de api.js. Dit heb ik ook vaak bij sommige functies opnieuw moeten doen na een merge omdat github desktop soms dingen gewoon niet meeneemt wat erg jammer is.
+  Hopelijk is het te zien hoeveel moeite in dit project is gestoken.
+  
+  - Bronnen:
+  - Stackoverflow.com
+  - https://reactnative.dev/
+  - Veel werk heb ik van Bryan kunnen zien hoe het moest, hij  had mij dit ook uitgelegd waardoor ik er makkelijk doorheen kon.
+  - https://expo.dev/go
+  - https://reactnavigation.org/docs/stack-navigator/
+  - https://reactnavigation.org/docs/web-support/
+  - https://medium.com/@shawnastaff/react-native-tutorial-1-2405d0c53143
+  
 - Hamza Afarran
     - Hamza heeft de inlog en registratie gemaakt van de applicatie en is bezig geweest met de modules.
 - Hamze Haji

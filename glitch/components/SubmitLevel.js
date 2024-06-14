@@ -5,7 +5,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import {useRoute} from '@react-navigation/native';
 import axios from 'axios';
 import isWeb from '../isWeb';
-import {get_assignment_by_assignment_id} from "../api";
+import {get_level_by_id} from "../api";
 
 function SubmitLevel() {
     const [file, setFile] = useState(null);
@@ -31,7 +31,7 @@ function SubmitLevel() {
     }
 
     useEffect(() => {
-        get_assignment_by_assignment_id(assignment_id)
+        get_level_by_id(assignment_id)
             .then(data => {
                 if (data) {
                     setAssignment(data);
