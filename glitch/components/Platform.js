@@ -40,7 +40,7 @@ function Platform() {
 
     const handleNavigate = (route, params) => {
         if (isWeb) {
-            navigate(route);
+            navigate(route, params);
         } else {
             navigation.navigate(route, params);
         }
@@ -65,7 +65,7 @@ function Platform() {
                             <Image source={{ uri: `data:image/jpeg;base64,${item.course_image}` }} style={styles.image} />
                             <Text style={styles.courseName}>{item.course_name}</Text>
                             <Text style={styles.courseDescription}>{item.course_description}</Text>
-                            <TouchableOpacity style={styles.editButton} onPress={() => handleNavigate(`/domains/${item.course_id}/edit-domain`, { courseId: item.course_id })}>
+                            <TouchableOpacity style={styles.editButton} onPress={() => handleNavigate(`/domains/${item.course_id}/edit-domain`, { course_id: item.course_id })}>
                                 <Text style={styles.buttonText}>Wijzig dit domein</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.deleteButton} onPress={() => {
