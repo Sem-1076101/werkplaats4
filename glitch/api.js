@@ -254,4 +254,25 @@ export function addDomain(domain) {
         });
 }
 
+
+export function addLevel(level) {
+    return connection.post(`/api/add-level/`, level, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.data) {
+            return response.data;
+        } else {
+            throw new Error('Response is undefined');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        throw error;
+    });
+}
+
+
 export default connection;
