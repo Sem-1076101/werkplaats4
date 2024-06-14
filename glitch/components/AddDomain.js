@@ -30,9 +30,9 @@ function AddDomain({navigation}) {
                 });
 
                 if (isWeb) {
-                    navigate('/dashboard');
+                    navigate('/platform');
                 } else {
-                    navigation.navigate('Dashboard');
+                    navigation.navigate('Platform');
                 }
             } else {
                 console.error('Ongeldige respons:', response);
