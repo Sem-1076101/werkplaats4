@@ -95,6 +95,19 @@ def add_domain_in_database(domain):
         conn.close()
 
 
+def add_module_in_database(module):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            "INSERT INTO modules (module_name, description, progress_indicator, domain_id) VALUES (?, ?, ?, ?)",
+            (module['module_name'], module['description'], module['progress_indicator'], module['domain_id']))
+        conn.commit()
+        return jsonify({'id': cursor.lastrowid})
+    finally:
+        conn.close()
+
+
 def add_level_in_database(level):
     conn = get_db()
     cursor = conn.cursor()
