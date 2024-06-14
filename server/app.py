@@ -9,7 +9,7 @@ from database import (get_all_categories_from_database, enroll_student_in_databa
                       get_level_by_module_id, get_level_by_id, edit_level_in_database,
                       add_user_to_db, get_user_from_db, delete_level_from_database, delete_module_from_database,
                       get_all_levels_from_database, submit_teacher_review_in_database,
-                      get_submissions_for_level_from_database, get_module_from_database, add_level_in_database)
+                      get_submissions_for_level_from_database, get_module_from_database, add_level_in_database, add_module_in_database)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -215,7 +215,6 @@ def edit_domain(course_id):
 
 
 @app.route('/api/add-domain/', methods=['POST', 'OPTIONS'])
-@cross_origin(supports_credentials=True)
 def create_domain():
     if request.method == 'OPTIONS':
         return jsonify({'message': 'success'}), 200
@@ -225,7 +224,6 @@ def create_domain():
         return result
 
 
-
 @app.route('/api/add-level/', methods=['POST', 'OPTIONS'])
 def create_level():
     if request.method == 'OPTIONS':
@@ -233,6 +231,16 @@ def create_level():
     else:
         data = request.get_json()
         result = add_level_in_database(data)
+        return jsonify(result)
+
+
+@app.route('/api/add-module/', methods=['POST', 'OPTIONS'])
+def create_module():
+    if request.method == 'OPTIONS':
+        return jsonify({'message': 'success'}), 200
+    else:
+        data = request.get_json()
+        result = add_module_in_database(data)
         return jsonify(result)
 
 
