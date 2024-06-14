@@ -61,6 +61,26 @@ Je bent al aangemeld bij de opleiding Applied Data Science & Artificial Intellig
 
 Als je je wilt aanmelden voor de opleiding moet je even een account aanmaken en je aanmelden bij een opleiding.
 
+
+# Werkende/niet volledig werkende functies
+
+- Sommige pagina's voor het toevoegen van dingen werken wel maar zijn niet goed gelinkt. Dit is inderdaad niet helemaal goed gegaan.
+Daarom hieronder de links zodat u wel kunt kijken dat het geprobeerd is. 
+
+- /add-level
+Dit werkte wel, was gefixt. In het mergen is het er weer uitgevlogen door een insert error.
+
+- /add-domain
+werkt als je iets aanmaakt wat niet bestaat, als je het test. Vul dan bijvoorbeeld in: "dit is een goede tes" en "dit moet werken" en dan werkt het (als het goed is).
+Jammer genoeg werkte dit ook en door mergen is het weer er helemaal verkeerd gegaan en heb ik het opnieuw gefixt.
+
+- /add-module
+werkte ook eerst maar weer eruit gevlogen door merge, erg vervelend.
+bijna gefixtt maar nu een json error waar we niet uitkomen.
+
+Het is erg jammer dat dit niet allemaal naar behoren werkt. We hebben erg veel dingen gefixt, vervolgens bij mergen zijn
+hele stukken code niet overgenoen, terwijl we met github desktop HANDMATIG alles gemerged hebben.
+
 # Functionaliteiten
 
 - Aanmelden bij een opleiding
