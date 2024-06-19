@@ -46,7 +46,7 @@ export function get_modules(domain_id) {
         });
 }
 
-export function get_level(module_id) {
+export function get_level_by_module_id(module_id) {
     return connection.get(`/api/levels/${module_id}`)
         .then(response => {
             if (response) {
@@ -278,6 +278,26 @@ export function addLevel(level) {
         console.error('Error:', error);
         throw error;
     });
+}
+
+
+export function addModule(module) {
+    return connection.post('/api/add-module/', module, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (response) {
+                return response.data;
+            } else {
+                throw new Error('Response is undefined');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw error;
+        });
 }
 
 export default connection;
