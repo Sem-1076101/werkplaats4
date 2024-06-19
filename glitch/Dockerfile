@@ -1,14 +1,19 @@
-FROM node:14
+FROM node:alpine
 
+# Zet de omgeving naar ontwikkeling
+ENV NODE_ENV=development
+
+# Werkmap instellen
 WORKDIR /app
 
-COPY package*.json ./
+# Kopieer de package.json en package-lock.json
+COPY ./package*.json /app/
 
+# Installeer de afhankelijkheden
 RUN npm install
 
-RUN npx expo install --fix
-
+# Kopieer de rest van de applicatie
 COPY . .
 
-CMD ["npx", "expo", "start", "--web"]
-CMD ["npx", "expo", "start", "--android"]
+# Start de Expo ontwikkelserver
+CMD ["npx", "expo", "start", "--tunnel"]
