@@ -16,4 +16,4 @@ RUN npm install
 COPY . .
 
 # Start de Expo ontwikkelserver
-CMD ["npx", "expo", "start", "--tunnel"]
+CMD ["npx", "expo", "start", "--web"]
