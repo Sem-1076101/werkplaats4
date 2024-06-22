@@ -11,4 +11,3 @@ RUN npx expo install --fix
 COPY . .
 
 CMD ["npx", "expo", "start", "--web"]
-CMD ["npx", "expo", "start", "--android"]
