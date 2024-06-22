@@ -60,6 +60,10 @@ Activeer de virtuele omgeving met het volgende commando: ```venv\Scripts\activat
 
 Installeer de benodigde packages met het volgende commando: ```pip install -r requirements.txt```
 
+Klik in de app.py op de groene play button om de server te starten, onderaan het bestand. Kijk in de terminal of de server is gestart en op welk IP adres en poort.
+
+Verander in de config.js het IP adres naar het IP adres van de server.
+
 Navigeer naar de main folder in het project met het volgende commando: ```cd ..\```
 
 Navigeer naar de glitch folder in het project met het volgende commando: ```cd .\glitch\```
