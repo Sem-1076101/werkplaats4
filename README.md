@@ -24,7 +24,7 @@ Klik op "Finish".
 
 Start de emulator door op de groene play button te klikken.
 
-# Applicatie starten
+# Applicatie starten op web
 
 Navigeer naar de main folder in het project met het volgende commando: ```cd .\wp4-2024-react-1e3\```
 
@@ -34,19 +34,41 @@ Run het docker build commando met het volgende commando: ```docker build -t wp4-
 
 Run het docker run commando met het volgende commando: ```docker run -p 5000:5000 wp4-2024-react-1e3-server```
 
-Kijk op welke IP adres de server draait met het volgende commando: ```docker-machine ip```
-
-Vul dit IP adres in bij het volgende bestand: ```wp4-2024-react-1e3\glitch\config.js```
-
 Navigeer naar de main folder in het project met het volgende commando: ```cd ..\```
 
 Navigeer naar de glitch folder in het project met het volgende commando: ```cd .\glitch\```
 
 Run het docker build commando met het volgende commando: ```docker build -t wp4-2024-react-1e3-glitch .```
 
-Run het docker run commando met het volgende commando: ```docker run -p 3000:3000 wp4-2024-react-1e3-glitch```
+Run het docker run commando met het volgende commando: ```docker run -p 8081:8081 wp4-2024-react-1e3-glitch```
 
-De applicatie wordt nu gestart op web en android.
+De applicatie wordt nu gestart op web.
+
+# Applicatie starten op Android
+
+Wij hebben enorm ons best gedaan om de applicatie werkend te krijgen via docker op de Android emulator, helaas is dit niet gelukt. We hebben hier veel tijd in gestoken en het is ons niet gelukt om dit werkend te krijgen. We hebben hier veel hulp bij gekregen van de docenten en medestudenten, helaas is het ons niet gelukt om dit werkend te krijgen.
+
+Daarom vragen we of jullie het via de volgende manier willen proberen om wel te kunnen zien dat wij veel werk en moeite in de mobiele applicatie hebben gestoken. Bij ons werkt het namelijk wel via de Android Emulator en via de Expo Go app op de mobiel. We hadden ook liever gehad dat alles gewoon soepel zou verlopen via Docker, maar helaas is dit niet gelukt.
+
+Navigeer naar de main folder in het project met het volgende commando: ```cd .\wp4-2024-react-1e3\```
+
+Navigeer naar de server folder in het project met het volgende commando: ```cd .\server\```
+
+Maak een virtuele omgeving aan met het volgende commando: ```python -m venv venv```
+
+Activeer de virtuele omgeving met het volgende commando: ```venv\Scripts\activate```
+
+Installeer de benodigde packages met het volgende commando: ```pip install -r requirements.txt```
+
+Navigeer naar de main folder in het project met het volgende commando: ```cd ..\```
+
+Navigeer naar de glitch folder in het project met het volgende commando: ```cd .\glitch\```
+
+Installeer de benodigde packages met het volgende commando: ```npm install```
+
+Start de applicatie met het volgende commando: ```npx expo start```
+
+Scan de QR code met de Expo Go app op je mobiel of druk op A voor de Android Emulator. Zorg dat je de Android emulator hebt gestart.
 
 # Applicatie gebruiken
 
