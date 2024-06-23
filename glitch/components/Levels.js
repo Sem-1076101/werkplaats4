@@ -1,28 +1,16 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity} from 'react-native';
-import {useNavigate, useParams} from 'react-router-dom';
-import {useRoute} from '@react-navigation/native';
-import {get_level_by_module_id} from '../api';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useRoute, useNavigation } from '@react-navigation/native';
+import { get_level_by_module_id } from '../api';
 import isWeb from '../isWeb';
 
 function Levels({navigation}) {
     const [levels, setLevels] = useState(null);
 
-    let module_id;
-    if (isWeb) {
-        let params = useParams();
-        module_id = params.module_id;
-    } else {
-        const route = useRoute();
-        module_id = route.params.module_id;
-    }
+    const { module_id } = isWeb ? useParams() : useRoute().params;
+    const navigate = isWeb ? useNavigate() : useNavigation();
 
-    let navigate;
-    if (isWeb) {
-        navigate = useNavigate();
-    } else {
-        navigate = navigation.navigate;
-    }
 
     useEffect(() => {
         const fetchDataInterval = setInterval(() => {
@@ -43,14 +31,14 @@ function Levels({navigation}) {
         };
     }, [module_id]);
 
-    const handleNavigate = (assignmentId) => {
-        const path = `/levels/${assignmentId}/submitlevel`;
-        if (isWeb) {
-            navigate(path);
-        } else {
-            navigate('SubmitLevel', { assignment_id: assignmentId });
-        }
-    };
+    // const handleNavigate = (assignment_id) => {
+    //     const path = `/SubmitLevel/${assignment_id}`;
+    //     if (isWeb) {
+    //         navigate(path);
+    //     } else {
+    //         navigate('submitlevel', { assignment_id: assignment_id });
+    //     }
+    // };
 
     return (
         <ScrollView style={styles.container}>
@@ -62,7 +50,13 @@ function Levels({navigation}) {
                             <TouchableOpacity
                                 key={index}
                                 style={styles.level}
-                                onPress={() => handleNavigate(level.assignment_id)}
+                                onPress={() => {
+                                if (isWeb) {
+                                    navigate(`/SubmitLevel/${level.assignment_id}`);
+                                } else {
+                                    navigation.navigate('SubmitLevel', {assignment_id: level.assignment_id});
+                                }
+                                }}
                             >
                                 <Text style={styles.levelText}>Naam: {level.assignment_title}</Text>
                                 <Text style={styles.levelText}>Beschrijving: {level.assignment_description}</Text>
@@ -73,7 +67,7 @@ function Levels({navigation}) {
                     )
                 ) : (
                     <View style={styles.loading}>
-                        <ActivityIndicator size="large" color="#0000ff"/>
+                        <ActivityIndicator size="large" color="#0000ff" />
                         <Text>Levels zijn aan het laden.</Text>
                     </View>
                 )}
