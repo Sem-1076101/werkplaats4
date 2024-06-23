@@ -43,7 +43,7 @@ function App() {
                             <Route path="/levels/:module_id" element={<Levels />} />
                             <Route path="/add-domain" element={<AddDomain />} />
                             <Route path="/add-modules" element={<AddModules />} />
-                            <Route path="/levels/:assignment_id/submitlevel" element={<SubmitLevel />} />
+                            <Route path="/submitlevel/:assignment_id" element={<SubmitLevel />} />
                             <Route path="/levels/:assignment_id/editlevel" element={<EditLevel />} />
                             <Route path="/modules/:module_id/edit-module" element={<EditModule />} />
                             <Route path="/domains/:domain_id/edit-domain" element={<EditDomain />} />
