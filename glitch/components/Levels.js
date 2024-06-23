@@ -43,6 +43,15 @@ function Levels({navigation}) {
         };
     }, [module_id]);
 
+    const handleNavigate = (assignmentId) => {
+        const path = `/levels/${assignmentId}/submitlevel`;
+        if (isWeb) {
+            navigate(path);
+        } else {
+            navigate('SubmitLevel', { assignment_id: assignmentId });
+        }
+    };
+
     return (
         <ScrollView style={styles.container}>
             <Text style={styles.header}>Level:</Text>
@@ -53,7 +62,7 @@ function Levels({navigation}) {
                             <TouchableOpacity
                                 key={index}
                                 style={styles.level}
-                                onPress={() => navigate(`/levels/${level.assignment_id}/submitlevel`)}
+                                onPress={() => handleNavigate(level.assignment_id)}
                             >
                                 <Text style={styles.levelText}>Naam: {level.assignment_title}</Text>
                                 <Text style={styles.levelText}>Beschrijving: {level.assignment_description}</Text>
