@@ -14,6 +14,8 @@ function Dashboard({navigation}) {
     const [courseName, setCourseName] = useState(null);
     const [courseId, setCourseId] = useState(null);
     const [studentnumber, setStudentnumber] = useState('');
+
+
     let navigate;
     if (isWeb) {
         navigate = useNavigate();
@@ -102,14 +104,14 @@ function Dashboard({navigation}) {
                         {courseName ? (
                             <Text style={styles.paragraph}>
                                 Je bent al toegevoegd aan een domein, namelijk <Text style={styles.link}
-                                                                                     onPress={() => {
-                                                                                         console.log('Navigating with domain_id:', courseId);
-                                                                                         if (isWeb) {
-                                                                                             navigate(`/modules/${courseId}`);
-                                                                                         } else {
-                                                                                             navigation.navigate('Modules', {domain_id: courseId});
-                                                                                         }
-                                                                                     }}>{courseName}</Text>.
+                                onPress={() => {
+                                console.log('Navigating with domain_id:', courseId);
+                                if (isWeb) {
+                                    navigate(`/modules/${courseId}`);
+                                } else {
+                                    navigation.navigate('Modules', {domain_id: courseId});
+                                }
+                                }}>{courseName}</Text>.
                             </Text>
                         ) : (
                             <Text style={styles.paragraph}>
