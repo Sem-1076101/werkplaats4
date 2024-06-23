@@ -70,12 +70,21 @@ export default function HeaderLayout() {
                             </TouchableOpacity>
                         </>
                     ) : (
-                        <TouchableOpacity
-                            style={[styles.button, styles.logoutButton]}
-                            onPress={handleLogout}
-                        >
-                            <Text style={styles.logoutButtonText}>Uitloggen</Text>
-                        </TouchableOpacity>
+                        <>
+                            <TouchableOpacity
+                                style={[styles.button, styles.logoutButton]}
+                                onPress={handleLogout}
+                            >
+                                <Text style={styles.logoutButtonText}>Uitloggen</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.button, styles.loginButton]}
+                                onPress={() => navigation.navigate('Dashboard')}
+                                style={styles.logoContainer}
+                            >
+                                <Text style={styles.loginButtonText}>Domeinen</Text>
+                            </TouchableOpacity>
+                        </>
                     )}
                     <TouchableOpacity
                         style={styles.themeButton}
