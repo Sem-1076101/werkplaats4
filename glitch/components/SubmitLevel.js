@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator, Image } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import {useNavigate, useParams} from 'react-router-dom';
-import {useRoute} from '@react-navigation/native';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import isWeb from '../isWeb';
-import {get_level_by_id} from "../api";
+import { get_level_by_id } from "../api";
 
 function SubmitLevel() {
     const [file, setFile] = useState(null);
@@ -23,12 +23,14 @@ function SubmitLevel() {
     }
 
     let navigate;
-    if (isWeb) {
-        navigate = useNavigate();
-    } else {
-        const navigation = useNavigation();
-        navigate = navigation.navigate;
-    }
+    const handleNavigate = (assignment_id) => {
+        const path = `/levels/${assignment_id}`;
+        if (isWeb) {
+            navigate(path);
+        } else {
+            navigate.navigate('Levels', { assignment_id: assignment_id });
+        }
+    };
 
     useEffect(() => {
         get_level_by_id(assignment_id)
@@ -72,11 +74,7 @@ function SubmitLevel() {
         })
             .then(() => {
                 Alert.alert('Succes', 'Level succesvol ingeleverd!');
-                if (isWeb) {
-                    navigate(`/Levels/${assignment_id}`);
-                } else {
-                    navigate('Levels', {assignment_id});
-                }
+                handleNavigate(assignment_id);
             })
             .catch(error => {
                 console.error('Error submitting level:', error);
@@ -89,22 +87,22 @@ function SubmitLevel() {
             <Text style={styles.header}>Level Inleveren</Text>
             {loading ? (
                 <View style={styles.loading}>
-                    <ActivityIndicator size="large" color="#0000ff"/>
+                    <ActivityIndicator size="large" color="#0000ff" />
                     <Text>Level gegevens worden geladen...</Text>
                 </View>
             ) : (
                 <>
                     <Text style={styles.label}>Beschrijving: {assignment && assignment.assignment_title}</Text>
-                    <Button title="Kies een bestand" onPress={handleFilePick}/>
+                    <Button title="Kies een bestand" onPress={handleFilePick} />
                     {file && <Text style={styles.fileName}>Geselecteerd bestand: {file.name}</Text>}
-                    {file && <Image source={{uri: file.uri}} style={styles.imagePreview}/>} {/* Voeg deze regel toe */}
+                    {file && <Image source={{ uri: file.uri }} style={styles.imagePreview} />}
                     <TextInput
                         style={styles.textInput}
                         placeholder="Beschrijving van de inlevering"
                         value={description}
                         onChangeText={setDescription}
                     />
-                    <Button title="Inleveren" onPress={handleSubmit}/>
+                    <Button title="Inleveren" onPress={handleSubmit} />
                 </>
             )}
         </View>
@@ -134,9 +132,9 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
     },
     imagePreview: {
-        width: 100, // Of een andere breedte die je wilt
-        height: 100, // Of een andere hoogte die je wilt
-        resizeMode: 'contain', // Of 'cover', afhankelijk van wat je wilt
+        width: 100,
+        height: 100,
+        resizeMode: 'contain',
     },
     textInput: {
         height: 40,
