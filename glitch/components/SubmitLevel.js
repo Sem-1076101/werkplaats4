@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import isWeb from '../isWeb';
-import { get_level_by_id } from "../api";
+import { get_level_by_id } from '../api';
+import { useParams } from 'react-router-dom'; // Add this import
 
 function SubmitLevel() {
     const [file, setFile] = useState(null);
@@ -22,12 +22,7 @@ function SubmitLevel() {
         assignment_id = route.params.assignment_id;
     }
 
-    let navigate;
-    if (isWeb) {
-        navigate = useNavigate();
-    } else {
-        navigate = useNavigate(); // Ensure you are using the correct hook for React Navigation
-    }
+    const navigation = useNavigation();
 
     useEffect(() => {
         get_level_by_id(assignment_id)
@@ -43,11 +38,12 @@ function SubmitLevel() {
     }, [assignment_id]);
 
     const handleFilePick = async () => {
-        let result = await DocumentPicker.getDocumentAsync({});
-        console.log(result);
+        let result = await DocumentPicker.getDocumentAsync({
+            type: "application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        });
         if (result.type === 'success') {
-            const { name, uri, type } = result;
-            setFile({ name, uri, type });
+            const { name, uri, mimeType } = result;
+            setFile({ name, uri, type: mimeType });
         }
     };
 
@@ -80,12 +76,13 @@ function SubmitLevel() {
             });
     };
 
+    let navigate;
     const handleNavigate = (assignment_id) => {
         const path = `/levels/${assignment_id}`;
         if (isWeb) {
             navigate(path);
         } else {
-            navigate(`/Levels/${assignment_id}`);
+            navigation.navigate('Levels', { assignment_id: assignment_id });
         }
     };
 
@@ -102,7 +99,6 @@ function SubmitLevel() {
                     <Text style={styles.label}>Beschrijving: {assignment && assignment.assignment_title}</Text>
                     <Button title="Kies een bestand" onPress={handleFilePick} />
                     {file && <Text style={styles.fileName}>Geselecteerd bestand: {file.name}</Text>}
-                    {file && <Image source={{ uri: file.uri }} style={styles.imagePreview} />}
                     <TextInput
                         style={styles.textInput}
                         placeholder="Beschrijving van de inlevering"
@@ -138,11 +134,6 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         fontStyle: 'italic',
     },
-    imagePreview: {
-        width: 100,
-        height: 100,
-        resizeMode: 'contain',
-    },
     textInput: {
         height: 40,
         borderColor: 'gray',
@@ -154,7 +145,7 @@ const styles = StyleSheet.create({
     loading: {
         marginTop: 50,
         alignItems: 'center',
-    },
+    }
 });
 
 export default SubmitLevel;
