@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator, Image } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import isWeb from '../isWeb';
 import { get_level_by_id } from "../api";
@@ -23,14 +23,11 @@ function SubmitLevel() {
     }
 
     let navigate;
-    const handleNavigate = (assignment_id) => {
-        const path = `/levels/${assignment_id}`;
-        if (isWeb) {
-            navigate(path);
-        } else {
-            navigate.navigate('Levels', { assignment_id: assignment_id });
-        }
-    };
+    if (isWeb) {
+        navigate = useNavigate();
+    } else {
+        navigate = useNavigate(); // Ensure you are using the correct hook for React Navigation
+    }
 
     useEffect(() => {
         get_level_by_id(assignment_id)
@@ -49,7 +46,8 @@ function SubmitLevel() {
         let result = await DocumentPicker.getDocumentAsync({});
         console.log(result);
         if (result.type === 'success') {
-            setFile(result);
+            const { name, uri, type } = result;
+            setFile({ name, uri, type });
         }
     };
 
@@ -80,6 +78,15 @@ function SubmitLevel() {
                 console.error('Error submitting level:', error);
                 Alert.alert('Fout', 'Er is een fout opgetreden bij het inleveren van het level');
             });
+    };
+
+    const handleNavigate = (assignment_id) => {
+        const path = `/levels/${assignment_id}`;
+        if (isWeb) {
+            navigate(path);
+        } else {
+            navigate(`/Levels/${assignment_id}`);
+        }
     };
 
     return (
