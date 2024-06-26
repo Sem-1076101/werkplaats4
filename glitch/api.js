@@ -13,6 +13,18 @@ export function enrollStudent(studentId, courseId) {
     })
 }
 
+
+export function current_student() {
+    return connection.get('/api/current-student')
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching student:', error);
+        });
+
+}
+
 export function get_module_by_id(module_id) {
     return connection.get(`/api/modules/${module_id}`)
         .then(response => {
