@@ -25,13 +25,19 @@ function Login({ navigation }) {
             const response = await axios.post(`http://${SERVER_IP}:5000/login`, formData);
             if (response && response.data) {
                 console.log('Response:', response.data);
-
+                console.log('Studentnummer:', response.data.studentnumber);
+                console.log('Course ID:', response.data.course_id);
+                let domain_id = response.data.course_id;
+                let stringifiedDomain_id = JSON.stringify(domain_id);
                 let studentnumber = response.data.studentnumber;
                 let stringifiedStudentnumber = JSON.stringify(studentnumber);
+                await AsyncStorage.setItem('domain_id', stringifiedDomain_id);
                 await AsyncStorage.setItem('studentnumber', stringifiedStudentnumber);
                 await AsyncStorage.setItem('isLoggedIn', 'true'); // Inlogstatus opslaan
 
                 console.log('Opgeslagen studentnummer:', await AsyncStorage.getItem('studentnumber'));
+                console.log('Opgeslagen domain_id:', await AsyncStorage.getItem('domain_id'));
+
 
                 if (isWeb) {
                     navigate('/dashboard');
