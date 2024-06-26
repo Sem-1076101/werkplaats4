@@ -4,6 +4,7 @@ import { View, Text, Image, TouchableOpacity, StyleSheet, Alert } from 'react-na
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useNavigation from './useNavigation';
 import { useTheme } from './ThemeContext';
+import isWeb from '../isWeb';
 
 const logo = require('../static/images/glitch-logo.png');
 const themeSwitch = require('../static/images/circle-half-stroke-solid.png');
@@ -22,6 +23,7 @@ export default function HeaderLayout() {
         checkLoginStatus();
     }, []);
 
+    let navigate;
     const handleLogout = async () => {
         try {
             await AsyncStorage.removeItem('isLoggedIn');
