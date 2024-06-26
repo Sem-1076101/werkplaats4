@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb from '../isWeb';
 import { get_level_by_id } from '../api';
-import { useParams } from 'react-router-dom'; // Add this import
+import { useParams } from 'react-router-dom'; // Verwijder deze regel, omdat we deze niet nodig hebben in React Native
 
 
 function SubmitLevel() {
@@ -14,14 +15,13 @@ function SubmitLevel() {
     const [loading, setLoading] = useState(true);
     const [assignment, setAssignment] = useState(null);
     const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
-    const [courseId, setCourseId] = useState(null);
+    const [domain_id, setDomainId] = useState(null); // Hernoemd van courseId naar domain_id
 
     let assignment_id;
     if (isWeb) {
         const params = useParams();
         assignment_id = params.assignment_id;
     } else {
-        const route = useRoute();
         assignment_id = route.params.assignment_id;
     }
 
@@ -43,14 +43,26 @@ function SubmitLevel() {
     }, [assignment_id]);
 
     useEffect(() => {
-        // Fetch the current student's data to get the course_id
-        axios.get('/api/current-student')
-            .then(response => {
-                setCourseId(response.data.course_id);
-            })
-            .catch(error => {
-                console.error('Error fetching student data:', error);
-            });
+        const fetchDomainId = async () => {
+            try {
+                const storedDomainId = await AsyncStorage.getItem('domain_id');
+                if (storedDomainId) {
+                    setDomainId(JSON.parse(storedDomainId));
+                } else {
+                    console.warn('No domain_id found in AsyncStorage');
+                }
+                setLoading(false);
+            } catch (error) {
+                console.error('Error retrieving domain_id from AsyncStorage:', error);
+                setLoading(false);
+            }
+        };
+
+        fetchDomainId();
+
+        return () => {
+            // Cleanup logic if needed
+        };
     }, []);
 
     const handleFilePick = async () => {
@@ -114,15 +126,15 @@ function SubmitLevel() {
     };
 
     const handleNavigate = () => {
-        if (courseId) {
-            const path = `/modules/${courseId}`;
+        if (domain_id) {
+            const path = `/modules/${domain_id}`;
             if (isWeb) {
                 window.location.href = path;
             } else {
-                navigation.navigate('Modules', { course_id: courseId });
+                navigation.navigate('Modules', { domain_id: domain_id });
             }
         } else {
-            console.error('courseId is null');
+            console.error('domain_id is null');
         }
     };
 
