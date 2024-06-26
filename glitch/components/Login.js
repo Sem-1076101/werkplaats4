@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb from '../isWeb';
-import { useNavigate } from 'react-router-dom';
-import { SERVER_IP } from '../config';
+import {useNavigate} from 'react-router-dom';
+import {SERVER_IP} from '../config';
 
-function Login({ navigation }) {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+function Login({navigation}) {
+    const [formData, setFormData] = useState({email: '', password: ''});
 
     let navigate;
     if (isWeb) {
@@ -15,7 +15,7 @@ function Login({ navigation }) {
     }
 
     const handleChange = (name, value) => {
-        setFormData({ ...formData, [name]: value });
+        setFormData({...formData, [name]: value});
     };
 
     const handleLogin = async () => {
@@ -32,12 +32,13 @@ function Login({ navigation }) {
                 let studentnumber = response.data.studentnumber;
                 let stringifiedStudentnumber = JSON.stringify(studentnumber);
                 await AsyncStorage.setItem('domain_id', stringifiedDomain_id);
+                await AsyncStorage.setItem('course_id', stringifiedDomain_id); // Opslaan onder 'course_id'
                 await AsyncStorage.setItem('studentnumber', stringifiedStudentnumber);
                 await AsyncStorage.setItem('isLoggedIn', 'true'); // Inlogstatus opslaan
 
                 console.log('Opgeslagen studentnummer:', await AsyncStorage.getItem('studentnumber'));
                 console.log('Opgeslagen domain_id:', await AsyncStorage.getItem('domain_id'));
-
+                console.log('Opgeslagen course_id:', await AsyncStorage.getItem('course_id')); // Log de opgeslagen 'course_id'
 
                 if (isWeb) {
                     navigate('/dashboard');
@@ -83,7 +84,7 @@ function Login({ navigation }) {
                             secureTextEntry
                         />
                     </View>
-                    <Button title="Inloggen" onPress={handleLogin} />
+                    <Button title="Inloggen" onPress={handleLogin}/>
                 </View>
             </View>
         </View>
