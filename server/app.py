@@ -59,8 +59,8 @@ def login():
     if not bcrypt.check_password_hash(user[2], password):
         return jsonify({"error": "Ongeldig wachtwoord"}), 401
 
-    # Return the studentnumber as part of the response
-    return jsonify({"message": "Inloggen succesvol", "studentnumber": user[5]}), 200
+    # Return the studentnumber and course_id as part of the response
+    return jsonify({"message": "Inloggen succesvol", "studentnumber": user[5], "course_id": user[7]}), 200
 
 
 @app.route('/api/modules/<int:domain_id>', methods=['GET'])
