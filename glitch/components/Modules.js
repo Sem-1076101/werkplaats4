@@ -1,14 +1,14 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import {get_modules} from '../api';
-import {useNavigate, useParams} from 'react-router-dom';
-import isWeb from "../isWeb"; // Importeer useNavigate voor navigatie
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { get_modules } from '../api';
+import { useNavigate, useParams } from 'react-router-dom';
+import isWeb from "../isWeb";
 
 const screenWidth = Dimensions.get('window').width;
-const cardWidthWeb = screenWidth / 4 - 20; // 20 is voor margin
+const cardWidthWeb = screenWidth / 4 - 20;
 
-function Modules({navigation, route}) {
-    const {domain_id} = isWeb ? useParams() : route.params;
+function Modules({ navigation, route }) {
+    const { domain_id } = isWeb ? useParams() : route.params;
     const [modules, setModules] = useState(null);
 
     let navigate;
@@ -41,27 +41,27 @@ function Modules({navigation, route}) {
             <View style={styles.modulesContainer}>
                 {modules !== null ? (
                     modules.map((item, index) => (
-                        <TouchableOpacity onPress={() => {
-                            if (isWeb) {
-                                navigate(`/Levels/${item.id}`);
-                            } else {
-                                navigation.navigate('Levels', {module_id: item.id});
-                            }
-                        }} key={index}>
-                            <View style={[styles.card, {width: isWeb ? cardWidthWeb : '100%'}]}>
+                        <TouchableOpacity
+                            key={index}
+                            onPress={() => {
+                                if (item.point_challenge === 0) {
+                                    if (isWeb) {
+                                        navigate(`/Levels/${item.id}`);
+                                    } else {
+                                        navigation.navigate('Levels', { module_id: item.id });
+                                    }
+                                }
+                            }}
+                            disabled={item.point_challenge === 1}
+                        >
+                            <View style={[styles.card, { width: isWeb ? cardWidthWeb : '100%' }]}>
                                 <View style={styles.cardBody}>
                                     <Text style={styles.cardTitle}>{item.module_name}</Text>
                                     <Text style={styles.cardText}>{item.description}</Text>
                                     <Text style={styles.cardText}>{item.progress_indicator}%</Text>
                                     <TouchableOpacity
-                                        style={styles.cardButton}
-                                        onPress={() => {
-                                            if (isWeb) {
-                                                navigate(`/Levels/${item.id}`);
-                                            } else {
-                                                navigation.navigate('Levels', {module_id: item.id});
-                                            }
-                                        }}
+                                        style={[styles.cardButton, { backgroundColor: item.point_challenge === 1 ? 'gray' : 'blue' }]}
+                                        disabled={true}
                                     >
                                         <Text style={styles.cardButtonText}>Bekijk levels</Text>
                                     </TouchableOpacity>
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 20,
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 2,
         elevation: 1,
@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     cardButton: {
-        backgroundColor: 'blue',
         padding: 10,
         borderRadius: 5,
     },
