@@ -7,11 +7,14 @@ import isWeb from '../isWeb';
 import { get_level_by_id } from '../api';
 import { useParams } from 'react-router-dom'; // Add this import
 
+
 function SubmitLevel() {
     const [file, setFile] = useState(null);
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(true);
     const [assignment, setAssignment] = useState(null);
+    const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+    const [courseId, setCourseId] = useState(null);
 
     let assignment_id;
     if (isWeb) {
@@ -25,9 +28,11 @@ function SubmitLevel() {
     const navigation = useNavigation();
 
     useEffect(() => {
+        console.log('Fetching level data for assignment ID:', assignment_id);
         get_level_by_id(assignment_id)
             .then(data => {
                 if (data) {
+                    console.log('Data fetched successfully:', data);
                     setAssignment(data);
                     setLoading(false);
                 } else {
@@ -37,13 +42,26 @@ function SubmitLevel() {
             .catch(error => console.error('Error fetching data:', error));
     }, [assignment_id]);
 
+    useEffect(() => {
+        // Fetch the current student's data to get the course_id
+        axios.get('/api/current-student')
+            .then(response => {
+                setCourseId(response.data.course_id);
+            })
+            .catch(error => {
+                console.error('Error fetching student data:', error);
+            });
+    }, []);
+
     const handleFilePick = async () => {
         let result = await DocumentPicker.getDocumentAsync({
             type: "application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         });
         if (result.type === 'success') {
             const { name, uri, mimeType } = result;
+            console.log('File picked:', { name, uri, mimeType });
             setFile({ name, uri, type: mimeType });
+            setIsSubmitEnabled(true);
         }
     };
 
@@ -68,7 +86,7 @@ function SubmitLevel() {
         })
             .then(() => {
                 Alert.alert('Succes', 'Level succesvol ingeleverd!');
-                handleNavigate(assignment_id);
+                showChallenge();
             })
             .catch(error => {
                 console.error('Error submitting level:', error);
@@ -76,13 +94,35 @@ function SubmitLevel() {
             });
     };
 
-    let navigate;
-    const handleNavigate = (assignment_id) => {
-        const path = `/levels/${assignment_id}`;
-        if (isWeb) {
-            navigate(path);
+    const showChallenge = () => {
+        const randomChallenge = Math.random() > 0.5 ? pointChallenges : conceptChallenges;
+        const challenge = randomChallenge[Math.floor(Math.random() * randomChallenge.length)];
+        Alert.alert('Challenge', challenge.question, [
+            { text: 'OK', onPress: handleNavigate }
+        ]);
+    };
+
+    const updatePointChallenge = async () => {
+        try {
+            await axios.put(`/api/update-point-challenge/${assignment_id}`, {
+                point_challenge: 2,
+            });
+            handleNavigate();
+        } catch (error) {
+            console.error('Error updating point challenge:', error);
+        }
+    };
+
+    const handleNavigate = () => {
+        if (courseId) {
+            const path = `/modules/${courseId}`;
+            if (isWeb) {
+                window.location.href = path;
+            } else {
+                navigation.navigate('Modules', { course_id: courseId });
+            }
         } else {
-            navigation.navigate('Levels', { assignment_id: assignment_id });
+            console.error('courseId is null');
         }
     };
 
@@ -106,6 +146,9 @@ function SubmitLevel() {
                         onChangeText={setDescription}
                     />
                     <Button title="Inleveren" onPress={handleSubmit} />
+                    <View style={styles.linkContainer}>
+                        <Button title="Ga naar Modules" onPress={updatePointChallenge} />
+                    </View>
                 </>
             )}
         </View>
@@ -145,7 +188,10 @@ const styles = StyleSheet.create({
     loading: {
         marginTop: 50,
         alignItems: 'center',
-    }
+    },
+    linkContainer: {
+        marginTop: 20,
+    },
 });
 
 export default SubmitLevel;
