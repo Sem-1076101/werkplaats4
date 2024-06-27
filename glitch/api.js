@@ -14,6 +14,30 @@ export function enrollStudent(studentId, courseId) {
 }
 
 
+export function get_student_by_studentnumber(studentnumber) {
+    return connection.get(`/api/student/${studentnumber}`)
+        .then(response => {
+            return response.data;
+        })
+        .catch(error => {
+            console.error('Error fetching student:', error);
+        });
+
+}
+
+
+export function update_point_challenge(studentnumber) {
+    return connection.put(`/api/update_point_challenge/${studentnumber}`)
+        .then (response => {
+            return response.data;
+        })
+        .catch (error => {
+            console.error('Error updating point challenge:', error);
+        });
+}
+
+
+
 export function current_student() {
     return connection.get('/api/current-student')
         .then(response => {
