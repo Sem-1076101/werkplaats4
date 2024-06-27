@@ -1,9 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import {get_modules} from '../api';
-import {useNavigate, useParams} from 'react-router-dom';
-import {get_student_by_studentnumber} from '../api';
+import {get_modules, get_student_by_studentnumber} from '../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigate, useParams} from 'react-router-dom';
 import isWeb from "../isWeb";
 
 const screenWidth = Dimensions.get('window').width;
@@ -12,6 +11,7 @@ const cardWidthWeb = screenWidth / 4 - 20;
 function Modules({navigation, route}) {
     const {domain_id} = isWeb ? useParams() : route.params;
     const [modules, setModules] = useState(null);
+    const [studentPointChallenge, setStudentPointChallenge] = useState(null);
 
     let navigate;
     if (isWeb) {
@@ -20,21 +20,26 @@ function Modules({navigation, route}) {
 
     useEffect(() => {
         const fetchDataInterval = setInterval(async () => {
-            const studentnumber = await AsyncStorage.getItem('studentnumber'); // Haal het studentnummer op uit de opslag
-            const studentData = await get_student_by_studentnumber(studentnumber); // Haal de studentgegevens op
-
-            get_modules(domain_id)
-                .then(response => {
-                    if (Array.isArray(response) && response.length) {
-                        // Filter de modules op basis van de point_challenge waarde van de student
-                        const filteredModules = response.filter(module => studentData.point_challenge !== 0 || module.point_challenge !== 1);
-                        setModules(filteredModules);
-                        console.log(filteredModules);
-                    } else {
-                        console.error('Unexpected response:', response);
-                    }
-                })
-                .catch(error => console.error('Error fetching data:', error));
+            try {
+                const studentnumber = await AsyncStorage.getItem('studentnumber'); // Haal het studentnummer op uit de opslag
+                const studentData = await get_student_by_studentnumber(studentnumber); // Haal de studentgegevens op
+                if (studentData && studentData.length > 0) {
+                    setStudentPointChallenge(studentData[0].point_challenge); // Update de state met point_challenge van de student
+                } else {
+                    console.warn('Geen studentgegevens gevonden.');
+                }
+                get_modules(domain_id)
+                    .then(response => {
+                        if (Array.isArray(response) && response.length) {
+                            setModules(response);
+                        } else {
+                            console.error('Unexpected response:', response);
+                        }
+                    })
+                    .catch(error => console.error('Error fetching module data:', error));
+            } catch (error) {
+                console.error('Error retrieving student number from AsyncStorage:', error);
+            }
         }, 1000);
 
         return () => {
@@ -42,51 +47,81 @@ function Modules({navigation, route}) {
         };
     }, [domain_id]);
 
-
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.header}>Beschikbare modules</Text>
             <View style={styles.modulesContainer}>
-                {modules !== null ? (
+                {modules !== null && studentPointChallenge !== null ? (
                     modules.map((item, index) => (
-                        <TouchableOpacity
-                            key={index}
-                            onPress={() => {
-                                if (item.point_challenge !== 1) {
+                        // Check of item.point_challenge 1 is om de module donker en niet klikbaar te maken
+                        item.point_challenge === 1 ? (
+                            <TouchableOpacity
+                                key={index}
+                                disabled={true}
+                            >
+                                <View style={[
+                                    styles.card,
+                                    {
+                                        width: isWeb ? cardWidthWeb : '100%',
+                                        backgroundColor: '#d3d3d3' // Lichter grijs als de module niet klikbaar is
+                                    }
+                                ]}>
+                                    <View style={styles.cardBody}>
+                                        <Text style={styles.cardTitle}>{item.module_name}</Text>
+                                        <Text style={styles.cardText}>{item.description}</Text>
+                                        <Text style={styles.cardText}>{item.progress_indicator}%</Text>
+                                        <TouchableOpacity
+                                            style={[
+                                                styles.cardButton,
+                                                {
+                                                    backgroundColor: 'gray'
+                                                }
+                                            ]}
+                                            disabled={true}
+                                        >
+                                            <Text style={styles.cardButtonText}>Bekijk levels</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                        ) : (
+                            // Toon de module als item.point_challenge 0 is
+                            <TouchableOpacity
+                                key={index}
+                                onPress={() => {
                                     if (isWeb) {
                                         navigate(`/Levels/${item.id}`);
                                     } else {
                                         navigation.navigate('Levels', {module_id: item.id});
                                     }
-                                }
-                            }}
-                            disabled={item.point_challenge === 1}
-                        >
-                            <View style={[
-                                styles.card,
-                                {
-                                    width: isWeb ? cardWidthWeb : '100%',
-                                    backgroundColor: item.point_challenge === 1 ? '#d3d3d3' : 'white' // Lichter grijs als de module niet klikbaar is
-                                }
-                            ]}>
-                                <View style={styles.cardBody}>
-                                    <Text style={styles.cardTitle}>{item.module_name}</Text>
-                                    <Text style={styles.cardText}>{item.description}</Text>
-                                    <Text style={styles.cardText}>{item.progress_indicator}%</Text>
-                                    <TouchableOpacity
-                                        style={[
-                                            styles.cardButton,
-                                            {
-                                                backgroundColor: item.point_challenge === 1 ? 'gray' : 'blue'
-                                            }
-                                        ]}
-                                        disabled={true}
-                                    >
-                                        <Text style={styles.cardButtonText}>Bekijk levels</Text>
-                                    </TouchableOpacity>
+                                }}
+                            >
+                                <View style={[
+                                    styles.card,
+                                    {
+                                        width: isWeb ? cardWidthWeb : '100%',
+                                        backgroundColor: 'white'
+                                    }
+                                ]}>
+                                    <View style={styles.cardBody}>
+                                        <Text style={styles.cardTitle}>{item.module_name}</Text>
+                                        <Text style={styles.cardText}>{item.description}</Text>
+                                        <Text style={styles.cardText}>{item.progress_indicator}%</Text>
+                                        <TouchableOpacity
+                                            style={[
+                                                styles.cardButton,
+                                                {
+                                                    backgroundColor: 'blue'
+                                                }
+                                            ]}
+                                            disabled={true}
+                                        >
+                                            <Text style={styles.cardButtonText}>Bekijk levels</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
+                            </TouchableOpacity>
+                        )
                     ))
                 ) : (
                     <View style={styles.loading}>
