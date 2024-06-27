@@ -296,3 +296,21 @@ def add_level_in_database(level):
         return {'id': cursor.lastrowid}
     finally:
         conn.close()
+
+
+def update_point_challenge(studentnumber):
+    points = 1
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE students SET point_challenge=? WHERE studentnumber=?",
+                   (points, studentnumber))
+    conn.commit()
+    conn.close()
+
+def get_student_by_studentnumber(studentnumber):
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM students WHERE studentnumber=?", (studentnumber,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
