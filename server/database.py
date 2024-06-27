@@ -307,10 +307,16 @@ def update_point_challenge(studentnumber):
     conn.commit()
     conn.close()
 
+
 def get_student_by_studentnumber(studentnumber):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM students WHERE studentnumber=?", (studentnumber,))
-    user = cursor.fetchone()
+    columns = [column[0] for column in cursor.description]
+    submissions = cursor.fetchall()
     conn.close()
-    return user
+    data = []
+    for row in submissions:
+        row_dict = dict(zip(columns, row))
+        data.append(row_dict)
+    return data
