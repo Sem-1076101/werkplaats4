@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb from '../isWeb';
 import { get_level_by_id } from '../api';
-import { useParams } from 'react-router-dom'; // Verwijder deze regel, omdat we deze niet nodig hebben in React Native
-
+import { update_point_challenge } from '../api'; // Importeer de update_point_challenge functie
+import { useParams } from 'react-router-dom';
 
 function SubmitLevel() {
     const [file, setFile] = useState(null);
@@ -15,13 +15,14 @@ function SubmitLevel() {
     const [loading, setLoading] = useState(true);
     const [assignment, setAssignment] = useState(null);
     const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
-    const [domain_id, setDomainId] = useState(null); // Hernoemd van courseId naar domain_id
+    const [domain_id, setDomainId] = useState(null);
 
     let assignment_id;
     if (isWeb) {
         const params = useParams();
         assignment_id = params.assignment_id;
     } else {
+        const route = useRoute();
         assignment_id = route.params.assignment_id;
     }
 
@@ -98,7 +99,7 @@ function SubmitLevel() {
         })
             .then(() => {
                 Alert.alert('Succes', 'Level succesvol ingeleverd!');
-                showChallenge();
+                updatePointChallenge(); // Update point_challenge naar 1
             })
             .catch(error => {
                 console.error('Error submitting level:', error);
@@ -107,8 +108,8 @@ function SubmitLevel() {
     };
 
     const showChallenge = () => {
-        const randomChallenge = Math.random() > 0.5 ? pointChallenges : conceptChallenges;
-        const challenge = randomChallenge[Math.floor(Math.random() * randomChallenge.length)];
+        // Vervang de random challenge code met je eigen uitdagingensysteem
+        const challenge = { question: 'Dummy challenge question?' };
         Alert.alert('Challenge', challenge.question, [
             { text: 'OK', onPress: handleNavigate }
         ]);
@@ -116,25 +117,30 @@ function SubmitLevel() {
 
     const updatePointChallenge = async () => {
         try {
-            await axios.put(`/api/update-point-challenge/${assignment_id}`, {
-                point_challenge: 2,
-            });
-            handleNavigate();
+            await update_point_challenge(); // Update point_challenge naar 1
+            handleNavigate(); // Navigeer naar Modules pagina na update
         } catch (error) {
             console.error('Error updating point challenge:', error);
         }
     };
 
-    const handleNavigate = () => {
-        if (domain_id) {
-            const path = `/modules/${domain_id}`;
-            if (isWeb) {
-                window.location.href = path;
+    const handleNavigate = async () => {
+        try {
+            const user_id = await AsyncStorage.getItem('user_id');
+            await axios.put(`/api/unlock-module`, { user_id, domain_id });
+
+            if (domain_id) {
+                const path = `/modules/${domain_id}`;
+                if (isWeb) {
+                    window.location.href = path;
+                } else {
+                    navigation.navigate('Modules', { domain_id: domain_id });
+                }
             } else {
-                navigation.navigate('Modules', { domain_id: domain_id });
+                console.error('domain_id is null');
             }
-        } else {
-            console.error('domain_id is null');
+        } catch (error) {
+            console.error('Error unlocking module:', error);
         }
     };
 
