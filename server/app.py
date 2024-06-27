@@ -9,7 +9,8 @@ from database import (get_all_categories_from_database, enroll_student_in_databa
                       get_level_by_module_id, get_level_by_id, edit_level_in_database,
                       add_user_to_db, get_user_from_db, delete_level_from_database, delete_module_from_database,
                       get_all_levels_from_database, submit_teacher_review_in_database,
-                      get_submissions_for_level_from_database, get_module_from_database, add_level_in_database, add_module_in_database)
+                      get_submissions_for_level_from_database, get_module_from_database, add_level_in_database,
+                      add_module_in_database, update_point_challenge, get_student_by_studentnumber)
 
 app = Flask(__name__)
 CORS(app, support_credentials=True)
@@ -248,6 +249,21 @@ def create_module():
 def get_module():
     module = get_module_from_database()
     return jsonify(module)
+
+
+@app.route('/api/update_point_challenge/<int:studentnumber>', methods=['PUT'])
+def update_point_challenge(studentnumber):
+    try:
+        update_point_challenge(studentnumber)
+        return jsonify({'message': 'Point challenge updated successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/student/<int:studentnumber>', methods=['GET'])
+def get_studentnumber(studentnumber):
+    student = get_student_by_studentnumber(studentnumber)
+    return jsonify(student)
 
 
 if __name__ == '__main__':
