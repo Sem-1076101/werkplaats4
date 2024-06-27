@@ -1,15 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
-import {get_modules, get_student_by_studentnumber} from '../api';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { get_modules, get_student_by_studentnumber } from '../api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import isWeb from "../isWeb";
 
 const screenWidth = Dimensions.get('window').width;
 const cardWidthWeb = screenWidth / 4 - 20;
 
-function Modules({navigation, route}) {
-    const {domain_id} = isWeb ? useParams() : route.params;
+function Modules({ navigation, route }) {
+    const { domain_id } = isWeb ? useParams() : route.params;
     const [modules, setModules] = useState(null);
     const [studentPointChallenge, setStudentPointChallenge] = useState(null);
 
@@ -53,8 +53,8 @@ function Modules({navigation, route}) {
             <View style={styles.modulesContainer}>
                 {modules !== null && studentPointChallenge !== null ? (
                     modules.map((item, index) => (
-                        // Check of item.point_challenge 1 is om de module donker en niet klikbaar te maken
-                        item.point_challenge === 1 ? (
+                        // Check of studentPointChallenge >= item.point_challenge om de module donker en niet klikbaar te maken
+                        studentPointChallenge < item.point_challenge ? (
                             <TouchableOpacity
                                 key={index}
                                 disabled={true}
@@ -85,14 +85,14 @@ function Modules({navigation, route}) {
                                 </View>
                             </TouchableOpacity>
                         ) : (
-                            // Toon de module als item.point_challenge 0 is
+                            // Toon de module als studentPointChallenge >= item.point_challenge is
                             <TouchableOpacity
                                 key={index}
                                 onPress={() => {
                                     if (isWeb) {
                                         navigate(`/Levels/${item.id}`);
                                     } else {
-                                        navigation.navigate('Levels', {module_id: item.id});
+                                        navigation.navigate('Levels', { module_id: item.id });
                                     }
                                 }}
                             >
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 20,
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.8,
         shadowRadius: 2,
         elevation: 1,
