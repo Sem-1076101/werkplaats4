@@ -5,8 +5,8 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb from '../isWeb';
-import {get_level_by_id, update_point_challenge} from '../api'; // Corrected import
-import {useParams} from 'react-router-dom';
+import {get_level_by_id, update_point_challenge} from '../api';
+import { useNavigate, useParams} from 'react-router-dom';
 
 function SubmitLevel() {
     const [file, setFile] = useState(null);
@@ -109,7 +109,6 @@ function SubmitLevel() {
             const studentnumber = await AsyncStorage.getItem('studentnumber');
             console.log('Updating point challenge for student:', studentnumber);
             await update_point_challenge(studentnumber);
-            alert('Point challenge succesvol ontgrendeld!');
             handleNavigate();
         } catch (error) {
             console.error('Error updating point challenge:', error);
@@ -119,11 +118,10 @@ function SubmitLevel() {
     const handleNavigate = async () => {
         try {
             const studentnumber = await AsyncStorage.getItem('studentnumber');
-            const point_challenge = await AsyncStorage.getItem('point_challenge');
-            console.log('logging point challenge for student:', point_challenge);
             await axios.post(`/api/update_point_challenge/${studentnumber}`);
 
             if (domain_id) {
+                console.log(domain_id)
                 const path = `/modules/${domain_id}`;
                 if (isWeb) {
                     window.location.href = path;
@@ -209,4 +207,3 @@ const styles = StyleSheet.create({
 });
 
 export default SubmitLevel;
-// Compare this snippet from glitch/components/Modules.js:
