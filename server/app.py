@@ -251,13 +251,10 @@ def get_module():
     return jsonify(module)
 
 
-@app.route('/api/update_point_challenge/<int:studentnumber>', methods=['PUT'])
-def update_point_challenge(studentnumber):
-    try:
-        update_point_challenge(studentnumber)
-        return jsonify({'message': 'Point challenge updated successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+@app.route('/api/update_point_challenge/<int:studentnumber>', methods=['POST'])
+def update_challenge(studentnumber):
+    update_point_challenge(studentnumber)
+    return jsonify({'message': 'Point challenge updated successfully'}), 200
 
 
 @app.route('/api/student/<int:studentnumber>', methods=['GET'])
