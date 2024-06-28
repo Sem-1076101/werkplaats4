@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, StyleSheet, TextInput, Button, Alert, ActivityIndicator} from 'react-native';
 import * as DocumentPicker from 'expo-document-picker';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import isWeb from '../isWeb';
-import { get_level_by_id } from '../api';
-import { update_point_challenge } from '../api'; // Importeer de update_point_challenge functie
-import { useParams } from 'react-router-dom';
+import {get_level_by_id, update_point_challenge} from '../api'; // Corrected import
+import {useParams} from 'react-router-dom';
 
 function SubmitLevel() {
     const [file, setFile] = useState(null);
@@ -33,7 +32,6 @@ function SubmitLevel() {
         get_level_by_id(assignment_id)
             .then(data => {
                 if (data) {
-                    console.log('Data fetched successfully:', data);
                     setAssignment(data);
                     setLoading(false);
                 } else {
@@ -60,10 +58,6 @@ function SubmitLevel() {
         };
 
         fetchDomainId();
-
-        return () => {
-            // Cleanup logic if needed
-        };
     }, []);
 
     const handleFilePick = async () => {
@@ -71,14 +65,13 @@ function SubmitLevel() {
             type: "application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         });
         if (result.type === 'success') {
-            const { name, uri, mimeType } = result;
-            console.log('File picked:', { name, uri, mimeType });
-            setFile({ name, uri, type: mimeType });
+            const {name, uri, mimeType} = result;
+            setFile({name, uri, type: mimeType});
             setIsSubmitEnabled(true);
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!file) {
             Alert.alert('Fout', 'Selecteer een bestand om in te leveren');
             return;
@@ -92,33 +85,32 @@ function SubmitLevel() {
         });
         formData.append('level_description', description);
 
-        axios.post(`/api/submit-level/${assignment_id}`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        })
-            .then(() => {
-                Alert.alert('Succes', 'Level succesvol ingeleverd!');
-                updatePointChallenge(); // Update point_challenge naar 1
-            })
-            .catch(error => {
-                console.error('Error submitting level:', error);
-                Alert.alert('Fout', 'Er is een fout opgetreden bij het inleveren van het level');
+        try {
+            await axios.post(`/api/submit-level/${assignment_id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
-    };
-
-    const showChallenge = () => {
-        // Vervang de random challenge code met je eigen uitdagingensysteem
-        const challenge = { question: 'Dummy challenge question?' };
-        Alert.alert('Challenge', challenge.question, [
-            { text: 'OK', onPress: handleNavigate }
-        ]);
+            Alert.alert('Succes', 'Level succesvol ingeleverd!');
+            await updatePointChallenge();
+        } catch (error) {
+            console.error('Error submitting level:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+                console.error('Response headers:', error.response.headers);
+            }
+            Alert.alert('Fout', 'Er is een fout opgetreden bij het inleveren van het level');
+        }
     };
 
     const updatePointChallenge = async () => {
         try {
-            await update_point_challenge(); // Update point_challenge naar 1
-            handleNavigate(); // Navigeer naar Modules pagina na update
+            const studentnumber = await AsyncStorage.getItem('studentnumber');
+            console.log('Updating point challenge for student:', studentnumber);
+            await update_point_challenge(studentnumber);
+            alert('Point challenge succesvol ontgrendeld!');
+            handleNavigate();
         } catch (error) {
             console.error('Error updating point challenge:', error);
         }
@@ -126,21 +118,25 @@ function SubmitLevel() {
 
     const handleNavigate = async () => {
         try {
-            const user_id = await AsyncStorage.getItem('user_id');
-            await axios.put(`/api/unlock-module`, { user_id, domain_id });
+            const studentnumber = await AsyncStorage.getItem('studentnumber');
+            const point_challenge = await AsyncStorage.getItem('point_challenge');
+            console.log('logging point challenge for student:', point_challenge);
+            await axios.post(`/api/update_point_challenge/${studentnumber}`);
 
             if (domain_id) {
                 const path = `/modules/${domain_id}`;
                 if (isWeb) {
                     window.location.href = path;
                 } else {
-                    navigation.navigate('Modules', { domain_id: domain_id });
+                    navigation.navigate('Modules', {domain_id: domain_id});
                 }
             } else {
                 console.error('domain_id is null');
             }
         } catch (error) {
-            console.error('Error unlocking module:', error);
+            console.error('Error updating point challenge:', error);
+            // Log de volledige error object voor meer details
+            console.error(error);
         }
     };
 
@@ -149,13 +145,13 @@ function SubmitLevel() {
             <Text style={styles.header}>Level Inleveren</Text>
             {loading ? (
                 <View style={styles.loading}>
-                    <ActivityIndicator size="large" color="#0000ff" />
+                    <ActivityIndicator size="large" color="#0000ff"/>
                     <Text>Level gegevens worden geladen...</Text>
                 </View>
             ) : (
                 <>
                     <Text style={styles.label}>Beschrijving: {assignment && assignment.assignment_title}</Text>
-                    <Button title="Kies een bestand" onPress={handleFilePick} />
+                    <Button title="Kies een bestand" onPress={handleFilePick}/>
                     {file && <Text style={styles.fileName}>Geselecteerd bestand: {file.name}</Text>}
                     <TextInput
                         style={styles.textInput}
@@ -163,9 +159,9 @@ function SubmitLevel() {
                         value={description}
                         onChangeText={setDescription}
                     />
-                    <Button title="Inleveren" onPress={handleSubmit} />
+                    <Button title="Inleveren" onPress={handleSubmit}/>
                     <View style={styles.linkContainer}>
-                        <Button title="Ga naar Modules" onPress={updatePointChallenge} />
+                        <Button title="Ga naar Modules" onPress={updatePointChallenge}/>
                     </View>
                 </>
             )}
@@ -213,3 +209,4 @@ const styles = StyleSheet.create({
 });
 
 export default SubmitLevel;
+// Compare this snippet from glitch/components/Modules.js:
