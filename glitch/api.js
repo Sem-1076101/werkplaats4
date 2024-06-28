@@ -27,12 +27,16 @@ export function get_student_by_studentnumber(studentnumber) {
 
 
 export function update_point_challenge(studentnumber) {
-    return connection.put(`/api/update_point_challenge/${studentnumber}`)
-        .then (response => {
-            return response.data;
-        })
-        .catch (error => {
+    return connection.post(`/api/update_point_challenge/${studentnumber}`)
+        .then(response => response.data)
+        .catch(error => {
             console.error('Error updating point challenge:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+                console.error('Response headers:', error.response.headers);
+            }
+            throw error;
         });
 }
 
